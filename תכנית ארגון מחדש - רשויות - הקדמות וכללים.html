@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תכנית עבודה: ארגון מחדש של החיבור "רשויות — הקדמות וכללים"</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;600;700;900&family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F1E6;
+  --paper-deep:#EEE8D8;
+  --ink:#241E17;
+  --ink-soft:#5B5346;
+  --line:#D9D0BC;
+  --structure:#24463B;
+  --structure-soft:#3E6B5C;
+  --split:#B8863B;
+  --merge:#3E6B5C;
+  --rename:#6B5C7A;
+  --move:#3A5A78;
+  --flag:#A24B3F;
+  --flag-bg:#F3E4DF;
+  --card-bg:#FBF9F2;
+  --shadow: 0 1px 2px rgba(36,30,23,.06), 0 6px 20px rgba(36,30,23,.05);
+  --radius: 14px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Assistant', 'Arial Hebrew', 'Heebo', sans-serif;
+  font-size:16.5px;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:'Frank Ruhl Libre', 'David Libre', serif;
+  color:var(--ink);
+  line-height:1.3;
+  margin:0 0 .5em;
+}
+a{color:var(--structure); text-decoration-thickness: 1px; text-underline-offset:3px;}
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:3px solid var(--structure-soft);
+  outline-offset:2px;
+  border-radius:4px;
+}
+::selection{background:#D9C9A3;}
+
+.shell{display:grid; grid-template-columns: 1fr min(1120px, 92vw) 1fr;}
+.shell > *{grid-column:2;}
+.wrap{max-width:1120px; margin:0 auto; padding:0 clamp(16px,3vw,32px);}
+
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(245,241,230,.92);
+  backdrop-filter: blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:1120px; margin:0 auto; padding:12px clamp(16px,3vw,32px);
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.brand{
+  font-family:'Frank Ruhl Libre',serif; font-weight:700; font-size:17px;
+  display:flex; align-items:center; gap:8px; color:var(--structure);
+}
+.brand .mark{
+  width:22px; height:22px; border-radius:5px; background:var(--structure);
+  display:inline-block; position:relative; flex:none;
+}
+.brand .mark::after{
+  content:""; position:absolute; inset:5px; border:1.5px solid var(--paper); border-radius:2px;
+}
+#navtoggle{
+  display:none; background:var(--structure); color:var(--paper); border:none;
+  padding:9px 14px; border-radius:8px; font-family:'Assistant'; font-weight:600; font-size:14px; cursor:pointer;
+}
+.toc-inline{display:flex; flex-wrap:wrap; gap:4px 2px; font-size:13.5px;}
+.toc-inline a{
+  color:var(--ink-soft); padding:6px 10px; border-radius:20px; white-space:nowrap;
+  transition:background .15s, color .15s;
+}
+.toc-inline a:hover, .toc-inline a.active{background:var(--structure); color:var(--paper);}
+@media (max-width:920px){
+  .toc-inline{
+    display:none; position:absolute; top:100%; inset-inline:0; background:var(--paper);
+    flex-direction:column; padding:10px 16px 18px; border-bottom:1px solid var(--line);
+    max-height:75vh; overflow:auto;
+  }
+  .toc-inline.open{display:flex;}
+  .toc-inline a{width:100%; text-align:start; padding:10px 12px;}
+  #navtoggle{display:inline-block;}
+}
+
+.hero{padding:56px 0 20px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:13px; font-weight:700; letter-spacing:.02em;
+  color:var(--structure); background:#E4E9E2; border:1px solid #cfd9cb;
+  padding:6px 14px; border-radius:30px; margin-bottom:22px;
+}
+.eyebrow::before{content:"◆"; font-size:9px;}
+h1.title{font-size:clamp(30px,4.4vw,46px); font-weight:700; max-width:24ch;}
+.lede{font-size:19px; color:var(--ink-soft); max-width:64ch; margin-top:10px;}
+.hero-note{
+  margin-top:28px; border:1px solid var(--line); background:var(--card-bg);
+  border-radius:var(--radius); padding:18px 22px; max-width:74ch; box-shadow:var(--shadow);
+  font-size:15px;
+}
+.hero-note b{color:var(--structure);}
+
+.diagram-section{padding:34px 0 12px;}
+.diagram-title{font-size:14px; font-weight:700; color:var(--ink-soft); margin-bottom:4px;}
+.diagram-sub{font-size:13.5px; color:var(--ink-soft); margin-bottom:18px;}
+.bars{display:flex; flex-direction:column; gap:22px;}
+.bar-label{font-size:13px; font-weight:700; margin-bottom:8px; display:flex; justify-content:space-between; color:var(--ink-soft);}
+.bar{
+  display:flex; width:100%; border-radius:10px; overflow:hidden; border:1px solid var(--line);
+  min-height:46px; background:var(--paper-deep);
+}
+.seg{
+  display:flex; align-items:center; justify-content:center;
+  color:var(--paper); font-size:11px; font-weight:700;
+  border-left:1px solid rgba(245,241,230,.35);
+  min-width:2px; padding:2px; white-space:nowrap; overflow:hidden;
+}
+.legend{display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:14px; font-size:12.5px; color:var(--ink-soft);}
+.legend span{display:inline-flex; align-items:center; gap:6px;}
+.legend i{width:11px; height:11px; border-radius:3px; display:inline-block;}
+
+section{padding:44px 0;}
+section + section{border-top:1px solid var(--line);}
+h2.section-title{font-size:clamp(23px,2.6vw,29px); display:flex; align-items:baseline; gap:12px;}
+h2.section-title .num{
+  font-family:'Assistant'; font-weight:800; color:var(--structure-soft); font-size:15px;
+  border:1.5px solid var(--structure-soft); border-radius:50%; width:30px; height:30px;
+  display:inline-flex; align-items:center; justify-content:center; flex:none;
+}
+.section-sub{color:var(--ink-soft); font-size:15.5px; max-width:75ch; margin-top:4px;}
+
+.rules-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:24px;}
+@media (max-width:760px){.rules-grid{grid-template-columns:1fr;}}
+.rule-card{border-radius:var(--radius); padding:22px; box-shadow:var(--shadow);}
+.rule-card.allow{background:#EEF3EA; border:1px solid #cddac4;}
+.rule-card.forbid{background:var(--flag-bg); border:1px solid #e0bfb6;}
+.rule-card h3{font-size:18px; display:flex; align-items:center; gap:10px;}
+.rule-card.allow h3{color:var(--structure);}
+.rule-card.forbid h3{color:var(--flag);}
+.rule-card ul{margin:12px 0 0; padding-inline-start:20px;}
+.rule-card li{margin-bottom:8px; font-size:15px;}
+
+.flag-sample{
+  margin-top:20px; border:1.5px dashed var(--flag); border-radius:10px; padding:16px 18px;
+  background:var(--flag-bg); font-size:14.5px; color:#5c2c22;
+}
+.flag-sample b{color:var(--flag); font-family:'Assistant';}
+.flag-types{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:18px;}
+.flag-type{border:1px solid var(--line); border-radius:10px; padding:12px 14px; background:var(--card-bg); font-size:13.8px;}
+.flag-type b{display:block; color:var(--flag); font-size:13px; margin-bottom:4px;}
+
+.macro-list{counter-reset:g; margin-top:26px; display:flex; flex-direction:column; gap:0;}
+.macro-item{
+  counter-increment:g; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px;
+  padding:15px 6px; border-bottom:1px solid var(--line);
+}
+.macro-item:first-child{border-top:1px solid var(--line);}
+.macro-item::before{
+  content:counter(g); font-family:'Frank Ruhl Libre'; font-weight:700; font-size:20px; color:var(--structure-soft);
+  width:34px; text-align:center;
+}
+.macro-item .mname{font-weight:600; font-size:15.5px;}
+.macro-item .mname a{color:var(--ink);}
+.perek-pill{
+  display:inline-block; font-size:11.5px; padding:3px 10px; border-radius:20px; font-weight:700;
+  background:#E4E9E2; color:var(--structure); border:1px solid #cfd9cb; white-space:nowrap;
+}
+.perek-pill.low{background:var(--flag-bg); color:var(--flag); border-color:#e0bfb6;}
+
+.group-card{
+  background:var(--card-bg); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:26px 28px; margin-top:26px; scroll-margin-top:80px;
+}
+.group-head{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:6px;}
+.group-badge{
+  font-family:'Assistant'; font-weight:800; font-size:13px; color:var(--paper);
+  background:var(--structure); padding:5px 12px; border-radius:8px; flex:none;
+}
+.group-head h3{font-size:22px; margin:0; flex:1 1 auto; min-width:200px;}
+.group-source{
+  font-size:14.5px; color:var(--ink-soft); border-inline-start:3px solid var(--structure-soft);
+  padding-inline-start:12px; margin:14px 0 18px;
+}
+.group-source b{color:var(--ink);}
+.group-body-title{
+  font-size:13px; font-weight:800; color:var(--ink-soft); margin:20px 0 10px; display:flex; align-items:center; gap:8px;
+}
+.group-body-title::after{content:""; flex:1; height:1px; background:var(--line);}
+ul.op-list, ul.flag-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+.op-list li, .flag-list li{
+  position:relative; padding:10px 14px; border-radius:8px; font-size:14.8px;
+  background:var(--paper); border:1px solid var(--line); border-inline-start:4px solid var(--ink-soft);
+}
+.op-list li b.tag, .flag-list li b.tag{
+  display:inline-block; font-size:11px; font-weight:800; padding:2px 9px; border-radius:20px;
+  margin-inline-end:8px; color:#fff; vertical-align:1px;
+}
+.op-merge{border-inline-start-color:var(--merge) !important;} .op-merge b.tag{background:var(--merge);}
+.op-split{border-inline-start-color:var(--split) !important;} .op-split b.tag{background:var(--split);}
+.op-rename{border-inline-start-color:var(--rename) !important;} .op-rename b.tag{background:var(--rename);}
+.op-move{border-inline-start-color:var(--move) !important;} .op-move b.tag{background:var(--move);}
+.op-copy{border-inline-start-color:var(--structure-soft) !important;} .op-copy b.tag{background:var(--structure-soft);}
+.flag-list li{border-inline-start-color:var(--flag) !important; background:var(--flag-bg);}
+.flag-list li b.tag{background:var(--flag);}
+.quote{font-family:'Frank Ruhl Libre',serif; color:var(--ink); background:var(--paper-deep); border-radius:6px; padding:1px 6px; font-size:.95em;}
+.pnum{font-family:'Assistant'; font-weight:700; font-size:.86em; color:var(--structure); background:#E4E9E2; border-radius:5px; padding:0 6px;}
+.no-flags{font-size:14px; color:var(--ink-soft); padding:8px 2px;}
+
+table.checklist{width:100%; border-collapse:collapse; margin-top:22px; font-size:14.5px;}
+table.checklist th{background:var(--structure); color:var(--paper); text-align:start; padding:10px 12px; font-weight:600;}
+table.checklist td{padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+table.checklist tr:nth-child(even) td{background:var(--paper-deep);}
+table.checklist td.before{color:#8a4032; text-decoration:line-through; text-decoration-color:#c98d7f;}
+table.checklist td.after{color:var(--structure); font-weight:700;}
+.decide-badge{display:inline-block; font-size:11px; font-weight:800; color:#fff; background:var(--flag); padding:2px 9px; border-radius:20px;}
+
+.map-wrap{overflow-x:auto; margin-top:20px; border:1px solid var(--line); border-radius:12px;}
+table.mapping{width:100%; border-collapse:collapse; font-size:13.8px; min-width:640px;}
+table.mapping th{background:var(--paper-deep); padding:10px 12px; text-align:start; position:sticky; top:0;}
+table.mapping td{padding:9px 12px; border-top:1px solid var(--line);}
+table.mapping tr:hover td{background:#F0EBD9;}
+
+.decision-card{border:1.5px solid #e0bfb6; background:var(--flag-bg); border-radius:12px; padding:18px 20px; margin-top:16px;}
+.decision-card h4{margin:0 0 6px; font-size:16.5px; color:#7a3226;}
+.decision-card p{margin:0; font-size:14.8px;}
+
+footer{padding:40px 0 70px; color:var(--ink-soft); font-size:13.5px;}
+footer .wrap{border-top:1px solid var(--line); padding-top:24px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="mark"></span> תכנית ארגון־מחדש · רשויות (הקדמות וכללים)</div>
+    <button id="navtoggle" aria-expanded="false" aria-controls="tocnav">תפריט</button>
+    <nav id="tocnav" class="toc-inline" aria-label="ניווט מהיר בתכנית">
+      <a href="#scope">היקף ומגבלות</a>
+      <a href="#synthesis">איחוד שני החלקים</a>
+      <a href="#flagging">מוסכמת דגלים</a>
+      <a href="#macro-toc">מבנה היעד</a>
+      <a href="#groups">15 הקבוצות</a>
+      <a href="#technical">תיקונים טכניים</a>
+      <a href="#mapping">טבלת מיפוי</a>
+      <a href="#decisions">להכרעת המחבר</a>
+    </nav>
+  </div>
+</div>
+
+<div class="shell">
+
+<header class="hero">
+  <span class="eyebrow">תכנית עריכה מבנית — לא שינוי תוכן · מסמך שישי בסדרה</span>
+  <h1 class="title">ארגון מחדש של החיבור<br>"רשויות — הקדמות וכללים"</h1>
+  <p class="lede">
+    תכנית עבודה מקיפה ומדויקת לאיחוד שני חלקי המסמך, פירוק קינון־היתר הסבוך (מדרגות כותרת 1 עד 7),
+    והעמדת מסה מונומנטלית בתורת המרחב ההלכתי (115 פסקאות) ב־15 קבוצות מושגיות רציפות ובהירות —
+    מהמבוא המטאפיזי והאונטולוגיה של חפץ ומקום, דרך מידות המרחב וסיווג הרשויות, ועד לקסיקון שלם של דיני מחיצה, פירצה ורשות הרבים.
+  </p>
+  <div class="hero-note">
+    <b>אתגר המבנה הייחודי במסמך זה:</b> המסמך המקורי פוצל לשני שערים ראשיים נפרדים (`כותרת 1 מספר 1` ו־`כותרת 1 מספר 2`)
+    שנכתבו במועדים שונים או מנקודות מבט שונות (האחת אונטולוגית־פנומנולוגית, והשנייה הלכתית־מטאפיזית).
+    התכנית שלהלן מייצרת <b>סינתזה אורגנית מושלמת</b> בין שני החלקים, ומציבה את המבוא המטאפיזי ("איסתכל באורייתא וברא עלמא")
+    כשער־הכניסה הראשי לחיבור כולו, מבלי לגעת או לשנות אף מילה בגוף הפסקאות.
+  </div>
+</header>
+
+<section class="diagram-section" aria-label="תרשים השוואה: מבנה נוכחי מול מבנה מוצע">
+  <div class="diagram-title">מבט מהיר: מ־2 חלקים מפוצלים ומקוננים לעומק אל 15 פרקים שיטתיים ומאוזנים</div>
+  <div class="diagram-sub">רוחב המקטעים פרופורציונלי למספר הפסקאות. המבנה המקורי סבל מקפיצות בהיררכיה (דילוגים ישירים מרמה 2 לרמה 7, וקינון עד רמה 6 ו־7).</div>
+  <div class="bars">
+    <div class="bar-row">
+      <div class="bar-label"><span>מבנה נוכחי — 2 חלקי־על מקוטעים (כותרת 1 מס׳ 1 ומס׳ 2)</span><span>סה"כ 115 פסקאות</span></div>
+      <div class="bar" role="img" aria-label="מבנה נוכחי: חלק א 40 פסקאות, חלק ב 75 פסקאות">
+        <div class="seg" style="flex:40;background:var(--structure);" title="חלק א׳: אונטולוגיה שימושית של חפץ ומקום — 40 פסקאות">40</div>
+        <div class="seg" style="flex:75;background:#3E6B5C;" title="חלק ב׳: הקדמה לדיני רשויות, מחיצות ופירצות — 75 פסקאות">75</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>מבנה מוצע — 15 קבוצות בחמש חטיבות יסוד רציפות</span><span>צבע = חטיבה רעיונית</span></div>
+      <div class="bar" role="img" aria-label="מבנה מוצע: 15 קבוצות מאוזנות היטב">
+        <div class="seg" style="flex:6;background:#24463B;" title="1 · מבוא עיוני־מטאפיזי">1</div>
+        <div class="seg" style="flex:5;background:#24463B;" title="2 · אונטולוגיה של חפץ ומקום">2</div>
+        <div class="seg" style="flex:10;background:#24463B;" title="3 · משמעויות שימושיות של מקום">3</div>
+        <div class="seg" style="flex:7;background:#3E6B5C;" title="4 · חמש מידות המרחב בהלכה">4</div>
+        <div class="seg" style="flex:15;background:#3E6B5C;" title="5 · טקסונומיה משולשת של חפץ ומקום">5</div>
+        <div class="seg" style="flex:3;background:#3E6B5C;" title="6 · סיכום המטריצה האונטולוגית">6</div>
+        <div class="seg" style="flex:5;background:#7a7350;" title="7 · שלוש הרשויות הבסיסיות">7</div>
+        <div class="seg" style="flex:5;background:#7a7350;" title="8 · מהות רשות היחיד ותנאי המבנה">8</div>
+        <div class="seg" style="flex:4;background:#7a7350;" title="9 · צורות הגידור: תל, חריץ ומחיצה">9</div>
+        <div class="seg" style="flex:5;background:#7a7350;" title="10 · תורת הצדדים, פילוש ועולה עד הרקיע">10</div>
+        <div class="seg" style="flex:7;background:#8a8365;" title="11 · טיפולוגיה שימושית של רה״י">11</div>
+        <div class="seg" style="flex:7;background:#8a8365;" title="12 · תיאוריית החציצה וההפרדה">12</div>
+        <div class="seg" style="flex:16;background:#8a8365;" title="13 · לקסיקון דיני מחיצה (16 מונחים)">13</div>
+        <div class="seg" style="flex:12;background:#5c5540;" title="14 · לקסיקון דיני פירצה (12 מונחים)">14</div>
+        <div class="seg" style="flex:8;background:#5c5540;" title="15 · תורת רשות הרבים, סמטא וצידי רה״ר">15</div>
+      </div>
+      <div class="legend">
+        <span><i style="background:#24463B;"></i> חטיבה א׳: מבוא מטאפיזי ואונטולוגיה יסודית</span>
+        <span><i style="background:#3E6B5C;"></i> חטיבה ב׳: מידות המרחב והטקסונומיה השימושית</span>
+        <span><i style="background:#7a7350;"></i> חטיבה ג׳: יסודות רשות היחיד, תל, חריץ וגובה</span>
+        <span><i style="background:#8a8365;"></i> חטיבה ד׳: סוגי רה״י ולקסיקון מחיצות ופירצות</span>
+        <span><i style="background:#5c5540;"></i> חטיבה ה׳: תורת רשות הרבים, סמטא וצידי רה״ר</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main>
+
+<section id="scope">
+  <h2 class="section-title"><span class="num">1</span> היקף העבודה והמגבלה המרכזית</h2>
+  <p class="section-sub">עקרונות היסוד הקבועים שאין לחרוג מהם בשום שלב.</p>
+  <div class="rules-grid">
+    <div class="rule-card forbid">
+      <h3>✕ אסור בהחלט</h3>
+      <ul>
+        <li>לשנות, לקצר או לנסח מחדש אף משפט בגוף הניתוח המושגי המקורי.</li>
+        <li>להשלים משפטים שנקטעו או נותרו פתוחים במקור (כגון בסוף כותרת 5 מס׳ 3).</li>
+        <li>למחוק פסקאות או לבטל הגדרות פילוסופיות מקוריות של המחבר.</li>
+        <li>להמיר את מבנה הלקסיקון (הגדרות המחיצה והפירצה) לפרוזה שוטפת או ההפך.</li>
+      </ul>
+    </div>
+    <div class="rule-card allow">
+      <h3>✓ מותר ומבוקש</h3>
+      <ul>
+        <li>לאחד את שני חלקי המסמך (`כותרת 1 מס׳ 1` ו־`מס׳ 2`) לרצף פירמידלי אחיד וסדור.</li>
+        <li>לשטח את קינון־היתר המפותל (רמות כותרת 1 עד 7) למערך 15 קבוצות מובנות.</li>
+        <li>לכתוב <b>כותרות ניווט בהירות</b> המשקפות בדיוק את המונח והגדרתו.</li>
+        <li>לתקן שגיאות כתיב, פיסוק לקוי והקלדה מובהקות.</li>
+        <li>לסמן בדגלי עורך מוגדרים פערי תוכן, כפילויות מושגיות וקטיעות.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="synthesis">
+  <h2 class="section-title"><span class="num">2</span> הסינתזה המבנית: איחוד שני חלקי המסמך</h2>
+  <p class="section-sub">ההיגיון הפנימי של חיבור `כותרת 1 מס׳ 1` ו־`כותרת 1 מס׳ 2`:</p>
+  <div class="hero-note">
+    <b>1. מיקום המבוא המטאפיזי־אמוני (מתוך כותרת 1 מס׳ 2):</b><br>
+    במסמך המקור מופיעה תחת `כותרת 1 מספר 2` הקדמה פילוסופית־תורנית נעלה: <i>"כהקדמה לגדרי רשויות... איסתכל באורייתא וברא עלמא... והוא ראשון אל חי וקיים עליון... מציאות הלכתית בציוויו ית'"</i>. הקדמה זו מציבה את היסוד האפיסטמולוגי לכל תורת הרשויות. <b>התכנית מציבה קטע מופלא זה כקבוצה 1 הפותחת את המסמך המאוחד כולו</b>, יחד עם חלוקת ארבעת נושאי ההוצאה מתוך `כותרת 2 מס׳ 6`.<br><br>
+    <b>2. שזירת האונטולוגיה של חפץ ומקום (מתוך כותרת 1 מס׳ 1):</b><br>
+    מיד לאחר המבוא המטאפיזי, נפרסת האונטולוגיה השיטתית: גדרי מקום וחלל מציאותיים (קבוצה 2), דרגות השימוש מקרבה ומנוחה עד רשות שלמה (קבוצה 3), חמש מידות המרחב ההלכתיות (קבוצה 4), הטקסונומיה המשולשת של צורכי האדם (קבוצה 5), וסיכום המטריצה האונטולוגית (קבוצה 6).<br><br>
+    <b>3. מעבר אל ההלכה המבנית של רשות היחיד ורשות הרבים (מתוך כותרת 1 מס׳ 2):</b><br>
+    לאחר ביסוס מושג הרשות האונטולוגי (קבוצה 7), החיבור עובר ליישום הטופולוגי ההלכתי המלא: רשות היחיד הממשית, תל וחריץ (קבוצות 8–10), סוגי רה"י (קבוצה 11), תורת המחיצות והפירצות (קבוצות 12–14), ורשות הרבים וצידיה (קבוצה 15).
+  </div>
+</section>
+
+<section id="method">
+  <h2 class="section-title"><span class="num">3</span> שיטת העבודה: חמשת תגי הפעולה</h2>
+  <p class="section-sub">חמשת התגים המנחים את העריכה המבנית:</p>
+  <ul class="op-list" style="margin-top:20px;">
+    <li class="op-move"><b class="tag">מיקום/סדר</b> העברת רצף פסקאות (כגון המבוא המטאפיזי) למיקומו הטבעי והנכון בראש המבנה.</li>
+    <li class="op-merge"><b class="tag">מיזוג</b> איחוד כותרות משנה קצרות ומקוטעות לרצף רעיוני אחד.</li>
+    <li class="op-split"><b class="tag">פיצול</b> חלוקת פסקאות מרובות מושגים לתת־סעיפים עצמאיים.</li>
+    <li class="op-rename"><b class="tag">שינוי כותרת</b> ניסוח כותרת בהירה מתוך לשון הטקסט — מילות הכותרת בלבד.</li>
+    <li class="op-copy"><b class="tag">העתקה ישירה</b> העתקת הרצף כלשונו וכסדרו.</li>
+  </ul>
+</section>
+
+<section id="flagging">
+  <h2 class="section-title"><span class="num">4</span> מוסכמת הסימון והדגלים</h2>
+  <p class="section-sub">דגלי העורך הייעודיים למסמך זה:</p>
+  <div class="flag-sample">
+    <b>⚑ הערת עורך [סוג]:</b> תיאור עובדתי קצר של הפגם — ללא ניחוש וללא השלמה בגוף הטקסט.
+  </div>
+  <div class="flag-types">
+    <div class="flag-type"><b>משפט קטוע במקור</b> משפט שנפסק ללא מילת סיום (כגון סוף כותרת 5 מס׳ 3: "ודבר לא נתבאר דיו").</div>
+    <div class="flag-type"><b>הפניה לתוכן חסר</b> "ע' לעיל / עיין להלן" ללא ציון מיקום ספציפי מדויק.</div>
+    <div class="flag-type"><b>מבנה לקסיקון (מונחון)</b> רצף מונחים קצרים (דיני מחיצה ודיני פירצה) הדורש שמירה קפדנית.</div>
+    <div class="flag-type"><b>איחוד מקורות כפול</b> סימון פסקאות שהועברו מחלק 2 לחלק 1 להשלמת התמונה.</div>
+  </div>
+</section>
+
+<section id="macro-toc">
+  <h2 class="section-title"><span class="num">5</span> מבנה היעד — 15 הקבוצות הסדורות</h2>
+  <p class="section-sub">15 פרקי המבנה השיטתי המאוחד — מהמטאפיזיקה ועד להלכות רשות הרבים:</p>
+  <div class="macro-list">
+    <div class="macro-item"><span class="mname"><a href="#g1">מבוא עיוני — מציאות מוקדמת, ציווי אלוקי וארבעת חלקי הוצאה ורשויות</a></span><span class="perek-pill">מבוא מטאפיזי</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g2">אונטולוגיה יסודית — תנאי המציאות, המקום והדבר, החלל והכלי</a></span><span class="perek-pill">אונטולוגיה בסיסית</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g3">המשמעויות השימושיות של המקום — מקרבה ומנוחה ועד רשות שלמה</a></span><span class="perek-pill">אונטולוגיה שימושית</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g4">חמש מידות המרחב בהלכה ואחידות המקום (י' טפחים, ד' אמות, ד' טפחים, ב"ס, ט"ז)</a></span><span class="perek-pill">מידות המרחב</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g5">הטקסונומיה המשולשת של מקום, חפץ וצורכי האדם</a></span><span class="perek-pill">סיווג מושגי</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g6">סיכום המטריצה האונטולוגית — מקום, חפץ, אדם ושימוש</a></span><span class="perek-pill">סיכום מטריציוני</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g7">שלוש הרשויות הבסיסיות — רה"י, רה"ר, כרמלית והיחס לחפץ המונח</a></span><span class="perek-pill">יסודות הרשויות</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g8">מהות רשות היחיד — שימוש היחיד, תנאי המבנה וגבולות עקרוניים</a></span><span class="perek-pill">יסודות רה"י</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g9">צורות הגידור העצמיות — תל, חריץ ומחיצה (מניעת רגל רבים)</a></span><span class="perek-pill">טופולוגיה של רה"י</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g10">תורת הצדדים, פילוש, ראויה לשימוש ודין עולה עד הרקיע</a></span><span class="perek-pill">מרחב רה"י</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g11">הטיפולוגיה השימושית של רשות היחיד (בית, חצר, מבוי, גג, קרפף, מוקצה)</a></span><span class="perek-pill">סוגי רה"י</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g12">תיאוריית החציצה וההפרדה — שלושת מרכיבי המחיצה ויחסי העירוב</a></span><span class="perek-pill">תורת המחיצות</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g13">לקסיקון דיני מחיצה — 16 מונחי יסוד (לבוד, גוד, פי תקרה, לחי, קורה, פתח ועוד)</a></span><span class="perek-pill">מונחון מחיצות</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g14">לקסיקון דיני פירצה — 12 מונחי יסוד (ג' וד' טפחים, י' אמות, פרוץ במילואו ועוד)</a></span><span class="perek-pill">מונחון פירצות</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g15">תורת רשות הרבים — מבנה ממשי, פלטיא, ירושלים, סמטא וצידי רה"ר</a></span><span class="perek-pill">רשות הרבים וצידיה</span></div>
+  </div>
+</section>
+
+<section id="groups">
+  <h2 class="section-title"><span class="num">6</span> פירוט מלא — 15 הקבוצות המאוחדות</h2>
+
+  <!-- Group 1 -->
+  <article class="group-card" id="g1">
+    <div class="group-head"><span class="group-badge">קבוצה 1</span><h3>מבוא עיוני — מציאות מוקדמת, ציווי אלוקי וארבעת חלקי הוצאה ורשויות</h3><span class="perek-pill">מבוא מטאפיזי</span></div>
+    <div class="group-source"><b>מקור:</b> פתיחת כותרת 1 מס׳ 2 (הפסקאות המטאפיזיות) משולבות עם כותרת 2 מס׳ 6 (ארבעת חלקי מלאכת הוצאה ורשויות).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> העברת פסקת המבוא המטאפיזית מתוך כותרת 1 מס׳ 2 (<i>"כהקדמה לגדרי רשויות... איסתכל באורייתא וברא עלמא... והוא ראשון אל חי וקיים עליון..."</i>) לראש המסמך כולו, כפתיחה עיונית מכוננת.</li>
+      <li class="op-copy"><b class="tag">העתקה</b> הצמדת פסקת כותרת 2 מס׳ 6 (חלוקת ארבעת נושאי ההוצאה והרשויות: מהות, הפרדה, תקנות חז"ל, הוצאה אסורה) מיד לאחר המבוא המטאפיזי.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> קביעת כותרת־על: "שער א׳: יסודות מטאפיזיים ואונטולוגיה של מקום וחפץ".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 2 -->
+  <article class="group-card" id="g2">
+    <div class="group-head"><span class="group-badge">קבוצה 2</span><h3>אונטולוגיה יסודית — תנאי המציאות, המקום והדבר, החלל והכלי</h3><span class="perek-pill">אונטולוגיה בסיסית</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 1 מס׳ 1 (פתיחה), כותרת 2 מס׳ 1, כותרת 7 מס׳ 1, כותרת 2 מס׳ 2, כותרת 3 מס׳ 1, וכותרת 7 מס׳ 2–4.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות היסוד האונטולוגיות כסדרן: תנאי המציאות של מלאכת הוצאה, גדרי מציאות חפץ ומקום, המקום והדבר (משמעות קיומית), החלל והחפץ (משמעות החלל המכיל), והרשות והכלי (חלל בעל צורה).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 3 -->
+  <article class="group-card" id="g3">
+    <div class="group-head"><span class="group-badge">קבוצה 3</span><h3>המשמעויות השימושיות של המקום — מקרבה ומנוחה ועד רשות שלמה</h3><span class="perek-pill">אונטולוגיה שימושית</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 3 מס׳ 2, כותרת 7 מס׳ 5–12, כותרת 3 מס׳ 3, וכותרת 7 מס׳ 13–14.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת שבע דרגות השימוש במקום ברצף סדור: (1) קירבה, (2) מנוחה, (3) ישיבה, (4) חלל שימוש, (5) מקום הינוח, (6) מקום המוכן לשימוש, (7) רשות ורשות מקום, וחלוקת היעוד לשימוש הכנה ולשימוש מעבר.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 4 -->
+  <article class="group-card" id="g4">
+    <div class="group-head"><span class="group-badge">קבוצה 4</span><h3>חמש מידות המרחב בהלכה ואחידות המקום</h3><span class="perek-pill">מידות המרחב</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 מס׳ 3, כותרת 3 מס׳ 4, כותרת 7 מס׳ 15–19, וכותרת 3 מס׳ 5.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת הביאור השיטתי של חמש מידות המרחב: עשרה טפחים (תפיסת הקרקע את אווירה), ארבע אמות (שיעור מקום שביתת/שימוש אדם), ארבעה טפחים (מקום הנחת חפץ חשוב), בית סאתיים (גודל הכלת מחיצות לחצר המשכן), וט"ז אמה (רוחב מעבר עגלות המשכן), וסיום בפסקת אחידות המקום.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">הפניה לא־מוסברת</b> בפסקה 19 (ט"ז אמה) מופיעה ההערה: <span class="quote">"(ובמק"א כת' דאולי יש בזה גדר של ארבע פעמים ארבע אמות)"</span> — לסמן כהפניה חיצונית.</li>
+    </ul>
+  </article>
+
+  <!-- Group 5 -->
+  <article class="group-card" id="g5">
+    <div class="group-head"><span class="group-badge">קבוצה 5</span><h3>הטקסונומיה המשולשת של מקום, חפץ וצורכי האדם</h3><span class="perek-pill">סיווג מושגי</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 מס׳ 4, כותרת 3 מס׳ 6–10, וכותרת 7 מס׳ 20–34.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת חמש המערכות המשולשות: (1) שלוש מדרגות המקום (יש בו דבר, מקיים, מוכן לקיום), (2) שלוש מדרגות חפץ ומקומו (נמצא, נמצא במקום מסוים, נמצא במקום חשוב), (3) שלוש מדרגות צורך אדם במקום (חלל, מקום, רשות), (4) שלוש מדרגות צורך בחפץ (כילוי, כלי תשמיש, אסיפת ממון), (5) שלוש מדרגות צורך בחפץ ממוקם (שימוש בו, מוכנותו לו, שמירתו).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">הפניה לתוכן חסר</b> בסוף פסקה 34 נכתב: <span class="quote">"(וע' מש"כ אקרא דציפור מצאה בית ודרור קן לה...)"</span> — לסמן.</li>
+    </ul>
+  </article>
+
+  <!-- Group 6 -->
+  <article class="group-card" id="g6">
+    <div class="group-head"><span class="group-badge">קבוצה 6</span><h3>סיכום המטריצה האונטולוגית — מקום, חפץ, אדם ושימוש</h3><span class="perek-pill">סיכום מטריציוני</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 3 מס׳ 11 וכותרת 7 מס׳ 35–37.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות הסיכום הממזגות את שלושת רובדי המציאות: רובד מציאות חפץ ומקום, רובד חפץ מקום והאדם, ורובד חפץ מקום ושימוש האדם.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 7 -->
+  <article class="group-card" id="g7">
+    <div class="group-head"><span class="group-badge">קבוצה 7</span><h3>שלוש הרשויות הבסיסיות — רה"י, רה"ר, כרמלית והיחס לחפץ המונח</h3><span class="perek-pill">יסודות הרשויות</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 מס׳ 5, כותרת 3 מס׳ 12–13, וכותרת 7 מס׳ 38–40.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת הגדרת שלוש הרשויות היסודיות ע"פ יעודן השימושי: רשות היחיד (מנוחה ושמירה אחידה), רשות הרבים (מעבר מרה"י לרה"י), כרמלית (מקום ללא יעוד שימושי), ופסקת הסיכום על רשות ביחס לחפץ המונח בה.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> סגירת שער א׳ ומעבר לשער ב׳: "שער ב׳: תורת הרשויות המעשית — רשות היחיד, מחיצות ופירצות".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 8 -->
+  <article class="group-card" id="g8">
+    <div class="group-head"><span class="group-badge">קבוצה 8</span><h3>מהות רשות היחיד — שימוש היחיד, תנאי המבנה וגבולות עקרוניים</h3><span class="perek-pill">יסודות רה"י</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 3 מס׳ 14 (מתוך חלק 2), כותרת 4 מס׳ 1, כותרת 5 מס׳ 1, וכותרת 6 מס׳ 1 (פתיחה).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-merge"><b class="tag">מיזוג</b> מיזוג הניתוח על מהות הרשויות לאופיין השימושי והמבנה הממשי (ההבחנה הממונית בין שימוש בזכות לשימוש בהפקר) עם פתיחת הגדרת רשות היחיד מן התורה.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 9 -->
+  <article class="group-card" id="g9">
+    <div class="group-head"><span class="group-badge">קבוצה 9</span><h3>צורות הגידור העצמיות — תל, חריץ ומחיצה (מניעת רגל רבים)</h3><span class="perek-pill">טופולוגיה של רה"י</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 7 מס׳ 41–44 (מתוך חלק 2).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת הדיון המעמיק בשלוש צורות הגידור: תל (גבולות שימוש בגובה), חריץ (עומק עשרה בקרקע), ומחיצה דקה (שני הפנים: חלוקת אוויר הרשויות מול מניעת רגל רבים).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 10 -->
+  <article class="group-card" id="g10">
+    <div class="group-head"><span class="group-badge">קבוצה 10</span><h3>תורת הצדדים, פילוש, ראויה לשימוש ודין עולה עד הרקיע</h3><span class="perek-pill">מרחב רה"י</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 7 מס׳ 45–46, וכותרת 6 מס׳ 2–3 (מתוך חלק 2).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת הניתוח על מספר המחיצות (מחלוקת ג' או ד' מחיצות), ארבע רוחות ופילוש, תנאי ד' על ד' הראויה לשימוש, ודין רשות היחיד עולה עד הרקיע (בית מקורה, גג ושימוש בכומתא וסודרא).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 11 -->
+  <article class="group-card" id="g11">
+    <div class="group-head"><span class="group-badge">קבוצה 11</span><h3>הטיפולוגיה השימושית של רשות היחיד (בית, חצר, מבוי, גג, קרפף, מוקצה)</h3><span class="perek-pill">סוגי רה"י</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 5 מס׳ 2 (מתוך חלק 2).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-split"><b class="tag">פיצול</b> פיצול שבע ההגדרות השימושיות של רשות היחיד (בית — תשמיש צנוע; חצר — שותפות שאינה צנועה; מבוי — לחי וקורה; גג — פס ד'; קרפף — אוצר ביותר מב"ס; מוקצה; דירה שתשמישה לאוויר) לתת־סעיפים עצמאיים ומובלטים.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 12 -->
+  <article class="group-card" id="g12">
+    <div class="group-head"><span class="group-badge">קבוצה 12</span><h3>תיאוריית החציצה וההפרדה — שלושת מרכיבי המחיצה ויחסי העירוב</h3><span class="perek-pill">תורת המחיצות</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 5 מס׳ 3 (מתוך חלק 2).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת הניתוח העיוני של שלושת מרכיבי המחיצה (המבנה החוצץ, הדבר שנחצצים בפניו, והדבר שחוצצים עליו), השפעות עירוב חד־צדדיות ודו־צדדיות (דאורייתא מול דרבנן), ומהות הגדרת המקום הנחצץ.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">משפט קטוע במקור</b> בסוף פסקה זו נקטע המשפט: <span class="quote">"...בהיות הרשות המערבת בלתי נצרכת להגדרה כל שהיא על מנת ליצור עירוב, אלא כוחה הוא בזה שאינה מוגדרת ודבר לא נתבאר דיו."</span> — לסמן כמשפט קטוע הדורש עיון.</li>
+    </ul>
+  </article>
+
+  <!-- Group 13 -->
+  <article class="group-card" id="g13">
+    <div class="group-head"><span class="group-badge">קבוצה 13</span><h3>לקסיקון דיני מחיצה — 16 מונחי יסוד (לבוד, גוד, פי תקרה, לחי, קורה ועוד)</h3><span class="perek-pill">מונחון מחיצות</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 6 מס׳ 4 וכותרת 7 מס׳ 47–62 (מתוך חלק 2).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת 16 מונחי המחיצה כסדרם: (1) אין מחיצה אלא לד', (2) לבוד, (3) גוד אסיק, (4) גוד אחית, (5) פי תקרה, (6) לחי, (7) קורה, (8) פתח, (9) פתחא רבה, (10) צורת הפתח, (11) דופן, (12) כותל, (13) עומד מרובה, (14) פסי ביראות, (15) גידודי, (16) גיפופי.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 14 -->
+  <article class="group-card" id="g14">
+    <div class="group-head"><span class="group-badge">קבוצה 14</span><h3>לקסיקון דיני פירצה — 12 מונחי יסוד (ג' וד' טפחים, י' אמות, פרוץ במילואו ועוד)</h3><span class="perek-pill">מונחון פירצות</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 6 מס׳ 5 וכותרת 7 מס׳ 63–74 (מתוך חלק 2).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת 12 מונחי הפירצה כסדרם: (1) שלושה טפחים, (2) ארבעה טפחים, (3) עשר אמות, (4) פרוץ במלואו, (5) פרוץ מרובה, (6) פרצה בקרן זווית, (7) מפולש, (8) בקעי ביה רבים, (9) דרך רבים (אתי רבים), (10) אתי אוירא דהאי גיסא, (11) בקיעת גדי, (12) דקירת גדי.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 15 -->
+  <article class="group-card" id="g15">
+    <div class="group-head"><span class="group-badge">קבוצה 15</span><h3>תורת רשות הרבים — מבנה ממשי, פלטיא, ירושלים, סמטא וצידי רה"ר</h3><span class="perek-pill">רשות הרבים וצידיה</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 4 מס׳ 2, כותרת 5 מס׳ 4–5, וכותרת 7 מס׳ 75–77 (מתוך חלק 2).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות רשות הרבים: המבנה הממשי (ט"ז אמה, אינה מקורה, ס' ריבוא), פלטיא וקושיית ירושלים לר"י בתוס' ורשב"א, ושלוש דרגות השימוש הציבורי — רשות הרבים (שימוש ציבורי), סמטא (שימוש פרטי לכל אדם), וצידי רשות הרבים (הפקר ללא ייעוד).</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> חתימת שער ב׳ של החיבור כולו.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+</section>
+
+<section id="technical">
+  <h2 class="section-title"><span class="num">7</span> רשימת תיקונים טכניים — גלובלית</h2>
+  <p class="section-sub">תיקוני כתיב, איות, לשון והקלדה מובהקים המותרים לביצוע במסמך:</p>
+  <table class="checklist">
+    <thead><tr><th>לפני</th><th>אחרי</th><th>סוג</th><th>מיקום שאותר</th></tr></thead>
+    <tbody>
+      <tr><td class="before">כמו"ש כתבנו / כמ"ש כתבנו</td><td class="after">כמו שכתבנו</td><td>שגיאת כפילות / ר"ת משובשים</td><td>כותרת 2 מס׳ 1, 3, 5</td></tr>
+      <tr><td class="before">איסתכל באורייתא</td><td class="after">אסתכל באורייתא (או: איסתכל באורייתא)</td><td>אחידות כתיב ארמי</td><td>כותרת 1 מס׳ 2</td></tr>
+      <tr><td class="before">שלושה הבחנות</td><td class="after">שלוש הבחנות</td><td>שגיאת לשון / זכר-נקבה</td><td>כותרת 7 מס׳ 46</td></tr>
+      <tr><td class="before">ארבעה מחיצות / שלוש מחיצות</td><td class="after">ארבע מחיצות / שלוש מחיצות</td><td>אחידות לשון / זכר-נקבה</td><td>כותרת 7 מס׳ 45–46</td></tr>
+      <tr><td class="before">טז' / י' / יג'</td><td class="after">ט"ז / י' / י"ג</td><td>אחידות סימני גרשיים בר"ת</td><td>לאורך כל המסמך</td></tr>
+      <tr><td class="before">שתי תנאים</td><td class="after">שני תנאים</td><td>שגיאת לשון / זכר-נקבה</td><td>כותרת 5 מס׳ 1</td></tr>
+      <tr><td class="before">פנים מחיתה</td><td class="after">פנים מחיצה</td><td>שגיאת הקלדה</td><td>כותרת 5 מס׳ 4</td></tr>
+      <tr><td class="before">המחיצה הנוכחים</td><td class="after">המחיצה הנוכחית</td><td>שגיאת הקלדה / התאמת מין</td><td>כותרת 7 מס׳ 49 (גוד אסיק)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="mapping">
+  <h2 class="section-title"><span class="num">8</span> נספח: טבלת מיפוי מלאה (ישן ← חדש)</h2>
+  <div class="map-wrap">
+  <table class="mapping">
+    <thead><tr><th>שער מקורי</th><th>כותרות ישנות במקור</th><th>פסקאות מקוריות</th><th>יעד בקבוצות החדשות</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="8">כותרת 1 מס׳ 1: רשויות — הקדמות וכללים</td><td>כותרת 2 מס׳ 1, כותרת 7 מס׳ 1, כותרת 2 מס׳ 2, כותרת 3 מס׳ 1, כותרת 7 מס׳ 2–4</td><td>1–4</td><td>קבוצה 2</td></tr>
+      <tr><td>כותרת 3 מס׳ 2, כותרת 7 מס׳ 5–12, כותרת 3 מס׳ 3, כותרת 7 מס׳ 13–14</td><td>5–14</td><td>קבוצה 3</td></tr>
+      <tr><td>כותרת 2 מס׳ 3, כותרת 3 מס׳ 4–5, כותרת 7 מס׳ 15–19</td><td>15–19</td><td>קבוצה 4</td></tr>
+      <tr><td>כותרת 2 מס׳ 4, כותרת 3 מס׳ 6–10, כותרת 7 מס׳ 20–34</td><td>20–34</td><td>קבוצה 5</td></tr>
+      <tr><td>כותרת 3 מס׳ 11, כותרת 7 מס׳ 35–37</td><td>35–37</td><td>קבוצה 6</td></tr>
+      <tr><td>כותרת 2 מס׳ 5, כותרת 3 מס׳ 12–13, כותרת 7 מס׳ 38–40</td><td>38–40</td><td>קבוצה 7</td></tr>
+      <tr><td colspan="3"><i>(סך הכל בחלק א׳: 40 פסקאות רציפות)</i></td></tr>
+      <tr><td rowspan="9">כותרת 1 מס׳ 2: הקדמה לדיני רשויות</td><td>כותרת 1 מס׳ 2 (פסקאות מטאפיזיות), כותרת 2 מס׳ 6 (ארבעת חלקי הוצאה)</td><td>מבוא חלק ב׳</td><td>קבוצה 1 (הועבר לפתיחת החיבור)</td></tr>
+      <tr><td>כותרת 3 מס׳ 14, כותרת 4 מס׳ 1, כותרת 5 מס׳ 1, כותרת 6 מס׳ 1 (פתיחה)</td><td>מבוא רה"י</td><td>קבוצה 8</td></tr>
+      <tr><td>כותרת 7 מס׳ 41–44 (תל, חריץ, מחיצה, עשרה טפחים)</td><td>41–44</td><td>קבוצה 9</td></tr>
+      <tr><td>כותרת 7 מס׳ 45–46, כותרת 6 מס׳ 2–3 (צדדים, ד' רוחות, עולה עד הרקיע)</td><td>45–46, ראויה לשימוש, עולה עד הרקיע</td><td>קבוצה 10</td></tr>
+      <tr><td>כותרת 5 מס׳ 2 (הגדרה שימושית: בית, חצר, מבוי, גג, קרפף, מוקצה, דירה)</td><td>הגדרות שימושיות רה"י</td><td>קבוצה 11</td></tr>
+      <tr><td>כותרת 5 מס׳ 3 (תיאוריית החציצה, שלושת מרכיבי המחיצה, השפעות עירוב)</td><td>מבנה ממשי והפרדה</td><td>קבוצה 12</td></tr>
+      <tr><td>כותרת 6 מס׳ 4, כותרת 7 מס׳ 47–62 (לקסיקון 16 דיני מחיצה)</td><td>47–62</td><td>קבוצה 13</td></tr>
+      <tr><td>כותרת 6 מס׳ 5, כותרת 7 מס׳ 63–74 (לקסיקון 12 דיני פירצה)</td><td>63–74</td><td>קבוצה 14</td></tr>
+      <tr><td>כותרת 4 מס׳ 2, כותרת 5 מס׳ 4–5, כותרת 7 מס׳ 75–77 (רה"ר, פלטיא, סמטא, צידי רה"ר)</td><td>75–77, מבנה ושימוש רה"ר</td><td>קבוצה 15</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="decisions">
+  <h2 class="section-title"><span class="num">9</span> החלטות שנותרו בידי המחבר בלבד</h2>
+  <div class="decision-card">
+    <h4>מיקום פסקת המבוא המטאפיזית ("איסתכל באורייתא וברא עלמא")</h4>
+    <p>
+      התכנית מציעה להציב את פסקת המבוא המטאפיזית (שנמצאה במקור תחת `כותרת 1 מס׳ 2`) בראש החיבור כולו (קבוצה 1),
+      משום שהיא מעניקה את הבסיס האמוני והאפיסטמולוגי לכל תורת המרחב ההלכתי.
+      אם המחבר יעדיף להשאיר את האונטולוגיה הפיזיקלית של חפץ ומקום בראש, ולהציב את המבוא המטאפיזי רק כפתיחה לשער ההלכתי של רשות היחיד, הדבר נתון להכרעתו.
+    </p>
+  </div>
+  <div class="decision-card">
+    <h4>עיצוב שני הלקסיקונים (16 מונחי מחיצה ו־12 מונחי פירצה)</h4>
+    <p>
+      פסקאות 47–62 ו־63–74 כתובות בצורת מילון מונחים אנציקלופדי תמציתי ומדויק.
+      התכנית שמרה על מבנה זה בדיוק בקבוצות 13 ו־14. מומלץ למחבר להחליט בעת ההדפסה הסופית האם להבליט את שם המונח בתחילת כל שורה כערך אנציקלופדי נפרד.
+    </p>
+  </div>
+  <div class="decision-card">
+    <h4>השלמת המשפט הקטוע בסוף תורת החציצה</h4>
+    <p>
+      בסוף כותרת 5 מס׳ 3 נקטע המשפט: <span class="quote">"...בהיות הרשות המערבת בלתי נצרכת להגדרה כל שהיא על מנת ליצור עירוב, אלא כוחה הוא בזה שאינה מוגדרת ודבר לא נתבאר דיו."</span>
+      השלמת המשפט או תיקונו הושארה במפורש לשיקול דעתו הבלעדי של המחבר.
+    </p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <div class="wrap">
+    מסמך זה הוא <b>תכנית עבודה מפורטת בלבד</b> — השישי בסדרה (לאחר עירובי תחומין, עירובי חצרות, מלאכת הוצאה-הקדמות, הוצאה-סוגיות ושבת מוקצה).
+    שום פסקת־תוכן לא שונתה; יש לחזור למקור המלא בעת הביצוע בהתאם להוראות שבכל כרטיס קבוצה לעיל.
+  </div>
+</footer>
+
+<script>
+(function(){
+  var toggle = document.getElementById('navtoggle');
+  var nav = document.getElementById('tocnav');
+  if(toggle && nav){
+    toggle.addEventListener('click', function(){
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+    });
+  }
+  var links = Array.prototype.slice.call(document.querySelectorAll('#tocnav a'));
+  var targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if('IntersectionObserver' in window && targets.length){
+    var map = {};
+    links.forEach(function(a,i){ if(targets[i]) map[targets[i].id] = a; });
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = map[entry.target.id];
+        if(!link) return;
+        if(entry.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, {rootMargin:'-40% 0px -50% 0px', threshold:0});
+    targets.forEach(function(t){ obs.observe(t); });
+  }
+})();
+</script>
+</body>
+</html>

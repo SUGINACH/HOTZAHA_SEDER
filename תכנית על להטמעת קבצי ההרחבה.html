@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תכנית עבודה כוללת: ניתוח והטמעת ששת קבצי ההרחבה והטיוטות בסדרת החיבורים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;600;700;900&family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F1E6;
+  --paper-deep:#EEE8D8;
+  --ink:#241E17;
+  --ink-soft:#5B5346;
+  --line:#D9D0BC;
+  --structure:#24463B;
+  --structure-soft:#3E6B5C;
+  --split:#B8863B;
+  --merge:#3E6B5C;
+  --rename:#6B5C7A;
+  --move:#3A5A78;
+  --flag:#A24B3F;
+  --flag-bg:#F3E4DF;
+  --card-bg:#FBF9F2;
+  --shadow: 0 1px 2px rgba(36,30,23,.06), 0 6px 20px rgba(36,30,23,.05);
+  --radius: 14px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Assistant', 'Arial Hebrew', 'Heebo', sans-serif;
+  font-size:16.5px;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:'Frank Ruhl Libre', 'David Libre', serif;
+  color:var(--ink);
+  line-height:1.3;
+  margin:0 0 .5em;
+}
+a{color:var(--structure); text-decoration-thickness: 1px; text-underline-offset:3px;}
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:3px solid var(--structure-soft);
+  outline-offset:2px;
+  border-radius:4px;
+}
+::selection{background:#D9C9A3;}
+
+.shell{display:grid; grid-template-columns: 1fr min(1120px, 92vw) 1fr;}
+.shell > *{grid-column:2;}
+.wrap{max-width:1120px; margin:0 auto; padding:0 clamp(16px,3vw,32px);}
+
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(245,241,230,.92);
+  backdrop-filter: blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:1120px; margin:0 auto; padding:12px clamp(16px,3vw,32px);
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.brand{
+  font-family:'Frank Ruhl Libre',serif; font-weight:700; font-size:17px;
+  display:flex; align-items:center; gap:8px; color:var(--structure);
+}
+.brand .mark{
+  width:22px; height:22px; border-radius:5px; background:var(--structure);
+  display:inline-block; position:relative; flex:none;
+}
+.brand .mark::after{
+  content:""; position:absolute; inset:5px; border:1.5px solid var(--paper); border-radius:2px;
+}
+#navtoggle{
+  display:none; background:var(--structure); color:var(--paper); border:none;
+  padding:9px 14px; border-radius:8px; font-family:'Assistant'; font-weight:600; font-size:14px; cursor:pointer;
+}
+.toc-inline{display:flex; flex-wrap:wrap; gap:4px 2px; font-size:13.5px;}
+.toc-inline a{
+  color:var(--ink-soft); padding:6px 10px; border-radius:20px; white-space:nowrap;
+  transition:background .15s, color .15s;
+}
+.toc-inline a:hover, .toc-inline a.active{background:var(--structure); color:var(--paper);}
+@media (max-width:920px){
+  .toc-inline{
+    display:none; position:absolute; top:100%; inset-inline:0; background:var(--paper);
+    flex-direction:column; padding:10px 16px 18px; border-bottom:1px solid var(--line);
+    max-height:75vh; overflow:auto;
+  }
+  .toc-inline.open{display:flex;}
+  .toc-inline a{width:100%; text-align:start; padding:10px 12px;}
+  #navtoggle{display:inline-block;}
+}
+
+.hero{padding:56px 0 20px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:13px; font-weight:700; letter-spacing:.02em;
+  color:var(--structure); background:#E4E9E2; border:1px solid #cfd9cb;
+  padding:6px 14px; border-radius:30px; margin-bottom:22px;
+}
+.eyebrow::before{content:"◆"; font-size:9px;}
+h1.title{font-size:clamp(30px,4.4vw,46px); font-weight:700; max-width:24ch;}
+.lede{font-size:19px; color:var(--ink-soft); max-width:64ch; margin-top:10px;}
+.hero-note{
+  margin-top:28px; border:1px solid var(--line); background:var(--card-bg);
+  border-radius:var(--radius); padding:18px 22px; max-width:74ch; box-shadow:var(--shadow);
+  font-size:15px;
+}
+.hero-note b{color:var(--structure);}
+
+.diagram-section{padding:34px 0 12px;}
+.diagram-title{font-size:14px; font-weight:700; color:var(--ink-soft); margin-bottom:4px;}
+.diagram-sub{font-size:13.5px; color:var(--ink-soft); margin-bottom:18px;}
+.bars{display:flex; flex-direction:column; gap:22px;}
+.bar-label{font-size:13px; font-weight:700; margin-bottom:8px; display:flex; justify-content:space-between; color:var(--ink-soft);}
+.bar{
+  display:flex; width:100%; border-radius:10px; overflow:hidden; border:1px solid var(--line);
+  min-height:46px; background:var(--paper-deep);
+}
+.seg{
+  display:flex; align-items:center; justify-content:center;
+  color:var(--paper); font-size:11px; font-weight:700;
+  border-left:1px solid rgba(245,241,230,.35);
+  min-width:2px; padding:2px; white-space:nowrap; overflow:hidden;
+}
+.legend{display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:14px; font-size:12.5px; color:var(--ink-soft);}
+.legend span{display:inline-flex; align-items:center; gap:6px;}
+.legend i{width:11px; height:11px; border-radius:3px; display:inline-block;}
+
+section{padding:44px 0;}
+section + section{border-top:1px solid var(--line);}
+h2.section-title{font-size:clamp(23px,2.6vw,29px); display:flex; align-items:baseline; gap:12px;}
+h2.section-title .num{
+  font-family:'Assistant'; font-weight:800; color:var(--structure-soft); font-size:15px;
+  border:1.5px solid var(--structure-soft); border-radius:50%; width:30px; height:30px;
+  display:inline-flex; align-items:center; justify-content:center; flex:none;
+}
+.section-sub{color:var(--ink-soft); font-size:15.5px; max-width:75ch; margin-top:4px;}
+
+.rules-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:24px;}
+@media (max-width:760px){.rules-grid{grid-template-columns:1fr;}}
+.rule-card{border-radius:var(--radius); padding:22px; box-shadow:var(--shadow);}
+.rule-card.allow{background:#EEF3EA; border:1px solid #cddac4;}
+.rule-card.forbid{background:var(--flag-bg); border:1px solid #e0bfb6;}
+.rule-card h3{font-size:18px; display:flex; align-items:center; gap:10px;}
+.rule-card.allow h3{color:var(--structure);}
+.rule-card.forbid h3{color:var(--flag);}
+.rule-card ul{margin:12px 0 0; padding-inline-start:20px;}
+.rule-card li{margin-bottom:8px; font-size:15px;}
+
+.flag-sample{
+  margin-top:20px; border:1.5px dashed var(--flag); border-radius:10px; padding:16px 18px;
+  background:var(--flag-bg); font-size:14.5px; color:#5c2c22;
+}
+.flag-sample b{color:var(--flag); font-family:'Assistant';}
+.flag-types{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:18px;}
+.flag-type{border:1px solid var(--line); border-radius:10px; padding:12px 14px; background:var(--card-bg); font-size:13.8px;}
+.flag-type b{display:block; color:var(--flag); font-size:13px; margin-bottom:4px;}
+
+.macro-list{counter-reset:g; margin-top:26px; display:flex; flex-direction:column; gap:0;}
+.macro-item{
+  counter-increment:g; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px;
+  padding:15px 6px; border-bottom:1px solid var(--line);
+}
+.macro-item:first-child{border-top:1px solid var(--line);}
+.macro-item::before{
+  content:counter(g); font-family:'Frank Ruhl Libre'; font-weight:700; font-size:20px; color:var(--structure-soft);
+  width:34px; text-align:center;
+}
+.macro-item .mname{font-weight:600; font-size:15.5px;}
+.macro-item .mname a{color:var(--ink);}
+.perek-pill{
+  display:inline-block; font-size:11.5px; padding:3px 10px; border-radius:20px; font-weight:700;
+  background:#E4E9E2; color:var(--structure); border:1px solid #cfd9cb; white-space:nowrap;
+}
+.perek-pill.target{background:#E4E0EE; color:var(--rename); border-color:#d0c6e0;}
+.perek-pill.dup{background:var(--flag-bg); color:var(--flag); border-color:#e0bfb6;}
+
+.group-card{
+  background:var(--card-bg); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:26px 28px; margin-top:26px; scroll-margin-top:80px;
+}
+.group-head{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:6px;}
+.group-badge{
+  font-family:'Assistant'; font-weight:800; font-size:13px; color:var(--paper);
+  background:var(--structure); padding:5px 12px; border-radius:8px; flex:none;
+}
+.group-head h3{font-size:22px; margin:0; flex:1 1 auto; min-width:200px;}
+.group-source{
+  font-size:14.5px; color:var(--ink-soft); border-inline-start:3px solid var(--structure-soft);
+  padding-inline-start:12px; margin:14px 0 18px;
+}
+.group-source b{color:var(--ink);}
+.group-body-title{
+  font-size:13px; font-weight:800; color:var(--ink-soft); margin:20px 0 10px; display:flex; align-items:center; gap:8px;
+}
+.group-body-title::after{content:""; flex:1; height:1px; background:var(--line);}
+ul.op-list, ul.flag-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+.op-list li, .flag-list li{
+  position:relative; padding:10px 14px; border-radius:8px; font-size:14.8px;
+  background:var(--paper); border:1px solid var(--line); border-inline-start:4px solid var(--ink-soft);
+}
+.op-list li b.tag, .flag-list li b.tag{
+  display:inline-block; font-size:11px; font-weight:800; padding:2px 9px; border-radius:20px;
+  margin-inline-end:8px; color:#fff; vertical-align:1px;
+}
+.op-merge{border-inline-start-color:var(--merge) !important;} .op-merge b.tag{background:var(--merge);}
+.op-split{border-inline-start-color:var(--split) !important;} .op-split b.tag{background:var(--split);}
+.op-rename{border-inline-start-color:var(--rename) !important;} .op-rename b.tag{background:var(--rename);}
+.op-move{border-inline-start-color:var(--move) !important;} .op-move b.tag{background:var(--move);}
+.op-copy{border-inline-start-color:var(--structure-soft) !important;} .op-copy b.tag{background:var(--structure-soft);}
+.flag-list li{border-inline-start-color:var(--flag) !important; background:var(--flag-bg);}
+.flag-list li b.tag{background:var(--flag);}
+.quote{font-family:'Frank Ruhl Libre',serif; color:var(--ink); background:var(--paper-deep); border-radius:6px; padding:1px 6px; font-size:.95em;}
+.pnum{font-family:'Assistant'; font-weight:700; font-size:.86em; color:var(--structure); background:#E4E9E2; border-radius:5px; padding:0 6px;}
+.no-flags{font-size:14px; color:var(--ink-soft); padding:8px 2px;}
+
+table.checklist{width:100%; border-collapse:collapse; margin-top:22px; font-size:14.5px;}
+table.checklist th{background:var(--structure); color:var(--paper); text-align:start; padding:10px 12px; font-weight:600;}
+table.checklist td{padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+table.checklist tr:nth-child(even) td{background:var(--paper-deep);}
+table.checklist td.before{color:#8a4032; text-decoration:line-through; text-decoration-color:#c98d7f;}
+table.checklist td.after{color:var(--structure); font-weight:700;}
+.decide-badge{display:inline-block; font-size:11px; font-weight:800; color:#fff; background:var(--flag); padding:2px 9px; border-radius:20px;}
+
+.map-wrap{overflow-x:auto; margin-top:20px; border:1px solid var(--line); border-radius:12px;}
+table.mapping{width:100%; border-collapse:collapse; font-size:13.8px; min-width:640px;}
+table.mapping th{background:var(--paper-deep); padding:10px 12px; text-align:start; position:sticky; top:0;}
+table.mapping td{padding:9px 12px; border-top:1px solid var(--line);}
+table.mapping tr:hover td{background:#F0EBD9;}
+
+.decision-card{border:1.5px solid #e0bfb6; background:var(--flag-bg); border-radius:12px; padding:18px 20px; margin-top:16px;}
+.decision-card h4{margin:0 0 6px; font-size:16.5px; color:#7a3226;}
+.decision-card p{margin:0; font-size:14.8px;}
+
+footer{padding:40px 0 70px; color:var(--ink-soft); font-size:13.5px;}
+footer .wrap{border-top:1px solid var(--line); padding-top:24px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="mark"></span> תכנית־על להטמעת קבצי ההרחבה</div>
+    <button id="navtoggle" aria-expanded="false" aria-controls="tocnav">תפריט</button>
+    <nav id="tocnav" class="toc-inline" aria-label="ניווט מהיר בתכנית">
+      <a href="#scope">מגבלות והנחיות</a>
+      <a href="#audit">זיהוי וכפילויות</a>
+      <a href="#flagging">מוסכמת דגלים</a>
+      <a href="#macro-toc">מפת ההטמעה</a>
+      <a href="#groups">15 קבוצות ההטמעה</a>
+      <a href="#technical">תיקונים טכניים</a>
+      <a href="#mapping">טבלת מיפוי מלאה</a>
+      <a href="#decisions">להכרעת המחבר</a>
+    </nav>
+  </div>
+</div>
+
+<div class="shell">
+
+<header class="hero">
+  <span class="eyebrow">תכנית־על אינטגרטיבית — ניתוח והטמעת 6 קבצי הרחבה בששת ספרי הסדרה</span>
+  <h1 class="title">תכנית איחוד והטמעה:<br>ששת קבצי ההרחבה והטיוטות</h1>
+  <p class="lede">
+    תכנית עבודה מקיפה לבחינה, זיהוי כפילויות והטמעה מושגית של ששת קבצי ההרחבה הנוספים שהועלו 
+    (הלכה דלבוד, מיגו דהוה דופן, הכנה שבת מוקצה, עירובין לא מסודר, ביאורי רש"י, וקדושת שבת) 
+    אל תוך ששת כרכי החיבור העיקריים — בהתאם להעדפת המחבר להטמיעם באופן אורגני ולא להעמידם כקבצים בודדים.
+  </p>
+  <div class="hero-note">
+    <b>ממצא מרכזי בבדיקה:</b> חלק מן הקבצים שהועלו מהווים <b>טיוטות עבודה מוקדמות</b> שקטעים שלמים מהן 
+    <b>כבר הוטמעו מילה־במילה</b> בספרי הסדרה הקודמים (במיוחד מילוני המחיצות והפירצה שהוטמעו ב"רשויות — הקדמות", 
+    ומטריצת הנחה־הקלטה שהוטמעה ב"הוצאה — סוגיות"). 
+    תכנית זו מפרידה בין הטיוטות החוזרות לבין <b>החיבורים העצמאיים המקוריים</b> (כגון מסת המן וההכנה, מאמר הלכה דלבוד, 
+    וחיבור שביתה-מנוחה-נפישה) וממפה את יעדם המדויק.
+  </div>
+</header>
+
+<section id="audit" aria-label="דו״ח ניתוח מצב הקבצים והכפילויות">
+  <h2 class="section-title"><span class="num">1</span> דו"ח זיהוי: סטטוס ששת קבצי ההרחבה</h2>
+  <p class="section-sub">מיפוי ראשוני של מהות כל קובץ, זיהוי כפילויות מול ששת הספרים הקיימים, וקביעת יעד ההטמעה:</p>
+  
+  <div class="map-wrap">
+  <table class="mapping">
+    <thead><tr><th>שם קובץ הרחבה</th><th>אופי החומר</th><th>מצב כפילות מול הסדרה הראשית</th><th>יעד הטמעה מוצע</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>1. בגדר הלכה דלבוד.txt</b></td>
+        <td>מסה למדנית עמוקה (ד' סוגי לבוד, תרי לבוד, גבשושית, לבוד לחומרא).</td>
+        <td><b>ייחודי ושלם.</b> מופיע רק כהגדרה תמציתית של שורה אחת בספר רשויות-הקדמות. כאן מופיע הניתוח המלא!</td>
+        <td><span class="perek-pill target">ספר 6 (רשויות — הקדמות) / ספר 4 (סוגיות)</span></td>
+      </tr>
+      <tr>
+        <td><b>2. מיגו דהוה דופן.txt</b></td>
+        <td>בירור למדני ממוקד בביאור הלכה (תר"ל ס"ז) ובפסי ביראות ומבוי.</td>
+        <td><b>ייחודי ושלם.</b> הרחבה ממוקדת על דין מיגו דשבת לסוכה בבאר שנחלקו בה הרמב"ם והראבי"ה.</td>
+        <td><span class="perek-pill target">ספר 4 (רשויות — סוגיות, קבוצות 10–11)</span></td>
+      </tr>
+      <tr>
+        <td><b>3. הכנה שבת מוקצה.txt</b></td>
+        <td>חיבור מחשבתי־הלכתי מונומנטלי על פרשת המן, שבתון, ביטחון, והכנה מדרבנן ודאורייתא.</td>
+        <td><b>ייחודי לחלוטין.</b> יצירת מופת תורנית בפילוסופיית ההכנה והשבת, עומדת בפני עצמה.</td>
+        <td><span class="perek-pill target">ספר 5 (הוצאה — הקדמות) או נספח מוביל לספר 1 (תחומין)</span></td>
+      </tr>
+      <tr>
+        <td><b>4. עירובין לא מסודר.txt</b></td>
+        <td>פנקס טיוטות, מילון שורשים בלשני, ומתווה ראשי פרקים של מסכת עירובין.</td>
+        <td><b>ברובו כפילות / טיוטת מקור:</b> מטריצת המילים ("מנחה מונחה...") מופיעה בהוצאה-סוגיות פס׳ 157; מילון מחיצה/פירצה מופיע ברשויות-הקדמות.</td>
+        <td><span class="perek-pill dup">חלקו כפילות לסימון; הבלשנות מוטמעת בספר 5</span></td>
+      </tr>
+      <tr>
+        <td><b>5. ביאורי רש''י.txt</b></td>
+        <td>31 ביאורים אנליטיים רציפים לדברי רש"י במסכת שבת ועירובין.</td>
+        <td><b>חומר גלם פרשני:</b> כמעט כל קטע שימש כבסיס לפסקאות ספציפיות בספרים 2, 3, 4.</td>
+        <td><span class="perek-pill target">הטמעה כעוגני פירוש בפנים הספרים / נספח ביאורים</span></td>
+      </tr>
+      <tr>
+        <td><b>6. קדושת שבת.txt</b></td>
+        <td>מסה פילוסופית מקיפה (שביתה, מנוחה, נפישה; חלוקת ל"ט מלאכות; שוכח עיקר שבת).</td>
+        <td><b>הגרסה המורחבת והמלאה</b> של הפרקים שתוכנם תומצת בספר הוצאה-הקדמות.</td>
+        <td><span class="perek-pill target">ספר 5 (מלאכת הוצאה — הקדמות וכללים)</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="scope">
+  <h2 class="section-title"><span class="num">2</span> היקף העבודה והמגבלה המרכזית</h2>
+  <p class="section-sub">עקרונות הברזל בהטמעת חומרי ההרחבה:</p>
+  <div class="rules-grid">
+    <div class="rule-card forbid">
+      <h3>✕ אסור בהחלט</h3>
+      <ul>
+        <li>למחוק תוכן מקורי רק בשל היותו טיוטה, אלא לסמנו כהעתק/טיוטה פנימית.</li>
+        <li>לשנות או לקצר את הניתוחים הלמדניים המורחבים בפרשת המן או בלבוד.</li>
+        <li>להשמיט את ההגדרות הבלשניות הייחודיות (טל/תן, רץ/צר, קום/מקום).</li>
+      </ul>
+    </div>
+    <div class="rule-card allow">
+      <h3>✓ מותר ומבוקש</h3>
+      <ul>
+        <li>להטמיע כל קטע הרחבה במקומו המדויק בספר המתאים מתוך ששת כרכי הסדרה.</li>
+        <li>להגדיר כותרות ברורות עבור כל חטיבת הרחבה המוטמעת.</li>
+        <li>לתקן שגיאות כתיב ופליטות קולמוס בקבצי ההרחבה.</li>
+        <li>לסמן בדגלי עורך את המקומות שבהם הקטעים כבר קיימים ככפילות מדויקת.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="flagging">
+  <h2 class="section-title"><span class="num">3</span> מוסכמת הסימון והדגלים</h2>
+  <p class="section-sub">סוגי הדגלים המיוחדים לתהליך ההטמעה:</p>
+  <div class="flag-sample">
+    <b>⚑ הערת עורך [הטמעה]:</b> ציון יעד ההטמעה המדויק של הפסקה בתוך כרכי הסדרה, תוך אזהרה מפני כפילויות.
+  </div>
+  <div class="flag-types">
+    <div class="flag-type"><b>כפילות טקסט מאומתת</b> קטע המופיע אות־באות בקובץ קודם (כמו מטריצת המילים בפס׳ 157 בהוצאה).</div>
+    <div class="flag-type"><b>הרחבה מושגית מעמיקה</b> טקסט המרחיב ומעמיק פסקה תמציתית קיימת בספר המרכזי.</div>
+    <div class="flag-type"><b>פנקס טיוטות / ראשי פרקים</b> רשימות נושאים וסקיצות שאינן פסקאות פרוזה שוטפות.</div>
+    <div class="flag-type"><b>פילולוגיה ובלשנות עברית</b> ניתוחי שורשים מקוריים של המחבר (שורשי אותיות ומונחים).</div>
+  </div>
+</section>
+
+<section id="macro-toc">
+  <h2 class="section-title"><span class="num">4</span> מפת ההטמעה — 15 יחידות האינטגרציה</h2>
+  <p class="section-sub">חלוקת ששת קבצי ההרחבה ל־15 קבוצות הטמעה סדורות לפי ספרי היעד בסדרה:</p>
+  <div class="macro-list">
+    <div class="macro-item"><span class="mname"><a href="#g1">מסת הלכה דלבוד — ד' חלקי לבוד, תרי לבוד ולבוד לחומרא</a></span><span class="perek-pill target">מוטמע בספר 6 (רשויות-הקדמות)</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g2">סוגיית מיגו דהווה דופן — פסי ביראות, סוכה ושיטת הראבי"ה</a></span><span class="perek-pill target">מוטמע בספר 4 (רשויות-סוגיות)</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g3">פנקס מונחי מחיצה ופירצה — זיהוי כפילות מול מילוני המקור</a></span><span class="perek-pill dup">טיוטה כפולה לספר 6</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g4">מתווה סדר מסכת עירובין ופרק קמא — שלד המסכת</a></span><span class="perek-pill target">מוטמע כמבוא לספרי עירובין</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g5">בלשנות למדנית — שורשי נטל/נתן, רץ/צר, קום/מקום</a></span><span class="perek-pill target">מוטמע בספר 5 (הוצאה-הקדמות)</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g6">מטריצת מושגי ההנחה — אימות כפילות מול ספר הוצאה-סוגיות</a></span><span class="perek-pill dup">טיוטה כפולה לפס׳ 157</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g7">דרשות הוצאה מיוחדות — בן סורר ומורה וראיית "כה/זה"</a></span><span class="perek-pill target">מוטמע בספר 3 (הוצאה-סוגיות)</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g8">ביאורי רש"י שבת (פרק א׳) — רשויות, קלוטה, כרמלית והוצאה</a></span><span class="perek-pill target">מוטמע בספר 3 ו־4</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g9">ביאורי רש"י שבת (פרק א׳–ב׳) — ד"ט, כוורת, מקום פטור ושבתון</a></span><span class="perek-pill target">מוטמע בספר 4 ו־5</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g10">ביאורי רש"י עירובין — ירושלים, רחבה, מבוי וחצר גדולה וקטנה</a></span><span class="perek-pill target">מוטמע בספר 2 ו־4</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g11">ביאורי רש"י שבת — שביתת בהמתו, תכשיט ודיחוי בשבת</a></span><span class="perek-pill target">מוטמע בספר 3 ו־5</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g12">מסת ההכנה ופרשת המן — שבתון, משנה לחם ומידת הביטחון</a></span><span class="perek-pill target">מוטמע בספר 5 ובספר 1</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g13">תורת השביתה, המנוחה והנפישה — ג' מדרגות יום השבת</a></span><span class="perek-pill target">מוטמע בספר 5 (שער ב׳)</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g14">אילן המלאכות המורחב — סיווג שיטתי של ל"ט מלאכות שבת</a></span><span class="perek-pill target">מוטמע בספר 5 (שער ב׳)</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g15">תורת זמני השבת — שוכח עיקר שבת והמהלך במדבר (מונה ששה/משמר אחד)</a></span><span class="perek-pill target">מוטמע בספר 5 ובספר 1</span></div>
+  </div>
+</section>
+
+<section id="groups">
+  <h2 class="section-title"><span class="num">5</span> פירוט מלא — 15 יחידות ההטמעה</h2>
+
+  <!-- Group 1 -->
+  <article class="group-card" id="g1">
+    <div class="group-head"><span class="group-badge">קבוצה 1</span><h3>מסת הלכה דלבוד — ד' חלקי לבוד, תרי לבוד ולבוד לחומרא</h3><span class="perek-pill target">יעד: ספר 6 (רשויות — הקדמות)</span></div>
+    <div class="group-source"><b>מקור:</b> הקובץ השלם `בגדר הלכה דלבוד.txt`.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> להטמיע את המאמר המלא בתוך <b>ספר 6 ("רשויות — הקדמות וכללים")</b> כהרחבה ישירה לפסקה 148 (הגדרת לבוד במילון המחיצות). במקור הופיעה שם רק שורה אחת, ואילו כאן נמצא הניתוח המלא של 4 סוגי לבוד (המבטל, המקרב/המאריך, המחבר, הממלא) ודין תרי לבוד בסוכה ומבוי.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> להעמיד כותרת משנה: "הרחבה מושגית: ארבעת גדרי הלכה דלבוד ותרי לבוד".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">ר"ת</b> `עומ"ר` (עומד מרובה), `הלל"מ` — לוודא אחידות.</li>
+    </ul>
+  </article>
+
+  <!-- Group 2 -->
+  <article class="group-card" id="g2">
+    <div class="group-head"><span class="group-badge">קבוצה 2</span><h3>סוגיית מיגו דהווה דופן — פסי ביראות, סוכה ושיטת הראבי"ה</h3><span class="perek-pill target">יעד: ספר 4 (רשויות — סוגיות)</span></div>
+    <div class="group-source"><b>מקור:</b> הקובץ השלם `מיגו דהוה דופן.txt`.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> להטמיע את המאמר בתוך <b>ספר 4 ("רשויות — סוגיות")</b> בקבוצה 10 או 11 (פסי ביראות ומחיצות שבת מול סוכה, סביב פס׳ 277–280). המאמר מיישב את קושיית הביאור הלכה (תר"ל ס"ז) על דברי השו"ע בדין פסי ביראות בבאר מול מבוי מפולש, ומבאר מדוע פסין הם "הבדלה יחסית" ולא "ייחוד פנימי".</li>
+      <li class="op-merge"><b class="tag">מיזוג</b> להצמיד את רשימת מראי המקומות והראשי פרקים שבסוף הקובץ (רמב"ם, תוס' כ., באו מים בשבת) כהערת הרחבה לסוגיה.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שאלה פתוחה</b> בסוף הפסקה הראשונה נשאר `וצ"ע .ע"כ` על דברי המאמר מרדכי — לסמן.</li>
+    </ul>
+  </article>
+
+  <!-- Group 3 -->
+  <article class="group-card" id="g3">
+    <div class="group-head"><span class="group-badge">קבוצה 3</span><h3>פנקס מונחי מחיצה ופירצה — זיהוי כפילות מול מילוני המקור</h3><span class="perek-pill dup">יעד: השוואה ואימות מול ספר 6</span></div>
+    <div class="group-source"><b>מקור:</b> `עירובין לא מסודר.txt`, חלק ג׳ (מרשימת "מחיצה, עשרה טפחים, לבוד..." ועד "דקירת גדי").</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">אימות כפילות</b> בדיקה פילולוגית מעלה כי רשימה זו היא <b>טיוטת היסוד המוקדמת</b> שממנה פיתח המחבר את שני מילוני המונחים המלאים בספר 6 (`רשויות — הקדמות`, קבוצות 13 ו־14, פסקאות 147–174).</li>
+      <li class="op-merge"><b class="tag">איחוד טיוטה</b> אין צורך להעתיקה מחדש כטקסט עצמאי, אלא לוודא שכל המונחים המנויים כאן (30 מונחים) מופיעים במלואם בספר 6.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">כפילות טיוטה מאומתת</b> רשימה זו מוטמעת במלואה ובשלמותה בספר 6.</li>
+    </ul>
+  </article>
+
+  <!-- Group 4 -->
+  <article class="group-card" id="g4">
+    <div class="group-head"><span class="group-badge">קבוצה 4</span><h3>מתווה סדר מסכת עירובין ופרק קמא — שלד המסכת</h3><span class="perek-pill target">יעד: מבוא כללי לכרכי עירובין (ספרים 1, 2, 4)</span></div>
+    <div class="group-source"><b>מקור:</b> `עירובין לא מסודר.txt`, חלק ב׳ ("סדר מסכת עירובין" ו"סדר פרק קמא דעירובין").</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> להעמיד את שני המקטעים המנתחים את מהלך פרקי מסכת עירובין (פרק א' עד י') ואת השתלשלות המשניות והגמרא בפרק קמא כמבוא שיטתי למהדורה המאוחדת של כרכי עירובין (תחומין, חצרות ורשויות).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שגיאת כתיב בסדרה</b> במקור נכתב: <span class="quote">"פרק רביעי... פרק שישי... פרק שישי... פרק שביעי..."</span> (פרק חמישי הוחלף בטעות בשישי פעמיים) — לתקן בטבלת ההגהה.</li>
+    </ul>
+  </article>
+
+  <!-- Group 5 -->
+  <article class="group-card" id="g5">
+    <div class="group-head"><span class="group-badge">קבוצה 5</span><h3>בלשנות למדנית — שורשי נטל/נתן, רץ/צר, קום/מקום</h3><span class="perek-pill target">יעד: ספר 5 (הוצאה — הקדמות וכללים, שער א׳)</span></div>
+    <div class="group-source"><b>מקור:</b> `עירובין לא מסודר.txt`, חלק א׳ (פסקאות 5–8: ניתוח שורשי אותיות ומילים).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> להטמיע את הפסקאות הבלשניות הנדירות הללו בתוך <b>ספר 5 ("מלאכת הוצאה — הקדמות וכללים")</b> בשער א' (בקבוצות 1–2 העוסקות בהגדרות המציאות, המקום והרצון).</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> לתת כותרת מתאימה: "שורשי לשון הקודש בהגדרת המעשה: טל/תן, רץ/צר, קום/מקום".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">משפט קטוע</b> הפסקה על שורש "נתן" מסתיימת במילים: <span class="quote">"...ומתון הוא דבר"</span> ללא סיום המשפט — לסמן.</li>
+    </ul>
+  </article>
+
+  <!-- Group 6 -->
+  <article class="group-card" id="g6">
+    <div class="group-head"><span class="group-badge">קבוצה 6</span><h3>מטריצת מושגי ההנחה — אימות כפילות מול ספר הוצאה-סוגיות</h3><span class="perek-pill dup">יעד: אימות מול ספר 3</span></div>
+    <div class="group-source"><b>מקור:</b> `עירובין לא מסודר.txt`, פסקאות 2–4 ("והמעשה הוא הנחה וגדר הנחה... והעושה ברשות הוא מקליט... מנחה מונחה מנוחה הנחייה...").</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">אימות כפילות</b> קטע זה מופיע אות־באות בתוך <b>ספר 3 ("מלאכת הוצאה — סוגיות")</b> בפסקה 157 (כותרת 7 מס׳ 157).</li>
+      <li class="op-merge"><b class="tag">איחוד טיוטה</b> אין צורך בהטמעה כפולה, אלא בסימון עורך המזהה שקטע זה נלקח מפנקס טיוטות זה.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">כפילות טקסט מאומתת</b> מופיע במלואו בפסקה 157 של מאמר הוצאה.</li>
+    </ul>
+  </article>
+
+  <!-- Group 7 -->
+  <article class="group-card" id="g7">
+    <div class="group-head"><span class="group-badge">קבוצה 7</span><h3>דרשות הוצאה מיוחדות — בן סורר ומורה וראיית "כה/זה"</h3><span class="perek-pill target">יעד: ספר 3 (מלאכת הוצאה — סוגיות, קבוצה 1)</span></div>
+    <div class="group-source"><b>מקור:</b> `עירובין לא מסודר.txt`, פסקאות 9–11 בסוגריים ("הנה מצאנו שמיעטו בדין בן סורר... ההבדל בין לשון כה ללשון זה... ממך זה יועץ...").</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> להטמיע קטעים אלו בתוך <b>ספר 3 ("מלאכת הוצאה — סוגיות")</b> בקבוצה 1 כהרחבה לדיון במשנת יציאות השבת (סביב פס׳ 51–54 הדנות במשמעות הוצאה על ידי האדם עצמו ובן סורר "והוציאו אותו").</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 8 -->
+  <article class="group-card" id="g8">
+    <div class="group-head"><span class="group-badge">קבוצה 8</span><h3>ביאורי רש"י שבת (פרק א׳) — רשויות, קלוטה, כרמלית והוצאה</h3><span class="perek-pill target">יעד: ספר 3 וספר 4</span></div>
+    <div class="group-source"><b>מקור:</b> `ביאורי רש''י.txt`, אותיות 1–6 (שבת ב. עד ו.).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום / הטמעה</b> קטעים אלו (שימוש רה"י ורה"ר, גדר הנחה, כמאן דמלי, היכא אשכחן, סיבת כרמלית, חצר של רבים) מהווים את הפירוש היסודי לרש"י. ניתן להטמיעם כהערות ביאור ישירות בתוך פסקאות 43, 75, 118, 196 בספר 3 וספר 4, או לשמרם כחלק מ"נספח ביאורי רש"י" המלווה את הסדרה.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 9 -->
+  <article class="group-card" id="g9">
+    <div class="group-head"><span class="group-badge">קבוצה 9</span><h3>ביאורי רש"י שבת (פרק א׳–ב׳) — ד"ט, כוורת, מקום פטור ושבתון</h3><span class="perek-pill target">יעד: ספר 4 וספר 5</span></div>
+    <div class="group-source"><b>מקור:</b> `ביאורי רש''י.txt`, אותיות 7–11 (שבת ו. עד י.).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום / הטמעה</b> הטמעת הביאורים על דין כרמלית עד י', גב לבינה, כוורת רחבה ו', וההבדל בין חפץ לכלי, בתוך ספר 4 ("רשויות — סוגיות") סביב קבוצה 7 וקבוצה 14.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 10 -->
+  <article class="group-card" id="g10">
+    <div class="group-head"><span class="group-badge">קבוצה 10</span><h3>ביאורי רש"י עירובין — ירושלים, רחבה, מבוי וחצר גדולה וקטנה</h3><span class="perek-pill target">יעד: ספר 2 וספר 4</span></div>
+    <div class="group-source"><b>מקור:</b> `ביאורי רש''י.txt`, אותיות 26–31 (עירובין ו. עד צב.).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום / הטמעה</b> הטמעת הביאורים על נעילת דלתות בירושלים, רחבה ומבוי שנפרץ, נראה מבחוץ ושוה מבפנים, וחצר קטנה שנפרצה לגדולה — בתוך <b>ספר 2 ("עירובי חצרות")</b> קבוצה 11, ובתוך <b>ספר 4 ("רשויות")</b> קבוצה 5 וקבוצה 6.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 11 -->
+  <article class="group-card" id="g11">
+    <div class="group-head"><span class="group-badge">קבוצה 11</span><h3>ביאורי רש"י שבת — שביתת בהמתו, תכשיט ודיחוי בשבת</h3><span class="perek-pill target">יעד: ספר 3 וספר 5</span></div>
+    <div class="group-source"><b>מקור:</b> `ביאורי רש''י.txt`, אותיות 17–25 (שבת נא. עד צז.).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום / הטמעה</b> הטמעת הביאורים המקיפים על שביתת בהמתו וכלים (כנזקי ממונו), תכשיט מול משוי, גזברית, זריקת ד"א, פיסלא, דיחוי בשבת, ולבוד ומלקט ורהיטני — בספר 3 ("הוצאה — סוגיות") ובספר 5 ("הוצאה — הקדמות").</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 12 -->
+  <article class="group-card" id="g12">
+    <div class="group-head"><span class="group-badge">קבוצה 12</span><h3>מסת ההכנה ופרשת המן — שבתון, משנה לחם ומידת הביטחון</h3><span class="perek-pill target">יעד: ספר 5 (הוצאה-הקדמות) ובספר 1 (תחומין)</span></div>
+    <div class="group-source"><b>מקור:</b> הקובץ השלם `הכנה שבת מוקצה.txt`.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> מאמר מופת זה על יסודות ההכנה בשבת, פרשת ירידת המן, "שבתון", "קודש לה'", ומעלת הביטחון מול דאגת המחר — מומלץ להטמיעו כפרק פתיחה מוביל לשער ב' ב<b>ספר 5 ("הוצאה — הקדמות וכללים")</b>, וכן כפרק מקביל המאיר את סוגיית ההכנה ב<b>ספר 1 ("עירובי תחומין")</b>.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">טקסט רציף ללא פיסוק</b> המאמר נכתב ברצף ארוך כמעט ללא חלוקת פסקאות — יש לחלקו לקטעים מובחנים בעת ההטמעה.</li>
+    </ul>
+  </article>
+
+  <!-- Group 13 -->
+  <article class="group-card" id="g13">
+    <div class="group-head"><span class="group-badge">קבוצה 13</span><h3>תורת השביתה, המנוחה והנפישה — ג' מדרגות יום השבת</h3><span class="perek-pill target">יעד: ספר 5 (מלאכת הוצאה — הקדמות, שער ב׳)</span></div>
+    <div class="group-source"><b>מקור:</b> `קדושת שבת.txt`, חלקים א׳ ו־ב׳ (ניתוח שלושת השמות: שביתה, מנוחה, נפישה, ועץ החלוקה המושגי של השבת).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> להטמיע את הניתוח המלא של שביתה (מהיצירה), מנוחה (מההתעסקות) ונפישה (מהרצון) בשער ב' של <b>ספר 5</b>, במקום שבו הובא רק סיכום מקוצר (סביב פס׳ 89–94).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 14 -->
+  <article class="group-card" id="g14">
+    <div class="group-head"><span class="group-badge">קבוצה 14</span><h3>אילן המלאכות המורחב — סיווג שיטתי של ל"ט מלאכות שבת</h3><span class="perek-pill target">יעד: ספר 5 (הוצאה — הקדמות, קבוצה 13)</span></div>
+    <div class="group-source"><b>מקור:</b> `קדושת שבת.txt`, חלק ב׳ (רשימת ל"ט מלאכות המחולקות ל־3 קטגוריות: יצירה [6], מצב [32], ושינוי [1]).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה והטמעה</b> להציב את רשימת ל"ט המלאכות המלאה והמפורטת בתוך <b>ספר 5</b> בקבוצה 13 ("טקסונומיה של ל"ט מלאכות"), כפירוט ישיר של המבנה המשולש.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 15 -->
+  <article class="group-card" id="g15">
+    <div class="group-head"><span class="group-badge">קבוצה 15</span><h3>תורת זמני השבת — שוכח עיקר שבת והמהלך במדבר (מונה ששה/משמר אחד)</h3><span class="perek-pill target">יעד: ספר 5 וספר 1</span></div>
+    <div class="group-source"><b>מקור:</b> `קדושת שבת.txt`, חלק ג׳ (סוגיית שבת סט. — מחלוקת רב הונא וחייא בר רב, "את שבתותי תשמורו", "ושמרו", ו"מחלליה מות יומת").</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> להטמיע את הניתוח העמוק על שלושת ממדי זמן השבת (כלל השבתות כיחידה אחת, שבת אחת כשלמה, וכל רגע משבת) בספר 5 כחלק מביאור קדושת הזמן, וכן כהערת רקע לסוגיית עירובי תחומין בספר 1.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+</section>
+
+<section id="technical">
+  <h2 class="section-title"><span class="num">6</span> רשימת תיקונים טכניים — קבצי ההרחבה</h2>
+  <p class="section-sub">תיקוני כתיב ופליטות קולמוס שאותרו בקבצי ההרחבה ויש לתקנם בעת ההטמעה:</p>
+  <table class="checklist">
+    <thead><tr><th>לפני (בקבצי ההרחבה)</th><th>אחרי</th><th>סוג</th><th>מיקום</th></tr></thead>
+    <tbody>
+      <tr><td class="before">פרק רביעי... פרק שישי... פרק שישי</td><td class="after">פרק רביעי... פרק חמישי... פרק שישי</td><td>טעות ספירה בסדר הפרקים</td><td>עירובין לא מסודר (חלק ב׳)</td></tr>
+      <tr><td class="before">איסורהלאו</td><td class="after">איסור הלאו</td><td>שגיאת רווח</td><td>קדושת שבת</td></tr>
+      <tr><td class="before">ממך זה יועץ</td><td class="after">ממך יצא יועץ</td><td>ציטוט פסוק (נחום א, יא)</td><td>עירובין לא מסודר (חלק א׳)</td></tr>
+      <tr><td class="before">לששון</td><td class="after">לשון</td><td>שגיאת הקלדה</td><td>עירובין לא מסודר</td></tr>
+      <tr><td class="before">גוד אחיד</td><td class="after">גוד אחית</td><td>שגיאת הקלדה</td><td>ביאורי רש"י (אות 25)</td></tr>
+      <tr><td class="before">ביצאצא דמישן</td><td class="after">ביצאתא דמישן</td><td>שגיאת הקלדה בארמית</td><td>ביאורי רש"י (אות 25)</td></tr>
+      <tr><td class="before">שלא יהיה בו שום רווח להיות המשך</td><td class="after">...בכדי שיהיה המשך</td><td>תיקון תחביר</td><td>בגדר הלכה דלבוד</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="mapping">
+  <h2 class="section-title"><span class="num">7</span> נספח: טבלת מיפוי מלאה (מקבצי ההרחבה אל ששת כרכי הסדרה)</h2>
+  <div class="map-wrap">
+  <table class="mapping">
+    <thead><tr><th>קובץ הרחבה</th><th>מקטע בקובץ</th><th>ספר היעד בסדרה</th><th>קבוצה ומיקום בספר היעד</th></tr></thead>
+    <tbody>
+      <tr><td><b>בגדר הלכה דלבוד.txt</b></td><td>המאמר כולו</td><td>ספר 6 (רשויות — הקדמות)</td><td>קבוצה 13 (הרחבה לפסקה 148)</td></tr>
+      <tr><td><b>מיגו דהוה דופן.txt</b></td><td>המאמר כולו</td><td>ספר 4 (רשויות — סוגיות)</td><td>קבוצה 10–11 (סביב פסקאות 277–280)</td></tr>
+      <tr><td><b>הכנה שבת מוקצה.txt</b></td><td>המאמר כולו</td><td>ספר 5 (הוצאה — הקדמות) / ספר 1</td><td>שער ב' (הקדמה לקדושת שבת / תחומין)</td></tr>
+      <tr><td rowspan="3"><b>עירובין לא מסודר.txt</b></td><td>פסקאות 2–4 (מטריצת הנחה)</td><td>ספר 3 (הוצאה — סוגיות)</td><td>כפילות מאומתת מול פסקה 157</td></tr>
+      <tr><td>פסקאות 5–11 (שורשים ובלשנות)</td><td>ספר 5 (הוצאה — הקדמות)</td><td>שער א' (קבוצות 1–2)</td></tr>
+      <tr><td>חלק ב' וג' (סדר עירובין ומילון)</td><td>ספר 6 וספר 4</td><td>מבוא לעירובין / כפילות למילוני מחיצה</td></tr>
+      <tr><td rowspan="4"><b>ביאורי רש''י.txt</b></td><td>אותיות 1–6 (שבת ב.–ו.)</td><td>ספר 3 וספר 4</td><td>מוטמע בסוגיות יציאות השבת ורשויות</td></tr>
+      <tr><td>אותיות 7–11 (שבת ו.–י.)</td><td>ספר 4 (רשויות — סוגיות)</td><td>קבוצה 7 וקבוצה 14</td></tr>
+      <tr><td>אותיות 12–16, 26–31 (עירובין)</td><td>ספר 2 וספר 4</td><td>מוטמע בסוגיות מבוי, חצר וירושלים</td></tr>
+      <tr><td>אותיות 17–25 (שבת נא.–צז.)</td><td>ספר 3 וספר 5</td><td>מוטמע בסוגיות בהמה, תכשיט ולבוד</td></tr>
+      <tr><td rowspan="3"><b>קדושת שבת.txt</b></td><td>חלק א' (שביתה, מנוחה, נפישה)</td><td>ספר 5 (הוצאה — הקדמות)</td><td>שער ב' (קבוצה 9 וקבוצה 11)</td></tr>
+      <tr><td>חלק ב' (חלוקת ל"ט מלאכות)</td><td>ספר 5 (הוצאה — הקדמות)</td><td>קבוצה 13 (טקסונומיית מלאכות)</td></tr>
+      <tr><td>חלק ג' (זמני שבת והמהלך במדבר)</td><td>ספר 5 (הוצאה — הקדמות) / ספר 1</td><td>שער ב' (קבוצה 9) / ספר תחומין</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="decisions">
+  <h2 class="section-title"><span class="num">8</span> החלטות שנותרו בידי המחבר בלבד</h2>
+  <div class="decision-card">
+    <h4>מודל ההטמעה: שילוב מלא בגוף הספרים מול כרך "הקדמות ונספחים"</h4>
+    <p>
+      התכנית נבנתה לפי העדפת המחבר להטמיע את החומרים בתוך ששת ספרי הסדרה הקיימים. 
+      עם זאת, מאמרים מונומנטליים כמו <b>"הכנה שבת מוקצה"</b> ו־<b>"קדושת שבת"</b> הם בעלי שיעור קומה של חיבורים פילוסופיים עצמאיים. 
+      יש להכריע האם להטמיעם כפרקי מבוא בתוך ספרי ההקדמות, או לחילופין להוציאם ככרך שביעי בסדרה: <i>"ספר קדושת השבת וההכנה"</i>.
+    </p>
+  </div>
+  <div class="decision-card">
+    <h4>מעמד קובץ "ביאורי רש"י"</h4>
+    <p>
+      קובץ ביאורי רש"י מכיל 31 יחידות פרשניות סדורות. 
+      יש להכריע: האם להטמיע כל ביאור כהערת שוליים / פסקת הרחבה בסוגיה הרלוונטית בספרי הסוגיות (ספרים 2, 3, 4), 
+      או להותירו כנספח ביאורים שלם בסוף כל כרך.
+    </p>
+  </div>
+  <div class="decision-card">
+    <h4>טיפול בקטעי הפנקס והטיוטות ("עירובין לא מסודר")</h4>
+    <p>
+      מתוך קובץ זה חולצו הקטעים הבלשניים הייחודיים (שורשי נטל/נתן, קום/מקום). 
+      שאר הקובץ מהווה טיוטות שכבר הוטמעו (מילוני מחיצה/פירצה ומטריצת הנחה). מומלץ לאשר את גניזת הטיוטות הכפולות כדי למנוע כפילות מיותרת בדפוס.
+    </p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <div class="wrap">
+    מסמך זה הוא <b>תכנית־על אינטגרטיבית</b> למיזוג ששת קבצי ההרחבה בששת ספרי הסדרה השלמה.
+    שום פסקת־תוכן לא שונתה; יש לפעול לפי מפת ההטמעה וכרטיסי הקבוצות לעיל בעת עריכת המהדורה השלמה.
+  </div>
+</footer>
+
+<script>
+(function(){
+  var toggle = document.getElementById('navtoggle');
+  var nav = document.getElementById('tocnav');
+  if(toggle && nav){
+    toggle.addEventListener('click', function(){
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+    });
+  }
+  var links = Array.prototype.slice.call(document.querySelectorAll('#tocnav a'));
+  var targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if('IntersectionObserver' in window && targets.length){
+    var map = {};
+    links.forEach(function(a,i){ if(targets[i]) map[targets[i].id] = a; });
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = map[entry.target.id];
+        if(!link) return;
+        if(entry.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, {rootMargin:'-40% 0px -50% 0px', threshold:0});
+    targets.forEach(function(t){ obs.observe(t); });
+  }
+})();
+</script>
+</body>
+</html>

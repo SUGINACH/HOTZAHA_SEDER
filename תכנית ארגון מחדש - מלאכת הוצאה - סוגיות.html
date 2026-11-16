@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תכנית עבודה: ארגון מחדש של המאמר "מלאכת הוצאה — סוגיות"</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;600;700;900&family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F1E6;
+  --paper-deep:#EEE8D8;
+  --ink:#241E17;
+  --ink-soft:#5B5346;
+  --line:#D9D0BC;
+  --structure:#24463B;
+  --structure-soft:#3E6B5C;
+  --split:#B8863B;
+  --merge:#3E6B5C;
+  --rename:#6B5C7A;
+  --move:#3A5A78;
+  --flag:#A24B3F;
+  --flag-bg:#F3E4DF;
+  --card-bg:#FBF9F2;
+  --shadow: 0 1px 2px rgba(36,30,23,.06), 0 6px 20px rgba(36,30,23,.05);
+  --radius: 14px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Assistant', 'Arial Hebrew', 'Heebo', sans-serif;
+  font-size:16.5px;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:'Frank Ruhl Libre', 'David Libre', serif;
+  color:var(--ink);
+  line-height:1.3;
+  margin:0 0 .5em;
+}
+a{color:var(--structure); text-decoration-thickness: 1px; text-underline-offset:3px;}
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:3px solid var(--structure-soft);
+  outline-offset:2px;
+  border-radius:4px;
+}
+::selection{background:#D9C9A3;}
+
+.shell{display:grid; grid-template-columns: 1fr min(1120px, 92vw) 1fr;}
+.shell > *{grid-column:2;}
+.wrap{max-width:1120px; margin:0 auto; padding:0 clamp(16px,3vw,32px);}
+
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(245,241,230,.92);
+  backdrop-filter: blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:1120px; margin:0 auto; padding:12px clamp(16px,3vw,32px);
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.brand{
+  font-family:'Frank Ruhl Libre',serif; font-weight:700; font-size:17px;
+  display:flex; align-items:center; gap:8px; color:var(--structure);
+}
+.brand .mark{
+  width:22px; height:22px; border-radius:5px; background:var(--structure);
+  display:inline-block; position:relative; flex:none;
+}
+.brand .mark::after{
+  content:""; position:absolute; inset:5px; border:1.5px solid var(--paper); border-radius:2px;
+}
+#navtoggle{
+  display:none; background:var(--structure); color:var(--paper); border:none;
+  padding:9px 14px; border-radius:8px; font-family:'Assistant'; font-weight:600; font-size:14px; cursor:pointer;
+}
+.toc-inline{display:flex; flex-wrap:wrap; gap:4px 2px; font-size:13.5px;}
+.toc-inline a{
+  color:var(--ink-soft); padding:6px 10px; border-radius:20px; white-space:nowrap;
+  transition:background .15s, color .15s;
+}
+.toc-inline a:hover, .toc-inline a.active{background:var(--structure); color:var(--paper);}
+@media (max-width:920px){
+  .toc-inline{
+    display:none; position:absolute; top:100%; inset-inline:0; background:var(--paper);
+    flex-direction:column; padding:10px 16px 18px; border-bottom:1px solid var(--line);
+    max-height:75vh; overflow:auto;
+  }
+  .toc-inline.open{display:flex;}
+  .toc-inline a{width:100%; text-align:start; padding:10px 12px;}
+  #navtoggle{display:inline-block;}
+}
+
+.hero{padding:56px 0 20px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:13px; font-weight:700; letter-spacing:.02em;
+  color:var(--structure); background:#E4E9E2; border:1px solid #cfd9cb;
+  padding:6px 14px; border-radius:30px; margin-bottom:22px;
+}
+.eyebrow::before{content:"◆"; font-size:9px;}
+h1.title{font-size:clamp(30px,4.4vw,46px); font-weight:700; max-width:24ch;}
+.lede{font-size:19px; color:var(--ink-soft); max-width:64ch; margin-top:10px;}
+.hero-note{
+  margin-top:28px; border:1px solid var(--line); background:var(--card-bg);
+  border-radius:var(--radius); padding:18px 22px; max-width:74ch; box-shadow:var(--shadow);
+  font-size:15px;
+}
+.hero-note b{color:var(--structure);}
+
+.diagram-section{padding:34px 0 12px;}
+.diagram-title{font-size:14px; font-weight:700; color:var(--ink-soft); margin-bottom:4px;}
+.diagram-sub{font-size:13.5px; color:var(--ink-soft); margin-bottom:18px;}
+.bars{display:flex; flex-direction:column; gap:22px;}
+.bar-label{font-size:13px; font-weight:700; margin-bottom:8px; display:flex; justify-content:space-between; color:var(--ink-soft);}
+.bar{
+  display:flex; width:100%; border-radius:10px; overflow:hidden; border:1px solid var(--line);
+  min-height:46px; background:var(--paper-deep);
+}
+.seg{
+  display:flex; align-items:center; justify-content:center;
+  color:var(--paper); font-size:11px; font-weight:700;
+  border-left:1px solid rgba(245,241,230,.35);
+  min-width:2px; padding:2px; white-space:nowrap; overflow:hidden;
+}
+.legend{display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:14px; font-size:12.5px; color:var(--ink-soft);}
+.legend span{display:inline-flex; align-items:center; gap:6px;}
+.legend i{width:11px; height:11px; border-radius:3px; display:inline-block;}
+
+section{padding:44px 0;}
+section + section{border-top:1px solid var(--line);}
+h2.section-title{font-size:clamp(23px,2.6vw,29px); display:flex; align-items:baseline; gap:12px;}
+h2.section-title .num{
+  font-family:'Assistant'; font-weight:800; color:var(--structure-soft); font-size:15px;
+  border:1.5px solid var(--structure-soft); border-radius:50%; width:30px; height:30px;
+  display:inline-flex; align-items:center; justify-content:center; flex:none;
+}
+.section-sub{color:var(--ink-soft); font-size:15.5px; max-width:75ch; margin-top:4px;}
+
+.rules-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:24px;}
+@media (max-width:760px){.rules-grid{grid-template-columns:1fr;}}
+.rule-card{border-radius:var(--radius); padding:22px; box-shadow:var(--shadow);}
+.rule-card.allow{background:#EEF3EA; border:1px solid #cddac4;}
+.rule-card.forbid{background:var(--flag-bg); border:1px solid #e0bfb6;}
+.rule-card h3{font-size:18px; display:flex; align-items:center; gap:10px;}
+.rule-card.allow h3{color:var(--structure);}
+.rule-card.forbid h3{color:var(--flag);}
+.rule-card ul{margin:12px 0 0; padding-inline-start:20px;}
+.rule-card li{margin-bottom:8px; font-size:15px;}
+
+.flag-sample{
+  margin-top:20px; border:1.5px dashed var(--flag); border-radius:10px; padding:16px 18px;
+  background:var(--flag-bg); font-size:14.5px; color:#5c2c22;
+}
+.flag-sample b{color:var(--flag); font-family:'Assistant';}
+.flag-types{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:18px;}
+.flag-type{border:1px solid var(--line); border-radius:10px; padding:12px 14px; background:var(--card-bg); font-size:13.8px;}
+.flag-type b{display:block; color:var(--flag); font-size:13px; margin-bottom:4px;}
+
+.macro-list{counter-reset:g; margin-top:26px; display:flex; flex-direction:column; gap:0;}
+.macro-item{
+  counter-increment:g; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px;
+  padding:15px 6px; border-bottom:1px solid var(--line);
+}
+.macro-item:first-child{border-top:1px solid var(--line);}
+.macro-item::before{
+  content:counter(g); font-family:'Frank Ruhl Libre'; font-weight:700; font-size:20px; color:var(--structure-soft);
+  width:34px; text-align:center;
+}
+.macro-item .mname{font-weight:600; font-size:15.5px;}
+.macro-item .mname a{color:var(--ink);}
+.perek-pill{
+  display:inline-block; font-size:11.5px; padding:3px 10px; border-radius:20px; font-weight:700;
+  background:#E4E9E2; color:var(--structure); border:1px solid #cfd9cb; white-space:nowrap;
+}
+.perek-pill.low{background:var(--flag-bg); color:var(--flag); border-color:#e0bfb6;}
+
+.group-card{
+  background:var(--card-bg); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:26px 28px; margin-top:26px; scroll-margin-top:80px;
+}
+.group-head{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:6px;}
+.group-badge{
+  font-family:'Assistant'; font-weight:800; font-size:13px; color:var(--paper);
+  background:var(--structure); padding:5px 12px; border-radius:8px; flex:none;
+}
+.group-head h3{font-size:22px; margin:0; flex:1 1 auto; min-width:200px;}
+.group-source{
+  font-size:14.5px; color:var(--ink-soft); border-inline-start:3px solid var(--structure-soft);
+  padding-inline-start:12px; margin:14px 0 18px;
+}
+.group-source b{color:var(--ink);}
+.group-body-title{
+  font-size:13px; font-weight:800; color:var(--ink-soft); margin:20px 0 10px; display:flex; align-items:center; gap:8px;
+}
+.group-body-title::after{content:""; flex:1; height:1px; background:var(--line);}
+ul.op-list, ul.flag-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+.op-list li, .flag-list li{
+  position:relative; padding:10px 14px; border-radius:8px; font-size:14.8px;
+  background:var(--paper); border:1px solid var(--line); border-inline-start:4px solid var(--ink-soft);
+}
+.op-list li b.tag, .flag-list li b.tag{
+  display:inline-block; font-size:11px; font-weight:800; padding:2px 9px; border-radius:20px;
+  margin-inline-end:8px; color:#fff; vertical-align:1px;
+}
+.op-merge{border-inline-start-color:var(--merge) !important;} .op-merge b.tag{background:var(--merge);}
+.op-split{border-inline-start-color:var(--split) !important;} .op-split b.tag{background:var(--split);}
+.op-rename{border-inline-start-color:var(--rename) !important;} .op-rename b.tag{background:var(--rename);}
+.op-move{border-inline-start-color:var(--move) !important;} .op-move b.tag{background:var(--move);}
+.op-copy{border-inline-start-color:var(--structure-soft) !important;} .op-copy b.tag{background:var(--structure-soft);}
+.flag-list li{border-inline-start-color:var(--flag) !important; background:var(--flag-bg);}
+.flag-list li b.tag{background:var(--flag);}
+.quote{font-family:'Frank Ruhl Libre',serif; color:var(--ink); background:var(--paper-deep); border-radius:6px; padding:1px 6px; font-size:.95em;}
+.pnum{font-family:'Assistant'; font-weight:700; font-size:.86em; color:var(--structure); background:#E4E9E2; border-radius:5px; padding:0 6px;}
+.no-flags{font-size:14px; color:var(--ink-soft); padding:8px 2px;}
+
+table.checklist{width:100%; border-collapse:collapse; margin-top:22px; font-size:14.5px;}
+table.checklist th{background:var(--structure); color:var(--paper); text-align:start; padding:10px 12px; font-weight:600;}
+table.checklist td{padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+table.checklist tr:nth-child(even) td{background:var(--paper-deep);}
+table.checklist td.before{color:#8a4032; text-decoration:line-through; text-decoration-color:#c98d7f;}
+table.checklist td.after{color:var(--structure); font-weight:700;}
+.decide-badge{display:inline-block; font-size:11px; font-weight:800; color:#fff; background:var(--flag); padding:2px 9px; border-radius:20px;}
+
+.map-wrap{overflow-x:auto; margin-top:20px; border:1px solid var(--line); border-radius:12px;}
+table.mapping{width:100%; border-collapse:collapse; font-size:13.8px; min-width:640px;}
+table.mapping th{background:var(--paper-deep); padding:10px 12px; text-align:start; position:sticky; top:0;}
+table.mapping td{padding:9px 12px; border-top:1px solid var(--line);}
+table.mapping tr:hover td{background:#F0EBD9;}
+
+.decision-card{border:1.5px solid #e0bfb6; background:var(--flag-bg); border-radius:12px; padding:18px 20px; margin-top:16px;}
+.decision-card h4{margin:0 0 6px; font-size:16.5px; color:#7a3226;}
+.decision-card p{margin:0; font-size:14.8px;}
+
+footer{padding:40px 0 70px; color:var(--ink-soft); font-size:13.5px;}
+footer .wrap{border-top:1px solid var(--line); padding-top:24px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="mark"></span> תכנית ארגון־מחדש · מלאכת הוצאה (סוגיות)</div>
+    <button id="navtoggle" aria-expanded="false" aria-controls="tocnav">תפריט</button>
+    <nav id="tocnav" class="toc-inline" aria-label="ניווט מהיר בתכנית">
+      <a href="#scope">היקף ומגבלות</a>
+      <a href="#structure-overview">מהות החיבור</a>
+      <a href="#flagging">מוסכמת דגלים</a>
+      <a href="#macro-toc">מבנה היעד</a>
+      <a href="#groups">15 הקבוצות</a>
+      <a href="#technical">תיקונים טכניים</a>
+      <a href="#mapping">טבלת מיפוי</a>
+      <a href="#decisions">להכרעת המחבר</a>
+    </nav>
+  </div>
+</div>
+
+<div class="shell">
+
+<header class="hero">
+  <span class="eyebrow">תכנית עריכה מבנית — לא שינוי תוכן · מסמך שמיני בסדרה</span>
+  <h1 class="title">ארגון מחדש של החיבור<br>"מלאכת הוצאה — סוגיות"</h1>
+  <p class="lede">
+    תכנית עבודה מקיפה, שיטתית ומדויקת להסדרת החיבור הלמדני העצום (413 פסקאות) העוסק בכל סוגיות מלאכת הוצאה —
+    סוגיית הוציא ונמלך (שבת צא.), צירוף חצאי שיעור, יציאות השבת (שבת ב.), ידו של אדם ככרמלית (שבת ג:),
+    עקירה והנחה מע"ג מקום ד' (שבת ד.), קלוטה כמי שהונחה, המוציא דרך סטיו (שבת ה:), מעביר דרך עליו (שבת ח.),
+    מקורות המלאכה במשכן, ועד יסודות מלאכת מחשבת, משאצל"ג, מתעסק ושנים שעשאוה.
+  </p>
+  <div class="hero-note">
+    <b>אתגר המבנה במסמך זה:</b> החיבור מכיל 413 פסקאות למדניות מורכבות תחת היררכיה מקוננת ומפותלת 
+    (10 שערי־על מרובי רמות תחת `כותרת 2` ו־`כותרת 3`, ו־103 תת־שערים תחת `כותרת 6`).
+    התכנית שלהלן משטחת את המבנה ל־<b>15 קבוצות נושאיות סדורות</b> העוקבות אחר סדר הסוגיות במסכת שבת ופירמידת המושגים של המחבר,
+    מבלי לשנות אף מילה או סברה בגוף הטקסט המקורי.
+  </div>
+</header>
+
+<section class="diagram-section" aria-label="תרשים השוואה: מבנה נוכחי מול מבנה מוצע">
+  <div class="diagram-title">מבט מהיר: מ־10 שערים מקוטעים ומקוננים אל 15 פרקים שיטתיים ומאוזנים</div>
+  <div class="diagram-sub">רוחב המקטעים פרופורציונלי למספר הפסקאות. במקור נוצרו שערי ענק בלתי מאוזנים לצד דילוגי רמות (מכותרת 2 ישירות לכותרת 6 ו־7).</div>
+  <div class="bars">
+    <div class="bar-row">
+      <div class="bar-label"><span>מבנה נוכחי — 10 שערי־על מקוננים לעומק</span><span>סה"כ 413 פסקאות</span></div>
+      <div class="bar" role="img" aria-label="מבנה נוכחי: שער 1 (42), שער 2-3 (55), שער 5 (98), שער 6 (51), שער 7-8 (39), שער 9 (55), שערים נוספים (73)">
+        <div class="seg" style="flex:42;background:#24463B;" title="שער 1: שיעור חפץ וצירופו (42)">42</div>
+        <div class="seg" style="flex:55;background:#3E6B5C;" title="שער 2-3: יציאות השבת ותולדותיה (55)">55</div>
+        <div class="seg" style="flex:98;background:var(--structure);" title="שער 5: פשט העני ועקוה&quot;נ (98 פסקאות)">98</div>
+        <div class="seg" style="flex:51;background:#6b6252;" title="שער 6: המוציא דרך סטיו (51)">51</div>
+        <div class="seg" style="flex:39;background:#5B5346;" title="שער 7-8: דרך עליו ודרך עליה (39)">39</div>
+        <div class="seg" style="flex:55;background:#8a8365;" title="שער 9: חלקי המלאכה ומקורותיה (55)">55</div>
+        <div class="seg" style="flex:73;background:#5c5540;" title="מתעסק, דשא&quot;מ, שנים שעשאוה וסיכום (73)">73</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>מבנה מוצע — 15 קבוצות בחמש חטיבות סוגיה סדורות</span><span>צבע = חטיבה עיונית</span></div>
+      <div class="bar" role="img" aria-label="מבנה מוצע: 15 קבוצות מאוזנות היטב">
+        <div class="seg" style="flex:10;background:#24463B;" title="1 · הוציא ונמלך ודיחוי">1</div>
+        <div class="seg" style="flex:12;background:#24463B;" title="2 · צירוף חצאי שיעור">2</div>
+        <div class="seg" style="flex:20;background:#24463B;" title="3 · אונטולוגיה של צירוף">3</div>
+        <div class="seg" style="flex:32;background:#3E6B5C;" title="4 · יציאות השבת (שבת ב.)">4</div>
+        <div class="seg" style="flex:23;background:#3E6B5C;" title="5 · ידו של אדם ככרמלית">5</div>
+        <div class="seg" style="flex:20;background:#7a7350;" title="6 · עקירה והנחה מעגמ&quot;ד">6</div>
+        <div class="seg" style="flex:12;background:#7a7350;" title="7 · תורת ההנחה והקליטה">7</div>
+        <div class="seg" style="flex:24;background:#7a7350;" title="8 · כותל רה&quot;ר וקלוטה לר&quot;ע">8</div>
+        <div class="seg" style="flex:42;background:#8a8365;" title="9 · כפל משמעות עקוה&quot;נ ותוך ג'">9</div>
+        <div class="seg" style="flex:32;background:#8a8365;" title="10 · המוציא דרך סטיו (ה:)">10</div>
+        <div class="seg" style="flex:19;background:#8a8365;" title="11 · צידי רה&quot;ר ומשא בהילוך">11</div>
+        <div class="seg" style="flex:39;background:#5c5540;" title="12 · דרך עליו ודרך עליה">12</div>
+        <div class="seg" style="flex:55;background:#5c5540;" title="13 · מקורות המלאכה ומשאצל&quot;ג">13</div>
+        <div class="seg" style="flex:25;background:#5B5346;" title="14 · תורת המתעסק ודשא&quot;מ">14</div>
+        <div class="seg" style="flex:48;background:#5B5346;" title="15 · שנים שעשאוה וסיכום המעשה">15</div>
+      </div>
+      <div class="legend">
+        <span><i style="background:#24463B;"></i> חטיבה א׳: תורת השיעור, שינוי מחשבה וצירוף (שבת צא. / פ.)</span>
+        <span><i style="background:#3E6B5C;"></i> חטיבה ב׳: יציאות השבת (שבת ב.) וידו של אדם (שבת ג:)</span>
+        <span><i style="background:#7a7350;"></i> חטיבה ג׳: תורת העקירה, ההנחה, קלוטה מעגמ״ד (שבת ד.–ה.)</span>
+        <span><i style="background:#8a8365;"></i> חטיבה ד׳: סוגיית המוציא דרך סטיו ודיני מעביר ברה״ר (שבת ה: / ח.)</span>
+        <span><i style="background:#5c5540;"></i> חטיבה ה׳: מקורות המלאכה, מלאכת מחשבת, מתעסק ושנים שעשאוה</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main>
+
+<section id="scope">
+  <h2 class="section-title"><span class="num">1</span> היקף העבודה והמגבלה המרכזית</h2>
+  <p class="section-sub">עקרונות היסוד הקבועים שאין לחרוג מהם בשום שלב.</p>
+  <div class="rules-grid">
+    <div class="rule-card forbid">
+      <h3>✕ אסור בהחלט</h3>
+      <ul>
+        <li>לשנות, לקצר או לנסח מחדש אף משפט או סברה בגוף הניתוח המקורי.</li>
+        <li>למחוק פסקאות או לבטל מהלכים למדניים מקוריים של המחבר.</li>
+        <li>לפתור בעצמנו שאלות פתוחות שהמחבר השאיר ב"וצ"ע" או "וצ"ב".</li>
+        <li>להשלים הפניות לחיבורים אחרים ("כמשנ"ת במק"א") בגוף הטקסט.</li>
+      </ul>
+    </div>
+    <div class="rule-card allow">
+      <h3>✓ מותר ומבוקש</h3>
+      <ul>
+        <li>לשטח את המבנה המקונן (10 שערים ו־103 תת־שערים) ל־15 קבוצות נושאיות סדורות.</li>
+        <li>לשמור על רציפות המספור המקורי של 413 הפסקאות תוך תיוג `(ישן)` עקבי.</li>
+        <li>לכתוב <b>כותרות ניווט בהירות ומדויקות</b> המשקפות את המהלך הלמדני בכל פסקה.</li>
+        <li>לתקן שגיאות כתיב, איות, לשון והקלדה מובהקות.</li>
+        <li>לסמן בדגלי עורך מוגדרים שאלות פתוחות והפניות חסרות.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="structure-overview">
+  <h2 class="section-title"><span class="num">2</span> מהות החיבור וארגון המבנה מחדש</h2>
+  <p class="section-sub">מסה למדנית רחבת־היקף בתורת המעשה, הכוונה והמלאכה במסכת שבת:</p>
+  <div class="hero-note">
+    <b>1. פירמידה עיונית הנעה מהחפץ אל הפועל:</b> החיבור בנוי בחמישה שלבים מדורגים:
+    (א) <i>תורת השיעור והחפץ</i> — שינוי מחשבה, צמקה ותפחה, דיחוי וצירוף חצאי שיעור;
+    (ב) <i>תורת המעשה והרשות</i> — יציאות השבת, ידו של אדם, עקירה והנחה ממקום ד', וקליטת אוויר הרשות;
+    (ג) <i>תורת התנועה והמעבר</i> — מעביר דרך סטיו, הילוך מול משא, צידי רה"ר, והעברה דרך עליו ודרך עליה;
+    (ד) <i>אונטולוגיה של מלאכת שבת</i> — מקורות מלאכת הוצאה ממשכן, מלאכה גרועה, שינוי מצב מול יצירה;
+    (ה) <i>תורת הדעת והכוונה</i> — מלאכת מחשבת, מלאכה שאינה צריכה לגופה, מתעסק, דבר שאינו מתכוון, ושנים שעשאוה.<br><br>
+    <b>2. פירוק עומס הקינון המקורי:</b> במסמך המקור נוצרו 103 ראשי פרקים מקוטעים תחת `כותרת 6`. 
+    התכנית מאגדת אותם ל־15 קבוצות מאוזנות ומאירות עיניים.
+  </div>
+</section>
+
+<section id="method">
+  <h2 class="section-title"><span class="num">3</span> שיטת העבודה: חמשת תגי הפעולה</h2>
+  <p class="section-sub">חמשת התגים המנחים את העריכה המבנית:</p>
+  <ul class="op-list" style="margin-top:20px;">
+    <li class="op-move"><b class="tag">מיקום/סדר</b> שמירה על רצף הסוגיות התלמודי המדויק מריש מסכת שבת ועד פרק הזורק והמצניע.</li>
+    <li class="op-merge"><b class="tag">מיזוג</b> איחוד כותרות משנה קצרות לחטיבה עיונית רציפה.</li>
+    <li class="op-split"><b class="tag">פיצול</b> חלוקת שרשראות סוגיה ארוכות ומסועפות לתת־סעיפים נהירים.</li>
+    <li class="op-rename"><b class="tag">שינוי כותרת</b> ניסוח כותרת תורנית מלוטשת המשקפת את המהלך הלמדני — מילות הכותרת בלבד.</li>
+    <li class="op-copy"><b class="tag">העתקה ישירה</b> העתקת הרצף כלשונו וכסדרו.</li>
+  </ul>
+</section>
+
+<section id="flagging">
+  <h2 class="section-title"><span class="num">4</span> מוסכמת הסימון והדגלים</h2>
+  <p class="section-sub">דגלי העורך המיוחדים למסמך זה:</p>
+  <div class="flag-sample">
+    <b>⚑ הערת עורך [סוג]:</b> תיאור עובדתי קצר של הבעיה — ללא השערות וללא פתרון בגוף המאמר.
+  </div>
+  <div class="flag-types">
+    <div class="flag-type"><b>שאלה ללא תירוץ מפורש</b> קושיות שהמחבר חתם ב"וצ"ע" או "וצ"ב" (פסקאות 55, 100, 108, 178, 230, 248, 258, 338).</div>
+    <div class="flag-type"><b>הפניה לתוכן חסר</b> "כמש"כ במק"א / במקום אחר הארכנו" שתוכנן אינו מפורש כאן (פסקאות 7, 59, 60, 64, 89, 92, 101, 131, 134, 154, 263, 296, 329, 330, 334).</div>
+    <div class="flag-type"><b>ר"ת מפוקפק / חילופי כינויים</b> שימוש חלופי בראשי התיבות `ח"כ` ו־`חכ'` (לציון חכמים / רבנן).</div>
+  </div>
+</section>
+
+<section id="macro-toc">
+  <h2 class="section-title"><span class="num">5</span> מבנה היעד — 15 הקבוצות הסדורות</h2>
+  <p class="section-sub">15 פרקי המבנה השיטתי — מסוגיית הוציא ונמלך ועד סיכום מבנה המעשה האסור:</p>
+  <div class="macro-list">
+    <div class="macro-item"><span class="mname"><a href="#g1">סוגיית הוציא ונמלך (שבת צא.) — שינוי מחשבה ושיעור, צירוף ודיחוי אצל שבת</a></span><span class="perek-pill">שבת צא.</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g2">צירוף חצאי שיעור בהוצאה (שבת פ. / ב"ב נה:) — שתי רשויות, מחוסר קריבה והעלם אחד</a></span><span class="perek-pill">שבת פ. / ב"ב נה:</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g3">אונטולוגיה של צירוף השיעור — ירושלמי שבת, כדי אכילת פרס ואריגה בבגדים</a></span><span class="perek-pill">ירושלמי שבת פ"א</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g4">יציאות השבת (שבת ב.) — עני ובעל הבית, מעשה אדם במקום חפץ והוצאה כמלאכת שינוי</a></span><span class="perek-pill">שבת ב.–ג.</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g5">ידו של אדם אינה כרה"ר ולא כרה"י (שבת ג:) — כרמלית, קנס ומחשבת עקירה (שבת ה:)</a></span><span class="perek-pill">שבת ג:.–ה:</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g6">עקירה והנחה מע"ג מקום ד' (שבת ד.) — דרך הוצאה, מקורה ושיטת רבי בזיז</a></span><span class="perek-pill">שבת ד.</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g7">גדרי ההנחה והקליטה — קלוטה לר"ע, ביתא כמאן דמליא לרבי ואוויר שאין סופו לנוח</a></span><span class="perek-pill">שבת ד.–ה. / גיטין עט.</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g8">מקום ד' על ד', כותל רה"ר וקלוטה כמי שהונחה בין ר"ע לחכמים</a></span><span class="perek-pill">שבת ד.–ה.</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g9">כפל משמעות עקירה והנחה, תוך ג' לרבנן ופטור זה עוקר וזה מניח (שבת ג.–ה.)</a></span><span class="perek-pill">שבת ג.–ה.</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g10">המוציא מחנות לפלטיא דרך סטיו (שבת ה:) — מיפסקא רשותא ומהלך כעומד לבן עזאי</a></span><span class="perek-pill">שבת ה:</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g11">צידי רשות הרבים (עירובין צד.), הילוך, משא ומעבר בהוצאה</a></span><span class="perek-pill">עירובין צד. / כתובות לא:</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g12">המעביר דרך עליו (שבת ח:) והעבירה דרך עליה (שבת פ.) — עמד לכתף ולפוש</a></span><span class="perek-pill">שבת ח: / פ.</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g13">מקורות מלאכת הוצאה, ל"ט מלאכות ומלאכה שאינה צריכה לגופה (ר"ש ור"י)</a></span><span class="perek-pill">שבת צז: / הוריות ד.</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g14">תורת המתעסק (כריתות יט:) ודבר שאינו מתכוון (פסחים כה.) — הנאה בע"כ ופסיק רישא</a></span><span class="perek-pill">כריתות יט: / פסחים כה:</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g15">שנים שעשאוה (פרשת חטאת), אבן בחיקו (ב"ק כו:) ומטריצת מבנה המעשה האסור</a></span><span class="perek-pill">שבת ג. / ב"ק כו:</span></div>
+  </div>
+</section>
+
+<section id="groups">
+  <h2 class="section-title"><span class="num">6</span> פירוט מלא — 15 הקבוצות הסדורות</h2>
+
+  <!-- Group 1 -->
+  <article class="group-card" id="g1">
+    <div class="group-head"><span class="group-badge">קבוצה 1</span><h3>סוגיית הוציא ונמלך (שבת צא.) — שינוי מחשבה ושיעור, צירוף ודיחוי אצל שבת</h3><span class="perek-pill">שבת צא.</span></div>
+    <div class="group-source"><b>מקור:</b> פתיחת החיבור תחת כותרת 2 מס׳ 1, כותרת 6 מס׳ 1–3, כותרת 7 מס׳ 1–10 (פסקאות 1–10).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 1–10 כסדרן: סוגיית שבת צא. בהוציא כגרוגרת לאכילה ונמלך לזריעה, תפחה וצמקה, ספק דיחוי אצל שבת, מוציא דרך כרמלית (ה:) מול דיחוי, ושיעור כגדר באיסור שבת ולא במעשה ההוצאה.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> הכתרת שער א׳: "שער א׳: תורת השיעור, שינוי מחשבה וצירוף חצאי שיעור בהוצאה".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">הפניה לתוכן חסר</b> בפסקה <span class="pnum">7</span> מופיעה הפניה: <span class="quote">"כמש"כ במק"א שעיקר הוצאה מרשות לרשות היא במהותה שינוי מקום חפץ..."</span>.</li>
+    </ul>
+  </article>
+
+  <!-- Group 2 -->
+  <article class="group-card" id="g2">
+    <div class="group-head"><span class="group-badge">קבוצה 2</span><h3>צירוף חצאי שיעור בהוצאה (שבת פ. / ב"ב נה:) — שתי רשויות, מחוסר קריבה והעלם אחד</h3><span class="perek-pill">שבת פ. / ב"ב נה:</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 6 מס׳ 4–8, כותרת 7 מס׳ 11–22 (פסקאות 11–22).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 11–22: שיעור המצטרף בשני מעשים מכוח מלאכת מחשבת, מחלוקת ר"ח ותוספות בב"ב נה:, ביאור דברי רבא ברשב"א וחכמים במצניע, רבא בשבת פ. בחצי גרוגרת שהניחה וחזר והוציא, גרימת שינוי מצב מול פעולת העברה, ומחשבת שיעור (לזרע/לאכילה).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 3 -->
+  <article class="group-card" id="g3">
+    <div class="group-head"><span class="group-badge">קבוצה 3</span><h3>אונטולוגיה של צירוף השיעור — ירושלמי שבת, כדי אכילת פרס ואריגה בבגדים</h3><span class="perek-pill">ירושלמי שבת פ"א</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 6 מס׳ 9–17, כותרת 7 מס׳ 23–42 (פסקאות 23–42).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 23–42: חקירה אי שיעור הוי מגדרי מלאכה או תנאי לחיוב, פטור מקום פטור מחמת חסרון מעשה בבת אחת, השוואה לכדי אכילת פרס, סוגיית הירושלמי שבת פ"א (ר' יוחנן, ר' יוסי, ר' אילא, ר' יודן, רבנן דקיסרין), אריגה בשני בגדים, ושיטת ר' יוחנן בהוציא והכניס חצי שיעור.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 4 -->
+  <article class="group-card" id="g4">
+    <div class="group-head"><span class="group-badge">קבוצה 4</span><h3>יציאות השבת (שבת ב.) — עני ובעל הבית, מעשה אדם במקום חפץ והוצאה כמלאכת שינוי</h3><span class="perek-pill">שבת ב.–ג.</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 מס׳ 2–3, כותרת 6 מס׳ 18–28, כותרת 7 מס׳ 43–74 (פסקאות 43–74).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 43–74: משנה שבת ב. (שתיים שהן ארבע), מעשה אדם במקום חפץ, עקירה והנחה, מקום חפץ מול מקום רשות, פטור מרה"י לרה"י (שבת מט:), מושיט בדיוטא אחת לאורך רה"ר, סוגיית בשר פסח (פסחים פה:), ואוויר מזבח (זבחים פז:).</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> הכתרת שער ב׳: "שער ב׳: יציאות השבת (שבת ב.) ותורת מעשה ההוצאה".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שאלה פתוחה</b> בפסקה <span class="pnum">55</span> מסתיים הדיון בקושיא על לשון "יציאות השבת" ב"וצ"ע".</li>
+      <li><b class="tag">הפניה לתוכן חסר</b> בפסקאות <span class="pnum">59</span>, <span class="pnum">60</span>, <span class="pnum">64</span> מופיעות הפניות חיצוניות ("כמש"כ במק"א").</li>
+    </ul>
+  </article>
+
+  <!-- Group 5 -->
+  <article class="group-card" id="g5">
+    <div class="group-head"><span class="group-badge">קבוצה 5</span><h3>ידו של אדם אינה כרה"ר ולא כרה"י (שבת ג:) — כרמלית, קנס ומחשבת עקירה (שבת ה:)</h3><span class="perek-pill">שבת ג:.–ה:</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 מס׳ 4, כותרת 6 מס׳ 29–37, כותרת 7 מס׳ 75–97 (פסקאות 75–97).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 75–97: בעיא דאביי בידו ככרמלית, עומד ברה"י ומטלטל ברה"ר, שיטת ר' יוחנן בעוקר מזווית לזווית (שבת ה:), מחשבת עקירה, קנס מול כרמלית, העברה ד' אמות ברה"ר, ומושיט בדיוטא אחת.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">הפניה לתוכן חסר</b> בפסקאות <span class="pnum">89</span> ו־<span class="pnum">92</span> מופיעות הפניות חיצוניות לחיבורים מקבילים.</li>
+    </ul>
+  </article>
+
+  <!-- Group 6 -->
+  <article class="group-card" id="g6">
+    <div class="group-head"><span class="group-badge">קבוצה 6</span><h3>עקירה והנחה מע"ג מקום ד' (שבת ד.) — דרך הוצאה, מקורה ושיטת רבי בזיז</h3><span class="perek-pill">שבת ד.</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 מס׳ 5 (פתיחה), כותרת 6 מס׳ 38–42, כותרת 7 מס׳ 98–117 (פסקאות 98–117).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 98–117: סוגיית פשט העני את ידו אמאי חייב והא בעינן עקוה"נ מעגמ"ד, דרך הוצאה ברש"י, ר' עקיבא בקלוטה, ר' יהודה (צז:), רב יוסף בשיטת רבי בזיז ורשות מקורה (ביתא כמאן דמליא), וסוגיית חצר בגיטין עט:.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> הכתרת שער ג׳: "שער ג׳: תורת העקירה, ההנחה, קלוטה כמי שהונחה ושיעור מקום ד'".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שאלה פתוחה</b> בפסקאות <span class="pnum">100</span> ו־<span class="pnum">108</span> מופיעות קושיות למדניות על שיטות הראשונים ללא מענה סופי.</li>
+      <li><b class="tag">הפניה לתוכן חסר</b> בפסקה <span class="pnum">101</span> מופיעה הפניה חיצונית.</li>
+    </ul>
+  </article>
+
+  <!-- Group 7 -->
+  <article class="group-card" id="g7">
+    <div class="group-head"><span class="group-badge">קבוצה 7</span><h3>גדרי ההנחה והקליטה — קלוטה לר"ע, ביתא כמאן דמליא לרבי ואוויר שאין סופו לנוח</h3><span class="perek-pill">שבת ד.–ה. / גיטין עט.</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 6 מס׳ 43–45, כותרת 7 מס׳ 118–129 (פסקאות 118–129).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 118–129: ניתוח מדוקדק של מונחי ההנחה (הונחה, קלוטה, מונח, נח), קלוטה כמי שהונחה ברשות, שתי דרגות מעשה ההוצאה, חצר משום מינטר, אוויר שאין סופו לנוח בב"מ יב:, ורבא בנח בתוך ג'.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 8 -->
+  <article class="group-card" id="g8">
+    <div class="group-head"><span class="group-badge">קבוצה 8</span><h3>מקום ד' על ד', כותל רה"ר וקלוטה כמי שהונחה בין ר"ע לחכמים</h3><span class="perek-pill">שבת ד.–ה.</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 6 מס׳ 46–48, כותרת 7 מס׳ 130–153 (פסקאות 130–153).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 130–153: לשון "מעל גבי מקום ד'", זורק דבילה שמינה בכותל רה"ר (ז:), עמוד ט', קלוטה כמי שהונחה ברש"י, ספיקא דרבה במחלוקת ר"ע וחכמים, והושטה מרה"י לרה"י דרך רה"ר.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">הפניה לתוכן חסר</b> בפסקאות <span class="pnum">131</span>, <span class="pnum">134</span>, ו־<span class="pnum">154</span> מופיעות הפניות חיצוניות למאמרים מקבילים.</li>
+    </ul>
+  </article>
+
+  <!-- Group 9 -->
+  <article class="group-card" id="g9">
+    <div class="group-head"><span class="group-badge">קבוצה 9</span><h3>כפל משמעות עקירה והנחה, תוך ג' לרבנן ופטור זה עוקר וזה מניח (שבת ג.–ה.)</h3><span class="perek-pill">שבת ג.–ה.</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 6 מס׳ 49–55, כותרת 7 מס׳ 154–195 (פסקאות 154–195).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 154–195: כפל משמעות עקוה"נ, ביתא כמאן דמליא ברש"י (חשוך ומלא הבלא), קיבל מי גשמים בכותל משופע, תוך ג' לרבנן (רבא), פטור זה עוקר וזה מניח בפרשת חטאת ("בעשותה"), זרק ונעקר וקיבל (ה.), וברייתא דאחרים.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שאלה פתוחה</b> בפסקה <span class="pnum">178</span> מועלות קושיות על סוגיית קיבל מי גשמים.</li>
+    </ul>
+  </article>
+
+  <!-- Group 10 -->
+  <article class="group-card" id="g10">
+    <div class="group-head"><span class="group-badge">קבוצה 10</span><h3>המוציא מחנות לפלטיא דרך סטיו (שבת ה:) — מיפסקא רשותא ומהלך כעומד לבן עזאי</h3><span class="perek-pill">שבת ה:</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 מס׳ 6, כותרת 6 מס׳ 56–65, כותרת 7 מס׳ 196–227 (פסקאות 196–227).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 196–227: סוגיית המוציא דרך סטיו, מהלך כעומד לבן עזאי, קושיית "היכא אשכחנא", מנקיט ואזיל, מעביר מתחילת ד' לסוף ד', צידי רה"ר לר"א, ביאור הדימויים בגמרא, וחלקי מעשה ההוצאה ברשויות.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> הכתרת שער ד׳: "שער ד׳: סוגיית המוציא דרך סטיו, צידי רשות הרבים והעברה ד' אמות".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 11 -->
+  <article class="group-card" id="g11">
+    <div class="group-head"><span class="group-badge">קבוצה 11</span><h3>צידי רשות הרבים (עירובין צד.), הילוך, משא ומעבר בהוצאה</h3><span class="perek-pill">עירובין צד. / כתובות לא:</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 6 מס׳ 66–69, כותרת 7 מס׳ 228–246 (פסקאות 228–246).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 228–246: סוגיית צידי רה"ר (עירובין צד.), חיפופי, זימנין דדחקי בכתובות לא: וב"ב יב., שיטת בן עזאי במהלך כעומד (עקירת כל פסיעה עקירה), ושלוש משמעויות מעשה ההוצאה (הליכה, משא, מעבר).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שאלה פתוחה</b> בפסקה <span class="pnum">230</span> מופיעה קושיא פתוחה בעניין "זימנין דדחקי".</li>
+    </ul>
+  </article>
+
+  <!-- Group 12 -->
+  <article class="group-card" id="g12">
+    <div class="group-head"><span class="group-badge">קבוצה 12</span><h3>המעביר דרך עליו (שבת ח:) והעבירה דרך עליה (שבת פ.) — עמד לכתף ולפוש</h3><span class="perek-pill">שבת ח: / פ.</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 מס׳ 7–8, כותרת 6 מס׳ 70–78, כותרת 7 מס׳ 247–285 (פסקאות 247–285).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 247–285: רבא בשבת ח: במעביר דרך עליו, חפץ נח ביחס לאדם, עמד לכתף מול עמד לפוש (שבת ה:), עקירת גופו, רבא בשבת פ. בחצי גרוגרת שהעבירה דרך עליה, חילול שבת כחפצא דאיסורא, ושינוי זהות מול שינוי איכות בהוצאה.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> הכתרת שער ה׳: "שער ה׳: מקורות מלאכת הוצאה, מלאכת מחשבת, מתעסק ושנים שעשאוה".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שאלה פתוחה</b> בפסקה <span class="pnum">248</span> נותרה חקירה פתוחה לעיון.</li>
+      <li><b class="tag">הפניה לתוכן חסר</b> בפסקה <span class="pnum">263</span> מופיעה הפניה חיצונית ("כמש"כ במק"א").</li>
+    </ul>
+  </article>
+
+  <!-- Group 13 -->
+  <article class="group-card" id="g13">
+    <div class="group-head"><span class="group-badge">קבוצה 13</span><h3>מקורות מלאכת הוצאה, ל"ט מלאכות ומלאכה שאינה צריכה לגופה (ר"ש ור"י)</h3><span class="perek-pill">שבת צז: / הוריות ד.</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 מס׳ 9, כותרת 6 מס׳ 79–87, כותרת 7 מס׳ 286–340 (פסקאות 286–340).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 286–340: לימוד זריקה, הכנסה והעברה ד"א בשבת צז:, תרומת המשכן (אל יעשו עוד מלאכה), טעם היות הוצאה מלאכה גרועה, אבות מלאכות ול"ט מלאכות, סוגיית בורר (עד.), הוריות ד., מלאכת מחשבת, ומלאכה שאינה צריכה לגופה לר"ש ור"י (מוציא את המת).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שאלה פתוחה</b> בפסקה <span class="pnum">338</span> נותרה חקירה פתוחה ב"וצ"ע".</li>
+      <li><b class="tag">הפניה לתוכן חסר</b> בפסקאות <span class="pnum">296</span>, <span class="pnum">329</span>, <span class="pnum">330</span>, <span class="pnum">334</span> מופיעות הפניות חיצוניות.</li>
+    </ul>
+  </article>
+
+  <!-- Group 14 -->
+  <article class="group-card" id="g14">
+    <div class="group-head"><span class="group-badge">קבוצה 14</span><h3>תורת המתעסק (כריתות יט:) ודבר שאינו מתכוון (פסחים כה.) — הנאה בע"כ ופסיק רישא</h3><span class="perek-pill">כריתות יט: / פסחים כה:</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 3 מס׳ 1–2, כותרת 6 מס׳ 88–92, כותרת 7 מס׳ 341–365 (פסקאות 341–365).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 341–365: שמואל בכריתות יט: (מתעסק בחלבים ועריות חייב שכן נהנה, בשבת פטור), מקלקל בחבורה, אבד מלקט מליבו, אשר חטא בה, פסחים כה: בהנאה הבאה בע"כ, פטור דבר שאינו מתכוון, פסיק רישא ולא אפשר.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+  <!-- Group 15 -->
+  <article class="group-card" id="g15">
+    <div class="group-head"><span class="group-badge">קבוצה 15</span><h3>שנים שעשאוה (פרשת חטאת), אבן בחיקו (ב"ק כו:) ומטריצת מבנה המעשה האסור</h3><span class="perek-pill">שבת ג. / ב"ק כו:</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 3 מס׳ 3–5, כותרת 6 מס׳ 93–103, כותרת 7 מס׳ 366–413 (פסקאות 366–413).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> העתקת פסקאות 366–413: פטור שנים שעשאוה בפרשת חטאת ("בעשותה"), זה עוקר וזה מניח, זה יכול וזה אינו יכול, מסייע, זורה ורוח מסייעתו, רבה בב"ק כו: (היתה אבן מונחת בחיקו, נזקין מול שבת), ומטריצת הסיכום הסופית של מבנה המעשה האסור (דשא"מ, משאצל"ג, מתעסק, מקלקל).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים מיוחדים ביחידה זו.</p>
+  </article>
+
+</section>
+
+<section id="technical">
+  <h2 class="section-title"><span class="num">7</span> רשימת תיקונים טכניים — גלובלית</h2>
+  <p class="section-sub">תיקוני כתיב, איות, לשון והקלדה מובהקים המותרים לביצוע במסמך:</p>
+  <table class="checklist">
+    <thead><tr><th>לפני</th><th>אחרי</th><th>סוג</th><th>מיקום שאותר</th></tr></thead>
+    <tbody>
+      <tr><td class="before">ח"כ / חכ' (מתחלף)</td><td class="after">חכמים (או: חכ')</td><td>אחידות כינוי חכמים / רבנן</td><td>לאורך כל המסמך (למשל פס׳ 18, 149, 219)</td></tr>
+      <tr><td class="before">גרורגרת</td><td class="after">גרוגרת</td><td>שגיאת הקלדה</td><td>כותרת 6 מס׳ 7 (פס׳ 17)</td></tr>
+      <tr><td class="before">מלכאת הוצאה</td><td class="after">מלאכת הוצאה</td><td>שגיאת הקלדה</td><td>כותרת 7 מס׳ 291</td></tr>
+      <tr><td class="before">איסורהלאו</td><td class="after">איסור הלאו</td><td>הפרדת רווח / הקלדה</td><td>כותרת 7 מס׳ 280</td></tr>
+      <tr><td class="before">שתים שהן ארבע / שתיים</td><td class="after">שתים שהן ארבע (אחידות)</td><td>אחידות לשון</td><td>לאורך המסמך</td></tr>
+      <tr><td class="before">שני רשויות / שלושה מידות</td><td class="after">שתי רשויות / שלוש מידות</td><td>שגיאת לשון / זכר-נקבה</td><td>פסקאות 11, 14, 115, 214</td></tr>
+      <tr><td class="before">שני גדרים / שלושה גדרים</td><td class="after">שני גדרים / שלושה גדרים</td><td>אחידות זכר לגדר</td><td>לאורך המסמך</td></tr>
+      <tr><td class="before">דאוריתא / דאורייתא</td><td class="after">דאורייתא (כתיב מלא אחיד)</td><td>אחידות כתיב</td><td>לאורך המסמך</td></tr>
+      <tr><td class="before">עגמ"ד / דע"ד</td><td class="after">ע"ג מקום ד' / ד' על ד'</td><td>אחידות ראשי תיבות</td><td>לאורך המסמך</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="mapping">
+  <h2 class="section-title"><span class="num">8</span> נספח: טבלת מיפוי מלאה (ישן ← חדש)</h2>
+  <div class="map-wrap">
+  <table class="mapping">
+    <thead><tr><th>שער מקורי (`כותרת 2/3`)</th><th>תת־שערים מקוריים (`כותרת 6`)</th><th>פסקאות מקוריות (`כותרת 7`)</th><th>יעד בקבוצות החדשות</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3">שער 1: שיעור חפץ דמלאכת הוצאה וצירופו</td><td>כותרת 6 מס׳ 1–3</td><td>1–10</td><td>קבוצה 1</td></tr>
+      <tr><td>כותרת 6 מס׳ 4–8</td><td>11–22</td><td>קבוצה 2</td></tr>
+      <tr><td>כותרת 6 מס׳ 9–17</td><td>23–42</td><td>קבוצה 3</td></tr>
+      <tr><td rowspan="2">שער 2–3: יציאות השבת והוצאה ותולדותיה</td><td>כותרת 6 מס׳ 18–28 (כולל שער 3 פתיחה)</td><td>43–74</td><td>קבוצה 4</td></tr>
+      <tr><td>שער 4: ידו של אדם (כותרת 6 מס׳ 29–37)</td><td>75–97</td><td>קבוצה 5</td></tr>
+      <tr><td rowspan="4">שער 5: פשט העני את ידו (עקוה"נ מעגמ"ד)</td><td>כותרת 6 מס׳ 38–42</td><td>98–117</td><td>קבוצה 6</td></tr>
+      <tr><td>כותרת 6 מס׳ 43–45</td><td>118–129</td><td>קבוצה 7</td></tr>
+      <tr><td>כותרת 6 מס׳ 46–48</td><td>130–153</td><td>קבוצה 8</td></tr>
+      <tr><td>כותרת 6 מס׳ 49–55</td><td>154–195</td><td>קבוצה 9</td></tr>
+      <tr><td rowspan="3">שער 6–8: דרך סטיו, דרך עליו, דרך עליה</td><td>כותרת 6 מס׳ 56–65 (דרך סטיו)</td><td>196–227</td><td>קבוצה 10</td></tr>
+      <tr><td>כותרת 6 מס׳ 66–69 (צידי רה"ר)</td><td>228–246</td><td>קבוצה 11</td></tr>
+      <tr><td>שער 7–8: דרך עליו ודרך עליה (כותרת 6 מס׳ 70–78)</td><td>247–285</td><td>קבוצה 12</td></tr>
+      <tr><td>שער 9: חלקי ואופני מלאכת הוצאה</td><td>כותרת 6 מס׳ 79–87</td><td>286–340</td><td>קבוצה 13</td></tr>
+      <tr><td rowspan="2">שערים 10–13: מתעסק, דשא"מ, שנים שעשאוה</td><td>שער 10–11: מתעסק ודשא"מ (כותרת 6 מס׳ 88–92)</td><td>341–365</td><td>קבוצה 14</td></tr>
+      <tr><td>שער 12–14: שנים שעשאוה, אבן בחיקו, סיכום (כותרת 6 מס׳ 93–103)</td><td>366–413</td><td>קבוצה 15</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="decisions">
+  <h2 class="section-title"><span class="num">9</span> החלטות שנותרו בידי המחבר בלבד</h2>
+  <div class="decision-card">
+    <h4>אחידות הכינויים "ח"כ" / "חכמים"</h4>
+    <p>
+      לאורך המסמך המחבר מקצר לעתים `ח"כ` ולעתים `חכ'` (לציון חכמים / רבנן מול ר' יהודה או ר' מאיר).
+      מומלץ למחבר להכריע האם לאחד את כל המופעים לכתיב המלא "חכמים" או להשאיר את ראשי התיבות המקוריים.
+    </p>
+  </div>
+  <div class="decision-card">
+    <h4>בירור ההפניות החיצוניות הרבות ("כמש"כ במק"א")</h4>
+    <p>
+      בפסקאות 7, 59, 60, 64, 89, 92, 101, 131, 134, 154, 263, 296, 329, 330, 334 מופיעות הפניות כגון "כמש"כ במק"א / במקום אחר הארכנו".
+      ההפניות הללו מתייחסות ברובן למאמרים המקבילים בסדרה ("מלאכת הוצאה — הקדמות וכללים", "רשויות — הקדמות וכללים", ו"רשויות — סוגיות"). 
+      מומלץ למחבר בעת ההדפסה הסופית להוסיף מראי מקומות מדויקים לסעיפים התואמים.
+    </p>
+  </div>
+  <div class="decision-card">
+    <h4>השוואת סוגיית שנים שעשאוה לדיני נזיקין</h4>
+    <p>
+      בפסקאות 372–374 המחבר מפתח הבחנה מהותית בין גדרי גרימה בדיני נזיקין לגדרי שביתה ומלאכה בשבת.
+      מומלץ למחבר לוודא בעריכה הסופית כי ניסוחים אלו מותאמים במדויק לקביעותיו במאמרי הכללים.
+    </p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <div class="wrap">
+    מסמך זה הוא <b>תכנית עבודה מפורטת בלבד</b> — השמיני בסדרה (לאחר עירובי תחומין, עירובי חצרות, מלאכת הוצאה-הקדמות, הוצאה-סוגיות ערוך, שבת מוקצה, רשויות-הקדמות ורשויות-סוגיות).
+    שום פסקת־תוכן לא שונתה; יש לחזור למקור המלא בעת הביצוע בהתאם להוראות שבכל כרטיס קבוצה לעיל.
+  </div>
+</footer>
+
+<script>
+(function(){
+  var toggle = document.getElementById('navtoggle');
+  var nav = document.getElementById('tocnav');
+  if(toggle && nav){
+    toggle.addEventListener('click', function(){
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+    });
+  }
+  var links = Array.prototype.slice.call(document.querySelectorAll('#tocnav a'));
+  var targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if('IntersectionObserver' in window && targets.length){
+    var map = {};
+    links.forEach(function(a,i){ if(targets[i]) map[targets[i].id] = a; });
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = map[entry.target.id];
+        if(!link) return;
+        if(entry.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, {rootMargin:'-40% 0px -50% 0px', threshold:0});
+    targets.forEach(function(t){ obs.observe(t); });
+  }
+})();
+</script>
+</body>
+</html>

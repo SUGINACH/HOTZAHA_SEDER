@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תכנית עבודה: ארגון מחדש של המאמר על עירובי חצירות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;600;700;900&family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F1E6;
+  --paper-deep:#EEE8D8;
+  --ink:#241E17;
+  --ink-soft:#5B5346;
+  --line:#D9D0BC;
+  --structure:#24463B;
+  --structure-soft:#3E6B5C;
+  --split:#B8863B;
+  --merge:#3E6B5C;
+  --rename:#6B5C7A;
+  --move:#3A5A78;
+  --flag:#A24B3F;
+  --flag-bg:#F3E4DF;
+  --card-bg:#FBF9F2;
+  --shadow: 0 1px 2px rgba(36,30,23,.06), 0 6px 20px rgba(36,30,23,.05);
+  --radius: 14px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Assistant', 'Arial Hebrew', 'Heebo', sans-serif;
+  font-size:16.5px;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:'Frank Ruhl Libre', 'David Libre', serif;
+  color:var(--ink);
+  line-height:1.3;
+  margin:0 0 .5em;
+}
+a{color:var(--structure); text-decoration-thickness: 1px; text-underline-offset:3px;}
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:3px solid var(--structure-soft);
+  outline-offset:2px;
+  border-radius:4px;
+}
+::selection{background:#D9C9A3;}
+
+.shell{display:grid; grid-template-columns: 1fr min(1120px, 92vw) 1fr;}
+.shell > *{grid-column:2;}
+.wrap{max-width:1120px; margin:0 auto; padding:0 clamp(16px,3vw,32px);}
+
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(245,241,230,.92);
+  backdrop-filter: blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:1120px; margin:0 auto; padding:12px clamp(16px,3vw,32px);
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.brand{
+  font-family:'Frank Ruhl Libre',serif; font-weight:700; font-size:17px;
+  display:flex; align-items:center; gap:8px; color:var(--structure);
+}
+.brand .mark{
+  width:22px; height:22px; border-radius:5px; background:var(--structure);
+  display:inline-block; position:relative; flex:none;
+}
+.brand .mark::after{
+  content:""; position:absolute; inset:5px; border:1.5px solid var(--paper); border-radius:2px;
+}
+#navtoggle{
+  display:none; background:var(--structure); color:var(--paper); border:none;
+  padding:9px 14px; border-radius:8px; font-family:'Assistant'; font-weight:600; font-size:14px; cursor:pointer;
+}
+.toc-inline{display:flex; flex-wrap:wrap; gap:4px 2px; font-size:13.5px;}
+.toc-inline a{
+  color:var(--ink-soft); padding:6px 10px; border-radius:20px; white-space:nowrap;
+  transition:background .15s, color .15s;
+}
+.toc-inline a:hover, .toc-inline a.active{background:var(--structure); color:var(--paper);}
+@media (max-width:920px){
+  .toc-inline{
+    display:none; position:absolute; top:100%; inset-inline:0; background:var(--paper);
+    flex-direction:column; padding:10px 16px 18px; border-bottom:1px solid var(--line);
+    max-height:75vh; overflow:auto;
+  }
+  .toc-inline.open{display:flex;}
+  .toc-inline a{width:100%; text-align:start; padding:10px 12px;}
+  #navtoggle{display:inline-block;}
+}
+
+.hero{padding:56px 0 20px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:13px; font-weight:700; letter-spacing:.02em;
+  color:var(--structure); background:#E4E9E2; border:1px solid #cfd9cb;
+  padding:6px 14px; border-radius:30px; margin-bottom:22px;
+}
+.eyebrow::before{content:"◆"; font-size:9px;}
+h1.title{font-size:clamp(30px,4.4vw,46px); font-weight:700; max-width:18ch;}
+.lede{font-size:19px; color:var(--ink-soft); max-width:64ch; margin-top:10px;}
+.hero-note{
+  margin-top:28px; border:1px solid var(--line); background:var(--card-bg);
+  border-radius:var(--radius); padding:18px 22px; max-width:74ch; box-shadow:var(--shadow);
+  font-size:15px;
+}
+.hero-note b{color:var(--structure);}
+
+.diagram-section{padding:34px 0 12px;}
+.diagram-title{font-size:14px; font-weight:700; color:var(--ink-soft); margin-bottom:4px;}
+.diagram-sub{font-size:13.5px; color:var(--ink-soft); margin-bottom:18px;}
+.bars{display:flex; flex-direction:column; gap:22px;}
+.bar-row{}
+.bar-label{font-size:13px; font-weight:700; margin-bottom:8px; display:flex; justify-content:space-between; color:var(--ink-soft);}
+.bar{
+  display:flex; width:100%; border-radius:10px; overflow:hidden; border:1px solid var(--line);
+  min-height:46px; background:var(--paper-deep);
+}
+.seg{
+  display:flex; align-items:center; justify-content:center;
+  color:var(--paper); font-size:11px; font-weight:700;
+  border-left:1px solid rgba(245,241,230,.35);
+  min-width:2px; padding:2px; white-space:nowrap; overflow:hidden;
+}
+.legend{display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:14px; font-size:12.5px; color:var(--ink-soft);}
+.legend span{display:inline-flex; align-items:center; gap:6px;}
+.legend i{width:11px; height:11px; border-radius:3px; display:inline-block;}
+
+section{padding:44px 0;}
+section + section{border-top:1px solid var(--line);}
+h2.section-title{font-size:clamp(23px,2.6vw,29px); display:flex; align-items:baseline; gap:12px;}
+h2.section-title .num{
+  font-family:'Assistant'; font-weight:800; color:var(--structure-soft); font-size:15px;
+  border:1.5px solid var(--structure-soft); border-radius:50%; width:30px; height:30px;
+  display:inline-flex; align-items:center; justify-content:center; flex:none;
+}
+.section-sub{color:var(--ink-soft); font-size:15.5px; max-width:75ch; margin-top:4px;}
+
+.rules-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:24px;}
+@media (max-width:760px){.rules-grid{grid-template-columns:1fr;}}
+.rule-card{border-radius:var(--radius); padding:22px; box-shadow:var(--shadow);}
+.rule-card.allow{background:#EEF3EA; border:1px solid #cddac4;}
+.rule-card.forbid{background:var(--flag-bg); border:1px solid #e0bfb6;}
+.rule-card h3{font-size:18px; display:flex; align-items:center; gap:10px;}
+.rule-card.allow h3{color:var(--structure);}
+.rule-card.forbid h3{color:var(--flag);}
+.rule-card ul{margin:12px 0 0; padding-inline-start:20px;}
+.rule-card li{margin-bottom:8px; font-size:15px;}
+
+.flag-sample{
+  margin-top:20px; border:1.5px dashed var(--flag); border-radius:10px; padding:16px 18px;
+  background:var(--flag-bg); font-size:14.5px; color:#5c2c22;
+}
+.flag-sample b{color:var(--flag); font-family:'Assistant';}
+.flag-types{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:18px;}
+.flag-type{border:1px solid var(--line); border-radius:10px; padding:12px 14px; background:var(--card-bg); font-size:13.8px;}
+.flag-type b{display:block; color:var(--flag); font-size:13px; margin-bottom:4px;}
+
+/* Meiri callout - unique to this document */
+.meiri-box{
+  margin-top:24px; border:1.5px solid #cfd9cb; background:#EEF3EA; border-radius:var(--radius);
+  padding:24px 26px; box-shadow:var(--shadow);
+}
+.meiri-box h3{font-size:19px; color:var(--structure); margin-bottom:6px;}
+.meiri-box .src{font-size:12.5px; color:var(--ink-soft); margin-bottom:16px; font-style:normal;}
+.meiri-list{counter-reset:mi; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;}
+.meiri-list li{
+  counter-increment:mi; position:relative; padding:10px 14px 10px 44px; background:var(--card-bg);
+  border:1px solid var(--line); border-radius:9px; font-size:14.5px;
+}
+.meiri-list li::before{
+  content:counter(mi); position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  width:22px; height:22px; border-radius:50%; background:var(--structure); color:var(--paper);
+  font-family:'Assistant'; font-weight:800; font-size:12px; display:flex; align-items:center; justify-content:center;
+}
+.meiri-list li b{color:var(--structure);}
+
+.macro-list{counter-reset:g; margin-top:26px; display:flex; flex-direction:column; gap:0;}
+.macro-item{
+  counter-increment:g; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px;
+  padding:15px 6px; border-bottom:1px solid var(--line);
+}
+.macro-item:first-child{border-top:1px solid var(--line);}
+.macro-item::before{
+  content:counter(g); font-family:'Frank Ruhl Libre'; font-weight:700; font-size:20px; color:var(--structure-soft);
+  width:34px; text-align:center;
+}
+.macro-item .mname{font-weight:600; font-size:15.5px;}
+.macro-item .mname a{color:var(--ink);}
+.perek-pill{
+  display:inline-block; font-size:11.5px; padding:3px 10px; border-radius:20px; font-weight:700;
+  background:#E4E9E2; color:var(--structure); border:1px solid #cfd9cb; white-space:nowrap;
+}
+.perek-pill.low{background:var(--flag-bg); color:var(--flag); border-color:#e0bfb6;}
+
+.group-card{
+  background:var(--card-bg); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:26px 28px; margin-top:26px; scroll-margin-top:80px;
+}
+.group-head{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:6px;}
+.group-badge{
+  font-family:'Assistant'; font-weight:800; font-size:13px; color:var(--paper);
+  background:var(--structure); padding:5px 12px; border-radius:8px; flex:none;
+}
+.group-head h3{font-size:22px; margin:0; flex:1 1 auto; min-width:200px;}
+.group-source{
+  font-size:14.5px; color:var(--ink-soft); border-inline-start:3px solid var(--structure-soft);
+  padding-inline-start:12px; margin:14px 0 18px;
+}
+.group-source b{color:var(--ink);}
+.group-body-title{
+  font-size:13px; font-weight:800; color:var(--ink-soft); margin:20px 0 10px; display:flex; align-items:center; gap:8px;
+}
+.group-body-title::after{content:""; flex:1; height:1px; background:var(--line);}
+ul.op-list, ul.flag-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+.op-list li, .flag-list li{
+  position:relative; padding:10px 14px; border-radius:8px; font-size:14.8px;
+  background:var(--paper); border:1px solid var(--line); border-inline-start:4px solid var(--ink-soft);
+}
+.op-list li b.tag, .flag-list li b.tag{
+  display:inline-block; font-size:11px; font-weight:800; padding:2px 9px; border-radius:20px;
+  margin-inline-end:8px; color:#fff; vertical-align:1px;
+}
+.op-merge{border-inline-start-color:var(--merge) !important;} .op-merge b.tag{background:var(--merge);}
+.op-split{border-inline-start-color:var(--split) !important;} .op-split b.tag{background:var(--split);}
+.op-rename{border-inline-start-color:var(--rename) !important;} .op-rename b.tag{background:var(--rename);}
+.op-move{border-inline-start-color:var(--move) !important;} .op-move b.tag{background:var(--move);}
+.op-copy{border-inline-start-color:var(--structure-soft) !important;} .op-copy b.tag{background:var(--structure-soft);}
+.flag-list li{border-inline-start-color:var(--flag) !important; background:var(--flag-bg);}
+.flag-list li b.tag{background:var(--flag);}
+.quote{font-family:'Frank Ruhl Libre',serif; color:var(--ink); background:var(--paper-deep); border-radius:6px; padding:1px 6px; font-size:.95em;}
+.pnum{font-family:'Assistant'; font-weight:700; font-size:.86em; color:var(--structure); background:#E4E9E2; border-radius:5px; padding:0 6px;}
+.no-flags{font-size:14px; color:var(--ink-soft); padding:8px 2px;}
+
+table.checklist{width:100%; border-collapse:collapse; margin-top:22px; font-size:14.5px;}
+table.checklist th{background:var(--structure); color:var(--paper); text-align:start; padding:10px 12px; font-weight:600;}
+table.checklist td{padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+table.checklist tr:nth-child(even) td{background:var(--paper-deep);}
+table.checklist td.before{color:#8a4032; text-decoration:line-through; text-decoration-color:#c98d7f;}
+table.checklist td.after{color:var(--structure); font-weight:700;}
+.decide-badge{display:inline-block; font-size:11px; font-weight:800; color:#fff; background:var(--flag); padding:2px 9px; border-radius:20px;}
+
+.map-wrap{overflow-x:auto; margin-top:20px; border:1px solid var(--line); border-radius:12px;}
+table.mapping{width:100%; border-collapse:collapse; font-size:13.8px; min-width:640px;}
+table.mapping th{background:var(--paper-deep); padding:10px 12px; text-align:start; position:sticky; top:0;}
+table.mapping td{padding:9px 12px; border-top:1px solid var(--line);}
+table.mapping tr:hover td{background:#F0EBD9;}
+
+.decision-card{border:1.5px solid #e0bfb6; background:var(--flag-bg); border-radius:12px; padding:18px 20px; margin-top:16px;}
+.decision-card h4{margin:0 0 6px; font-size:16.5px; color:#7a3226;}
+.decision-card p{margin:0; font-size:14.8px;}
+
+footer{padding:40px 0 70px; color:var(--ink-soft); font-size:13.5px;}
+footer .wrap{border-top:1px solid var(--line); padding-top:24px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="mark"></span> תכנית ארגון־מחדש · פרק ב'</div>
+    <button id="navtoggle" aria-expanded="false" aria-controls="tocnav">תפריט</button>
+    <nav id="tocnav" class="toc-inline" aria-label="ניווט מהיר בתכנית">
+      <a href="#scope">היקף ומגבלות</a>
+      <a href="#meiri">מקור המאירי</a>
+      <a href="#flagging">מוסכמת דגלים</a>
+      <a href="#macro-toc">מבנה היעד</a>
+      <a href="#groups">15 הקבוצות</a>
+      <a href="#technical">תיקונים טכניים</a>
+      <a href="#mapping">טבלת מיפוי</a>
+      <a href="#decisions">להכרעת המחבר</a>
+    </nav>
+  </div>
+</div>
+
+<div class="shell">
+
+<header class="hero">
+  <span class="eyebrow">תכנית עריכה מבנית — לא שינוי תוכן · מסמך שני בסדרה</span>
+  <h1 class="title">ארגון מחדש של המאמר על עירובי חצירות<br>לפי סדר הסוגיות בגמרא</h1>
+  <p class="lede">
+    תכנית עבודה מלאה להפקת גרסה מסודרת של הפרק על עירובי חצירות — תקנת שלמה, גדרי בית וחצר,
+    דירת גוי, ביטול רשות ושכירות, ועד "המניח ביתו והלך לשבות" — מסודרת מחדש לפי השתלשלות הסוגיה
+    במסכת עירובין, ומתקנת את בעיות המבנה שאותרו בבדיקה, מבלי לגעת בתוכן הפסקאות המקוריות.
+  </p>
+  <div class="hero-note">
+    <b>מסמך זה הוא השני בסדרה</b> (הראשון עסק בעירובי תחומין) ובנוי לפי אותה שיטת עבודה ואותה
+    מוסכמת סימון בדיוק — כדי לאפשר עקביות בעריכת שני הפרקים כחלק מאותו חיבור.
+    <b>המגבלה המרכזית זהה:</b> תוכן הפסקאות וניסוחן אינם ניתנים לשינוי כלל; רק סדר, מיזוג, פיצול,
+    כותרות, כתיב, ר"ת, וסימון קטעים בעייתיים.
+  </div>
+</header>
+
+<section class="diagram-section" aria-label="תרשים השוואה: מבנה נוכחי מול מבנה מוצע">
+  <div class="diagram-title">מבט מהיר: מ־12 יחידות לא־אחידות אל 15 קבוצות מסודרות</div>
+  <div class="diagram-sub">רוחב כל מקטע פרופורציונלי (בקירוב) למספר הפסקאות שהוא מכיל. כאן הפער חמור אף יותר מהפרק הקודם: שתי כותרות מכילות יחד כמחצית מהמסמך.</div>
+  <div class="bars">
+    <div class="bar-row">
+      <div class="bar-label"><span>מבנה נוכחי — 12 כותרות "כותרת 2"</span><span>סה"כ 241 פסקאות</span></div>
+      <div class="bar" role="img" aria-label="מבנה נוכחי: שתי יחידות ענק (68 ו-51 פסקאות) לצד שתי כותרות ריקות">
+        <div class="seg" style="flex:15;background:#5B5346;" title="איסור חצרות — 15">15</div>
+        <div class="seg" style="flex:4;background:#6b6252;" title="תקנת עירוב — 4">4</div>
+        <div class="seg" style="flex:5;background:#5B5346;" title="תורת עירוב — 5">5</div>
+        <div class="seg" style="flex:68;background:var(--structure);" title="ביטול רשות — 68 פסקאות">68</div>
+        <div class="seg" style="flex:51;background:#3E6B5C;" title="שבת הואיל והותרה — 51 פסקאות">51</div>
+        <div class="seg" style="flex:33;background:#6b6252;" title="עיר של רבים — 33">33</div>
+        <div class="seg" style="flex:4;background:#5B5346;" title="כל שהותר למקצת שבת — 4">4</div>
+        <div class="seg" style="flex:1;background:var(--flag);" title="כותרת ריקה (*) — פסקה אחת">*</div>
+        <div class="seg" style="flex:33;background:#6b6252;" title="שכירות — 33">33</div>
+        <div class="seg" style="flex:19;background:#5B5346;" title="יש גזל בשבת — 19">19</div>
+        <div class="seg" style="flex:6;background:#6b6252;" title="המניח ביתו — 6">6</div>
+        <div class="seg" style="flex:2;background:var(--flag);" title="כותרת ריקה (*) — 2 פסקאות, קטוע">*</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>מבנה מוצע — 15 קבוצות, בסדר הופעתן בש"ס</span><span>צבע = מיקום תלמודי משוער</span></div>
+      <div class="bar" role="img" aria-label="מבנה מוצע: 15 קבוצות לפי חמישה אשכולות תלמודיים">
+        <div class="seg" style="flex:47;background:#24463B;" title="1 · שבת גורמת + כל שהותר">1</div>
+        <div class="seg" style="flex:2;background:#24463B;" title="2 · תקנת שלמה">2</div>
+        <div class="seg" style="flex:4;background:#3E6B5C;" title="3 · תקנת עירוב">3</div>
+        <div class="seg" style="flex:4;background:#3E6B5C;" title="4 · תורת עירוב">4</div>
+        <div class="seg" style="flex:14;background:#3E6B5C;" title="5 · איסור חצרות">5</div>
+        <div class="seg" style="flex:1;background:#7a7350;" title="6 · ביטול יסודות">6</div>
+        <div class="seg" style="flex:17;background:#7a7350;" title="7 · דירת גוי">7</div>
+        <div class="seg" style="flex:37;background:#8a8365;" title="8 · תיאוריית רשות">8</div>
+        <div class="seg" style="flex:47;background:#7a7350;" title="9 · שכירות (מאוחדת)">9</div>
+        <div class="seg" style="flex:19;background:#5c5540;" title="10 · יש גזל בשבת">10</div>
+        <div class="seg" style="flex:15;background:#5c5540;" title="11 · עיר של רבים">11</div>
+        <div class="seg" style="flex:8;background:#5c5540;" title="12 · מבוי ושיתוף">12</div>
+        <div class="seg" style="flex:18;background:#8a8365;" title="13 · מקום פטור">13</div>
+        <div class="seg" style="flex:6;background:#5B5346;" title="14 · המניח ביתו">14</div>
+        <div class="seg" style="flex:2;background:var(--flag);" title="15 · נספח/קטיעה">15</div>
+      </div>
+      <div class="legend">
+        <span><i style="background:#24463B;"></i> יסודות מוקדמים, פרק ב׳ (יז–כא בקירוב)</span>
+        <span><i style="background:#3E6B5C;"></i> יסודות עירוב חצרות, פתיחת פרק ו׳</span>
+        <span><i style="background:#7a7350;"></i> חלק 1 בחלוקת הראשון (עכו״ם, ביטול, שכירות)</span>
+        <span><i style="background:#5c5540;"></i> חלקים 6–7 (חלוקת חצר, מבואות) + גזל</span>
+        <span><i style="background:#8a8365;"></i> תיאוריה כללית מפוזרת</span>
+        <span><i style="background:var(--flag);"></i> נספח/דגל בלבד</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main>
+
+<section id="scope">
+  <h2 class="section-title"><span class="num">1</span> היקף העבודה והמגבלה המרכזית</h2>
+  <p class="section-sub">זהה למגבלה שנקבעה עבור הפרק הראשון בסדרה — ואינה ניתנת לפשרה.</p>
+  <div class="rules-grid">
+    <div class="rule-card forbid">
+      <h3>✕ אסור בהחלט</h3>
+      <ul>
+        <li>לשנות מילה אחת בתוכן הפסקאות המקוריות או בניסוחן.</li>
+        <li>"לתקן" סברות, לקצר משפטים, או להשלים קושיה שנותרה פתוחה (כגון פס׳ 202 שמכילה רק "א.").</li>
+        <li>למחוק פסקה — גם אם היא חוזרת על תוכן פסקה אחרת (כגון הכפילות בפס׳ 240–241 מול פתיחת המסמך).</li>
+        <li>להשלים בעצמנו תוכן החסר בהפניות כגון <span class="quote">"מש"כ במק"א"</span>.</li>
+      </ul>
+    </div>
+    <div class="rule-card allow">
+      <h3>✓ מותר ומבוקש</h3>
+      <ul>
+        <li>לשנות את <b>סדר</b> הופעת הפסקאות והכותרות במסמך.</li>
+        <li>לפצל כותרת קיימת לכמה כותרות־משנה, ולמזג כמה כותרות לאחת.</li>
+        <li>לכתוב/לשנות <b>כותרות</b> לשם בהירות ניווט.</li>
+        <li>לתקן שגיאות כתיב מובהקות, ולתקן/לאחד ראשי־תיבות.</li>
+        <li>לסמן (לא לפתור!) קטעים קטועים, לא־מוסברים, או בעלי ר"ת מפוקפקים.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="meiri">
+  <h2 class="section-title"><span class="num">2</span> ממצא מפתח: חלוקת המאירי לפרק ו' ("הדר")</h2>
+  <p class="section-sub">
+    בדיקת מקורות עבור מסמך זה העלתה משאב שלא היה זמין לפרק הקודם: ראשון (מצוטט תחת "ביאור:הל"מ עירובין סא ב",
+    בסגנון האופייני למאירי) מציג חלוקה מפורשת לשמונה חלקים של פרק ו' עירובין — הפרק שבו יושב עיקר המסמך שלפנינו.
+    חלוקה זו שימשה עוגן מרכזי לבניית חלופה א' (הציר הטקסטואלי) בהמשך.
+  </p>
+  <div class="meiri-box">
+    <h3>"יחלקו עניני הפרק לשמנה חלקים"</h3>
+    <div class="src">מקור: ביאור על עירובין סא ע"ב, פתיחת פרק ו' ("הדר")</div>
+    <ol class="meiri-list">
+      <li><b>שהעכו"ם אוסר</b> ושאינו ניתר אלא בשכירות מקומו; מיהו "עכו"ם" לעניין זה; ישראל ששכח ולא עירב — די בביטול</li>
+      <li><b>כשביטל רשותו</b> — מה דינו עמהם ומה דינם עמו; הבדל בין אחד ששכח לשניים</li>
+      <li><b>זמן נתינת הרשות</b> (ביטול) — מבעוד יום או גם משחשכה</li>
+      <li><b>האם ביטול חוזר ואוסר</b> בשום צד</li>
+      <li><b>[חלק חמישי — לא אותר במלואו בבדיקה; מומלץ לוודא ישירות במאירי]</b></li>
+      <li><b>על איזה צד נקראו בתי החצר "חלוקים"</b> זה מזה, שיהיו צריכים לערב</li>
+      <li><b>מתי סומכים על עירוב במקום שיתוף</b> ולהיפך; חצרות שעירבו זו לזו — האם הופכות לחצר אחת</li>
+      <li><b>שתי חצרות זו לפנים מזו</b> — איזו אוסרת על חברתה ועל איזה צד</li>
+    </ol>
+  </div>
+  <div class="hero-note" style="margin-top:20px;">
+    <b>שימוש בממצא זה:</b> חלקים 1–4 ו-6–8 תואמים באופן ניכר לנושאי המסמך שלפנינו (דירת גוי / ביטול / שיתוף / פנימית־חיצונה).
+    חלק 5 לא אותר בבדיקה החיצונית ונותר סימן שאלה — ייתכן שהוא חופף לדיון "יש גזל בשבת" שבמסמך, אך זו השערה בלבד.
+    <b>מומלץ למחבר לאמת חלוקה זו ישירות מול המאירי</b> לפני סמיכה מלאה עליה בעריכה הסופית.
+  </div>
+</section>
+
+<section id="method">
+  <h2 class="section-title"><span class="num">3</span> שיטת העבודה: ארבעה סוגי פעולה</h2>
+  <p class="section-sub">זהה לתכנית הראשונה בסדרה — חמישה תגי־פעולה קבועים.</p>
+  <ul class="op-list" style="margin-top:20px;">
+    <li class="op-move"><b class="tag">מיקום/סדר</b> העברת בלוק שלם למקום אחר במסמך, בלי לגעת בו.</li>
+    <li class="op-merge"><b class="tag">מיזוג</b> איחוד שתי כותרות לכותרת אחת, כשהפסקאות ממשיכות זו את זו רעיונית.</li>
+    <li class="op-split"><b class="tag">פיצול</b> חלוקת כותרת עמוסה לכמה כותרות־משנה — בדרך כלל על בסיס סימוני "פסקה -" שכבר קיימים במקור.</li>
+    <li class="op-rename"><b class="tag">שינוי כותרת</b> ניסוח כותרת חדשה או מתוקנת — רק מילות הכותרת עצמה.</li>
+    <li class="op-copy"><b class="tag">העתקה ישירה</b> העתקת הבלוק כלשונו וכסדרו למיקומו החדש.</li>
+  </ul>
+</section>
+
+<section id="flagging">
+  <h2 class="section-title"><span class="num">4</span> מוסכמת הסימון</h2>
+  <p class="section-sub">זהה לתכנית הראשונה, עם קטגוריה נוספת שנדרשה כאן: "פער־תוכן" (placeholder ריק, לא רק קושיה פתוחה).</p>
+  <div class="flag-sample">
+    <b>⚑ הערת עורך [סוג]:</b> תיאור עובדתי קצר של הבעיה בלבד — ללא ניחוש, ללא השלמה, ללא פתרון מוצע.
+  </div>
+  <div class="flag-types">
+    <div class="flag-type"><b>קטיעה פיזית</b> הטקסט נגמר באמצע ואין המשך בחומר שנמסר.</div>
+    <div class="flag-type"><b>הפניה לתוכן חסר</b> "מש"כ במק"א" וכיו"ב — מצביע למקום שאינו בתוך המסמך הנתון.</div>
+    <div class="flag-type"><b>שאלה ללא תירוץ</b> קושיה מפורשת ("וצ"ע"/"וצ"ב") שאין לה מענה בהמשך.</div>
+    <div class="flag-type"><b>כפילות תוכן</b> שתי יחידות דנות באותה שאלה עצמה, במרחק גדול זו מזו.</div>
+    <div class="flag-type"><b>פער־תוכן (חדש)</b> פלייסהולדר ריק לגמרי (כגון "א." בלבד) — שונה מ"שאלה פתוחה": כאן אין אפילו טענה חלקית.</div>
+    <div class="flag-type"><b>ר"ת מפוקפק</b> ראשי־תיבות שעלולים להתפרש בשני אופנים שונים.</div>
+  </div>
+</section>
+
+<section id="macro-toc">
+  <h2 class="section-title"><span class="num">5</span> מבנה היעד — תוכן העניינים המלא</h2>
+  <p class="section-sub">
+    סדר הקבוצות הוא סדר הופעתן המשוער בש"ס. רמת הוודאות משתנה: פריטים עם "פרק ב'" או ציטוט דף מפורש
+    (יז., כא:, פו.) מבוססים על אימות ישיר; פריטים המסומנים "מיקום לא ודאי" טעונים בדיקה נוספת מול הגמרא.
+  </p>
+  <div class="macro-list">
+    <div class="macro-item"><span class="mname"><a href="#g1">שבת גורמת או דיורין גורמין (+ כל שהותר למקצת שבת)</a></span><span class="perek-pill">פרק ב׳, יז. (וע.-צג: לחלק השני — לוודא)</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g2">תקנת שלמה ועירובין</a></span><span class="perek-pill">פרק ב׳, כא: בקירוב</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g3">תקנת עירוב — שלבי המעשה</a></span><span class="perek-pill low">פרק ו׳, מיקום לא ודאי</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g4">תורת עירוב — המשך</a></span><span class="perek-pill low">פרק ו׳, מיקום לא ודאי</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g5">איסור חצרות — יסודות "חלוקים"</a></span><span class="perek-pill">פרק ו׳, חלק 6 בחלוקת המאירי</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g6">ביטול רשות — יסודות</a></span><span class="perek-pill">פרק ו׳, חלקים 2–4 בחלוקת המאירי</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g7">דירת גוי בחצר — מחלוקת ר"מ וראב"י</a></span><span class="perek-pill">פרק ו׳, חלק 1 — פתיחת הפרק, סא:–סב.</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g8">תיאוריית רשות וקניין — יסודות כלליים</a></span><span class="perek-pill low">חומר־רקע מפוזר</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g9">שכירות (משני מקורות מאוחדים)</a></span><span class="perek-pill">פרק ו׳, חלק 1 (המשך), סה:–סו. ואילך</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g10">יש גזל בשבת</a></span><span class="perek-pill low">פרק ו׳, מיקום לא מאומת בוודאות</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g11">שיתוף מבואות ועיר של רבים</a></span><span class="perek-pill">פרק ו׳, חלק 7 בחלוקת המאירי</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g12">דיני מבוי ושיתוף חצרות</a></span><span class="perek-pill">פרק ו׳, בהמשך לחלק 7</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g13">מקום פטור, אוויר רשויות</a></span><span class="perek-pill low">חומר־רקע מפוזר</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g14">בענין המניח ביתו והלך לשבות</a></span><span class="perek-pill">פרק ו׳ (סופו), פו. — מצוטט במפורש</span></div>
+    <div class="macro-item"><span class="mname"><a href="#g15">נספח: כפילות פתיחה + קטיעה</a></span><span class="perek-pill low">דגל בלבד — לא רלוונטי למיקום</span></div>
+  </div>
+</section>
+
+<section id="groups">
+  <h2 class="section-title"><span class="num">6</span> פירוט מלא — 15 הקבוצות</h2>
+
+  <article class="group-card" id="g1">
+    <div class="group-head"><span class="group-badge">קבוצה 1</span><h3>שבת גורמת או דיורין גורמין (+ כל שהותר למקצת שבת)</h3><span class="perek-pill">פרק ב׳, יז. — מצוטט במפורש בגוף המאמר</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 5, כותרת 7 מס׳ 93–135, <b>ממוזגת</b> עם כותרת 2 הישנה מס׳ 7 בשלמותה — כותרת 7 מס׳ 177–180 (מוצבת כפתיחה).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> להציב את פס׳ 177–180 (הברייתא "כל שהותר למקצת שבת... חוץ ממבטל רשות") כפתיחת הקבוצה, לפני פס׳ 93 — תוכנה נראה כמקור-היסוד שממנו נבנה הדיון המורחב.</li>
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק את פס׳ 93–135 כסדרן המקורי אחרי הפתיחה.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">מיקום לא ודאי</b> המחבר מצטט "(יז.)" עבור עיקר הכלל אך "(ע:)" ו"(צג:)" עבור פס׳ 177–180 — פער דפים משמעותי שטרם יושב. יש לוודא את סדר ההופעה המדויק בגמרא לפני קביעה סופית.</li>
+    </ul>
+  </article>
+
+  <article class="group-card" id="g2">
+    <div class="group-head"><span class="group-badge">קבוצה 2</span><h3>תקנת שלמה ועירובין</h3><span class="perek-pill">פרק ב׳, כא: בקירוב</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 7 מס׳ 8 (מתוך כותרת 2 הישנה מס׳ 1), <b>ממוזגת</b> עם כותרת 7 מס׳ 20 (פתיחת כותרת 2 הישנה מס׳ 3).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-move"><b class="tag">מיקום</b> להעביר את פס׳ 8 (שהיתה בתוך "איסור חצרות") להיות סמוכה לפס׳ 20 (שהיתה פתיחת "תורת עירוב") — שתיהן דנות בתקנת שלמה, במרחק 12 פסקאות זו מזו במקור.</li>
+      <li class="op-merge"><b class="tag">מיזוג</b> לאחד את שתיהן תחת כותרת־על אחת, כסדר טבעי (פס׳ 8 ואז פס׳ 20, או להיפך — לפי שיקול תוכני).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים נוספים ביחידה זו.</p>
+  </article>
+
+  <article class="group-card" id="g3">
+    <div class="group-head"><span class="group-badge">קבוצה 3</span><h3>תקנת עירוב — שלבי המעשה</h3><span class="perek-pill low">פרק ו׳, מיקום לא ודאי</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 2 בשלמותה — כותרת 7 מס׳ 16 עד 19.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק כלשונן וכסדרן. אין פיצול/מיזוג פנימי נדרש.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+  <article class="group-card" id="g4">
+    <div class="group-head"><span class="group-badge">קבוצה 4</span><h3>תורת עירוב — המשך</h3><span class="perek-pill low">פרק ו׳, מיקום לא ודאי</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 3 — כותרת 7 מס׳ 21 עד 24 (ללא פס׳ 20, שהועברה לקבוצה 2).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק כלשונן וכסדרן.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+  <article class="group-card" id="g5">
+    <div class="group-head"><span class="group-badge">קבוצה 5</span><h3>איסור חצרות — יסודות "בתי חצר חלוקים"</h3><span class="perek-pill">פרק ו׳, חלק 6 בחלוקת המאירי</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 1 — כותרת 7 מס׳ 1 עד 7, ו-9 עד 15 (ללא פס׳ 8, שהועברה לקבוצה 2).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק את כותרות 7 מס׳ 1–7 כסדרן.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> כותרת 7 מס׳ 7 ("חילוק גדר דריסת רגל דחצר מבמבוי") ומס׳ 12 ("ביאור חילוק גדר דריסת רגל דחצר מבמבוי") כמעט זהות בניסוחן. לשנות את <b>כותרת 12 בלבד</b> — למשל ל"יישום החילוק: גדר דריסת רגל דבית".</li>
+      <li class="op-split"><b class="tag">פיצול</b> כותרת 7 מס׳ 9 מכילה במקור <b>ארבעה</b> סימוני "פסקה -" נפרדים (קושיה על שיתוף במבוי; קושיה מגמ' שבת קלא; קושיה על "רגל שלא במקומה"; קושיה על משמעות "אורך זמן" בשימוש) — לפצל לארבע תת־כותרות.</li>
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק את כותרות 7 מס׳ 10–15 כסדרן (מס׳ 12 בכותרת המתוקנת).</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים נוספים ביחידה זו.</p>
+  </article>
+
+  <article class="group-card" id="g6">
+    <div class="group-head"><span class="group-badge">קבוצה 6</span><h3>ביטול רשות — יסודות ("מי יכול לבטל")</h3><span class="perek-pill">פרק ו׳, חלקים 2–4 בחלוקת המאירי</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 7 מס׳ 25 בלבד (מתוך כותרת 2 הישנה מס׳ 4).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-split"><b class="tag">פיצול</b> פסקה זו מכילה במקור <b>שמונה</b> סימוני "פסקה -" נפרדים (דין מקום שהקיפוהו נכרים; דין יורש; דין מומר; דין מי שיכול להחזיק; קושיה על הסתירה ביניהם; ביאור דעת רש"י; חמישה סוגי־אדם מנויים בסוף) — זהו הפיצול הפנימי הקיצוני ביותר בשני המסמכים; לחלק לשמונה תת־כותרות.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים נוספים ביחידה זו (מעבר לפיצול הנדרש).</p>
+  </article>
+
+  <article class="group-card" id="g7">
+    <div class="group-head"><span class="group-badge">קבוצה 7</span><h3>דירת גוי בחצר — מחלוקת ר"מ וראב"י</h3><span class="perek-pill">פרק ו׳, חלק 1 בחלוקת המאירי — פתיחת הפרק, סא:–סב.</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 7 מס׳ 26–31, <b>ממוזגת</b> עם כותרת 7 מס׳ 68–78, ועם ההתייחסויות בפס׳ 84 ו-91 (כולן מתוך כותרת 2 הישנה מס׳ 4).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק את כותרות 7 מס׳ 26–31 כלשונן — ההצגה הראשונה של המחלוקת.</li>
+      <li class="op-merge"><b class="tag">מיזוג</b> להצמיד מיד אחריהן את כותרות 7 מס׳ 68–78 — ההצגה השנייה, המפורטת יותר. במקור, בין שתי ההצגות משתרעות 36 פסקאות של דיון תיאורטי כללי (שהועברו לקבוצה 8) שאינן נוגעות ישירות לגוי או לביטול.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> כותרת 7 מס׳ 68 ("מחלוקת ר"מ וראב"י בדין גוי") כמעט זהה לכותרת מס׳ 27 ("ביאור מח' ר"מ וראב"י"). לשנות את <b>כותרת 68 בלבד</b> — למשל ל"פיתוח נוסף: מחלוקת ר"מ וראב"י".</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">ר"ת מפוקפק</b> "ראב"י" משמש כאן לכינוי בעל המחלוקת עם ר"מ, אך ראשי־תיבות אלו מציינים בדרך כלל את ר' אליעזר בן יעקב, בעוד שהמקור החיצוני שנבדק מזהה את בעל המחלוקת כ"ר' אליעזר" (סתם). <b>אין להכריע אוטומטית</b> — טעון בירור מפורש מול המחבר (ראו סעיף 8).</li>
+    </ul>
+  </article>
+
+  <article class="group-card" id="g8">
+    <div class="group-head"><span class="group-badge">קבוצה 8</span><h3>תיאוריית רשות וקניין — יסודות כלליים</h3><span class="perek-pill low">חומר־רקע מפוזר, ללא מיקום מדויק</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 7 מס׳ 32–67 (מתוך כותרת 2 הישנה מס׳ 4), <b>ממוזגת</b> עם כותרת 2 הישנה מס׳ 8 בשלמותה — כותרת 7 מס׳ 181 (הכותרת הריקה "*").</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק את כותרות 7 מס׳ 32–67 כסדרן — פרק־יסוד תיאורטי עצמאי (קניין הגוף, קניין הפירות, מיוחדות, שימוש חלוק/מאוחד) שאינו נוגע ישירות ל"ביטול" אלא מבסס את המנגנון המושגי לכל הדיון בגוי ובשכירות.</li>
+      <li class="op-rename"><b class="tag">שינוי כותרת</b> לתת לפס׳ 181 כותרת אמיתית (הכותרת המקורית שלה היתה ריקה — "*" בלבד) — למשל "עיקר וטפל בשימוש רשות" — ולהציבה כחלק אחרון של קבוצה זו, שכן היא דנה באותם מושגי רשות/שימוש.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים נוספים ביחידה זו.</p>
+  </article>
+
+  <article class="group-card" id="g9">
+    <div class="group-head"><span class="group-badge">קבוצה 9</span><h3>שכירות (משני מקורות מאוחדים)</h3><span class="perek-pill">פרק ו׳, חלק 1 (המשך) — סה:–סו. ואילך</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 7 מס׳ 79–92 (מתוך כותרת 2 הישנה מס׳ 4), <b>ממוזגת</b> עם כותרת 2 הישנה מס׳ 9 בשלמותה — כותרת 7 מס׳ 182–214.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק את כותרות 7 מס׳ 79–92 כסדרן — עוסקות בשכירו/לקיטו/אשתו ובמעבר ל"הואיל והותרה".</li>
+      <li class="op-merge"><b class="tag">מיזוג (רשות)</b> לשקול איחוד עם כותרות 7 מס׳ 182–214 (שכירות, במקור כותרת־על נפרדת ומרוחקת), שכן שתיהן דנות במנגנון השכירות מנכרי. זו המלצה עדינה — אם לא יבוצע המיזוג, יש להותיר את שתי היחידות נפרדות אך סמוכות, עם הפניה צולבת מפורשת ביניהן.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שאלה פתוחה</b> כותרת 7 מס׳ <span class="pnum">74</span> מסתיימת ב"וצ"ע" — לסמן.</li>
+      <li><b class="tag">שאלה פתוחה</b> כותרת 7 מס׳ <span class="pnum">77</span> מסתיימת ב"ועדיין צ"ב" — לסמן.</li>
+      <li><b class="tag">פער־תוכן</b> כותרת 7 מספר <span class="pnum">202</span> ("מחלוקת בית שמאי ובית הלל בביטול") מכילה במקור <b>רק את התו "א."</b> — ללא כל משפט. זהו פלייסהולדר ריק, לא סתם קושיה פתוחה — לסמן במפורש כך.</li>
+      <li><b class="tag">הפניה לתוכן חסר</b> כותרת 7 מס׳ <span class="pnum">214</span> מסתיימת ב"ויבואר אי"ה" ללא הפניה קדימה מזוהה בבירור.</li>
+    </ul>
+  </article>
+
+  <article class="group-card" id="g10">
+    <div class="group-head"><span class="group-badge">קבוצה 10</span><h3>יש גזל בשבת</h3><span class="perek-pill low">פרק ו׳, מיקום לא מאומת בוודאות</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 10 בשלמותה — כותרת 7 מס׳ 215 עד 233.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק כסדרן. אין פיצול/מיזוג פנימי נדרש.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">שאלה פתוחה</b> כותרת 7 מס׳ <span class="pnum">227</span> מכיל "וצ"ע" בתוך מאמר מוסגר ("...וא"כ אף הכא יהיה מותר, וצ"ע)") — לסמן.</li>
+      <li><b class="tag">מיקום לא ודאי</b> יחידה זו לא נמצא עבורה עיגון-דף חיצוני ודאי; ייתכן שהיא חופפת לחלק ה-5 החסר בחלוקת המאירי (ראו סעיף 2) — השערה בלבד, טעונה אימות.</li>
+    </ul>
+  </article>
+
+  <article class="group-card" id="g11">
+    <div class="group-head"><span class="group-badge">קבוצה 11</span><h3>שיתוף מבואות ועיר של רבים</h3><span class="perek-pill">פרק ו׳, חלק 7 בחלוקת המאירי</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 6, חלק א׳ — כותרת 7 מס׳ 144 עד 158.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק כסדרן — עוסק בעירוב עיר שלמה ותיקון מבואותיה.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים ביחידה זו.</p>
+  </article>
+
+  <article class="group-card" id="g12">
+    <div class="group-head"><span class="group-badge">קבוצה 12</span><h3>דיני מבוי ושיתוף חצרות</h3><span class="perek-pill">פרק ו׳, בהמשך לחלק 7 בחלוקת המאירי</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 5, חלק ב׳ — כותרת 7 מס׳ 136 עד 143.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק כסדרן.</li>
+      <li class="op-split"><b class="tag">פיצול</b> כותרת 7 מס׳ 136 מכילה מאמר־מוסגר ארוך במיוחד, המשתרע דה־פקטו על מספר תת־נושאים עד סגירתו בפס׳ 141 — לשקול פיצולו למספר תת־כותרות במקום פסקה־ענק אחת.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים נוספים ביחידה זו.</p>
+  </article>
+
+  <article class="group-card" id="g13">
+    <div class="group-head"><span class="group-badge">קבוצה 13</span><h3>מקום פטור, אוויר רשויות, וגדרי קרקע/מקום/רשות</h3><span class="perek-pill low">חומר־רקע מפוזר</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 6, חלק ב׳ — כותרת 7 מס׳ 159 עד 176.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק כסדרן.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <ul class="flag-list">
+      <li><b class="tag">כפילות תוכן</b> הסיכום התיאורטי בסוף היחידה (פס׳ 166–176, "קרקע/מקום/רשות") מזכיר במובהק את המבנה התיאורטי שכבר הופיע בקבוצה 8 (פס׳ 61–67). לשקול, בעת ביצוע בפועל, אם אין מקום לאחד את שתי היחידות התיאורטיות לגוש אחד — או להותירן נפרדות עם הפניה צולבת.</li>
+    </ul>
+  </article>
+
+  <article class="group-card" id="g14">
+    <div class="group-head"><span class="group-badge">קבוצה 14</span><h3>בענין המניח ביתו והלך לשבות במקום אחר</h3><span class="perek-pill">פרק ו׳ (סופו), פו. — מצוטט במפורש בגוף המאמר</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 11 בשלמותה — כותרת 7 מס׳ 234 עד 239.</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק את כותרות 7 מס׳ 234–238 כסדרן — כולל ציטוטי רשב"א, עבודת הקודש, טור, שו"ע, רמ"א, וחזון איש. יחידה זו שונה בסגנונה (פסיקתי־קטלוגי) משאר המסמך; מומלץ להציבה כנספח חותם ולא כחלק מהזרימה העיונית הרציפה (ראו שלב 4 בניתוח).</li>
+      <li class="op-split"><b class="tag">עיצוב מחדש</b> כותרת 7 מס׳ 239 מכילה בפועל <b>טבלה בת 36 תרחישים</b> שהמחבר עצמו כבר חילק לסעיפים ממוספרים (א׳–ל״ו) עם "פסקה -" נפרד לכל סעיף (ישראל/גוי, זמן יציאה, מקום יציאה, יכולת חזרה, הסחת דעת). זו אינה בקשת "פיצול" רגילה אלא המלצת <b>עיצוב מחדש כטבלה מפורשת</b> — מבנה שכבר קיים בפועל בטקסט המקורי, רק בצורת פרוזה.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון</div>
+    <p class="no-flags">לא אותרו דגלים נוספים ביחידה זו (מעבר להמלצת העיצוב).</p>
+  </article>
+
+  <article class="group-card" id="g15">
+    <div class="group-head"><span class="group-badge">קבוצה 15</span><h3>נספח: כפילות פתיחה + קטיעה</h3><span class="perek-pill low">דגל בלבד — סוף המסמך הנתון</span></div>
+    <div class="group-source"><b>מקור:</b> כותרת 2 הישנה מס׳ 12 — כותרת 7 מס׳ 240 עד 241 (הכותרת השנייה הריקה "*" במסמך זה).</div>
+    <div class="group-body-title">פעולות נדרשות</div>
+    <ul class="op-list">
+      <li class="op-copy"><b class="tag">העתקה</b> להעתיק כלשונן, כיחידה חותמת את המסמך כולו — בכפוף לדגלים החמורים שלהלן.</li>
+    </ul>
+    <div class="group-body-title">דגלים לסימון — החשובים ביותר בתכנית זו</div>
+    <ul class="flag-list">
+      <li><b class="tag">כפילות תוכן חמורה</b> פס׳ <span class="pnum">240</span> חוזרת כמעט מילה־במילה על <b>פתיחת המסמך עצמו</b> (פס׳ 1–2): שתיהן עוסקות ב"רש"י... הוצאה מרשות לרשות... בית רשות המיוחדת לו וחצר רשות חבירו מושל/ת בה" בניסוח כמעט זהה. יש לסמן זאת במפורש ולהשאיר את ההכרעה (האם זו טיוטה כפולה, שכפול מכוון, או משהו אחר) בידי המחבר — <b>אין למחוק את אף אחת מהגרסאות</b> ללא הוראה מפורשת.</li>
+      <li><b class="tag">קטיעה פיזית</b> מיד לאחר פס׳ 241 המסמך נגמר עם אותו סימן טכני ריק ("פסקה -") שנמצא בסוף המסמך על עירובי תחומין — יש לסמן זאת באופן בולט מאוד בתחתית המסמך המסודר, בציון מפורש שהמקור כפי שנמסר מסתיים כאן.</li>
+    </ul>
+  </article>
+
+</section>
+
+<section id="technical">
+  <h2 class="section-title"><span class="num">7</span> רשימת תיקונים טכניים — גלובלית</h2>
+  <p class="section-sub">מסמך זה "נקי" יותר מקודמו מבחינה טכנית־לשונית — רק שתי שגיאות הקלדה ודאיות, הצמודות זו לזו באותו משפט.</p>
+  <table class="checklist">
+    <thead><tr><th>לפני</th><th>אחרי</th><th>סוג</th><th>מיקום שאותר</th></tr></thead>
+    <tbody>
+      <tr><td class="before">להשכירץ</td><td class="after">להשכיר</td><td>שגיאת הקלדה</td><td>כותרת 7 מס׳ 78</td></tr>
+      <tr><td class="before">אאישתו</td><td class="after">אאשתו</td><td>שגיאת הקלדה</td><td>כותרת 7 מס׳ 78, אותו משפט</td></tr>
+      <tr><td class="before">ראב"י (זיהוי אפשרי כפול)</td><td><span class="decide-badge">להכרעת המחבר — ר׳ סעיף 8</span></td><td>ר"ת מפוקפק</td><td>פס׳ 26–31, 68–78</td></tr>
+      <tr><td class="before">ר"ח (סיכון מונע בלבד)</td><td>לוודא ש"ר"ח" תמיד = רב חסדא, ו"ר' חייא" תמיד באות מלאה</td><td>מניעת בלבול עתידי</td><td>פס׳ 201 מול כותרת 2 מס׳ 10</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="mapping">
+  <h2 class="section-title"><span class="num">8</span> נספח: טבלת מיפוי ישן ← חדש</h2>
+  <div class="map-wrap">
+  <table class="mapping">
+    <thead><tr><th>מס׳ ישן (כותרת 2)</th><th>שם ישן</th><th>פסקאות</th><th>יעד חדש</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>איסור חצרות</td><td>1–15</td><td>מפוצל: קבוצה 5 (1–7, 9–15), קבוצה 2 (8)</td></tr>
+      <tr><td>2</td><td>תקנת עירוב</td><td>16–19</td><td>קבוצה 3</td></tr>
+      <tr><td>3</td><td>תורת עירוב</td><td>20–24</td><td>מפוצל: קבוצה 2 (20), קבוצה 4 (21–24)</td></tr>
+      <tr><td>4</td><td>ביטול רשות</td><td>25–92</td><td>מפוצל: קבוצה 6 (25), קבוצה 7 (26–31, 68–78, 84, 91), קבוצה 8 (32–67), קבוצה 9 (79–92)</td></tr>
+      <tr><td>5</td><td>שבת הואיל והותרה הותרה</td><td>93–143</td><td>מפוצל: קבוצה 1 (93–135), קבוצה 12 (136–143)</td></tr>
+      <tr><td>6</td><td>עיר של רבים</td><td>144–176</td><td>מפוצל: קבוצה 11 (144–158), קבוצה 13 (159–176)</td></tr>
+      <tr><td>7</td><td>כל שהותר למקצת שבת</td><td>177–180</td><td>קבוצה 1 (מוזזת לפתיחה)</td></tr>
+      <tr><td>8</td><td>* (כותרת ריקה)</td><td>181</td><td>קבוצה 8</td></tr>
+      <tr><td>9</td><td>שכירות</td><td>182–214</td><td>קבוצה 9 (מוזגת עם 79–92)</td></tr>
+      <tr><td>10</td><td>יש גזל בשבת</td><td>215–233</td><td>קבוצה 10</td></tr>
+      <tr><td>11</td><td>בענין הניח ביתו והלך לשבות</td><td>234–239</td><td>קבוצה 14</td></tr>
+      <tr><td>12</td><td>* (כותרת ריקה, קטוע)</td><td>240–241</td><td>קבוצה 15</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="decisions">
+  <h2 class="section-title"><span class="num">9</span> החלטות שנותרו בידי המחבר בלבד</h2>
+  <div class="decision-card">
+    <h4>זהות "ראב"י"</h4>
+    <p>
+      ראשי־התיבות "ראב"י" משמשים במסמך לבעל המחלוקת עם ר"מ בדין דירת גוי בחצר. באופן סטנדרטי מציינים
+      ראשי־תיבות אלו את ר' אליעזר בן יעקב, אך מקור חיצוני שנבדק (ביאור על עירובין סא ב) מזהה את בעל המחלוקת
+      הספציפית הזו כ"ר' אליעזר" (סתם). יש להכריע אם "ראב"י" כאן הוא כינוי מדויק ומקובל בהקשר זה (שאולי לא אותר
+      במקור שנבדק), או שמא נדרש תיקון. תיקון אוטומטי כאן עלול לשנות זיהוי תנאי ולכן אינו באחריות תכנית זו.
+    </p>
+  </div>
+  <div class="decision-card">
+    <h4>כפילות פתיחה/סיום (פס׳ 240–241)</h4>
+    <p>
+      כאמור בקבוצה 15, שתי הפסקאות האחרונות במסמך חוזרות כמעט־מילולית על פתיחתו, ומיד לאחריהן המסמך נקטע.
+      יש לברר מול המחבר: האם מדובר בטיוטה כפולה שנקטעה (ואז יש לשקול השמטתה), או בניואנס־נוסח מכוון
+      (ואז יש לתעד את ההבדל ביניהן במפורש). אין להכריע בכך אוטומטית.
+    </p>
+  </div>
+  <div class="decision-card">
+    <h4>חלק 5 החסר בחלוקת המאירי, ומיקום "יש גזל בשבת"</h4>
+    <p>
+      חלוקת שמונת החלקים שאותרה (סעיף 2 לעיל) חסרה את חלק מספר 5 — לא אותר בבדיקה החיצונית. קיימת השערה
+      (לא מאומתת) שהוא עשוי לחפוף לדיון "יש גזל בשבת" שבמסמך, אך יש לוודא ישירות מול מקור המאירי/הגמרא
+      לפני הכרעה סופית על מיקומה המדויק של אותה קבוצה בתכנית.
+    </p>
+  </div>
+  <div class="decision-card">
+    <h4>איחוד שתי יחידות "שכירות" (קבוצה 9)</h4>
+    <p>
+      הוצע לאחד את פס׳ 79–92 עם פס׳ 182–214 לקבוצה אחת, בהיותן עוסקות באותו נושא. זו המלצה, לא הוראה —
+      אם המחבר מעדיף להשאירן כשתי יחידות נפרדות (בשל הבדלי דגש או היקף), יש להשאירן סמוכות עם הפניה
+      צולבת מפורשת במקום מיזוג ממשי.
+    </p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <div class="wrap">
+    מסמך זה הוא <b>תכנית עבודה בלבד</b> — השני בסדרה. שום פסקת־תוכן מן המקור לא צוטטה כאן במלואה;
+    יש לחזור למקור המלא בעת הביצוע, פסקה־פסקה, בהתאם להוראות שבכל כרטיס קבוצה לעיל.
+  </div>
+</footer>
+
+<script>
+(function(){
+  var toggle = document.getElementById('navtoggle');
+  var nav = document.getElementById('tocnav');
+  if(toggle && nav){
+    toggle.addEventListener('click', function(){
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+    });
+  }
+  var links = Array.prototype.slice.call(document.querySelectorAll('#tocnav a'));
+  var targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if('IntersectionObserver' in window && targets.length){
+    var map = {};
+    links.forEach(function(a,i){ if(targets[i]) map[targets[i].id] = a; });
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = map[entry.target.id];
+        if(!link) return;
+        if(entry.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, {rootMargin:'-40% 0px -50% 0px', threshold:0});
+    targets.forEach(function(t){ obs.observe(t); });
+  }
+})();
+</script>
+</body>
+</html>
