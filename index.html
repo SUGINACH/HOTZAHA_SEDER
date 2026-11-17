@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>כתב יד S027 · סדר הוצאה — הערות מגיב</title>
+<meta name="description" content="גוף החיבור והערות המגיב בתצוגת צד-בצד — כתב יד S027 (P04577, מקור 797)">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230f172a"/><text x="32" y="44" font-size="34" text-anchor="middle" fill="%23fbbf24" font-family="serif" font-weight="bold">א</text></svg>'>
+<style>
+:root{
+  --bg:#eef2f7; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+  --head:#0f172a; --head2:#1e293b; --accent:#fbbf24;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:118px}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI","Noto Sans Hebrew","Arial Hebrew",Arial,sans-serif;
+  font-size:16px;line-height:1.6}
+button{font-family:inherit}
+
+/* ---------- header ---------- */
+#topbar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,var(--head),var(--head2));
+  color:#fff;box-shadow:0 2px 14px rgba(15,23,42,.35)}
+.hrow{display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}
+.brand{line-height:1.25}
+.brand .t1{font-size:17px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
+.brand .t1 b{color:var(--accent)}
+.brand .t2{font-size:11.5px;color:#94a3b8;white-space:nowrap}
+.controls{display:flex;align-items:center;gap:8px;margin-inline-start:auto;min-width:0;flex:0 1 auto}
+.navbtn{width:36px;height:36px;border-radius:9px;border:1px solid #334155;background:#1e293b;
+  color:#e2e8f0;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.navbtn:hover{background:#334155}
+.navbtn:disabled{opacity:.35;cursor:default}
+#chapterSelect{max-width:430px;min-width:0;width:auto;flex:0 1 430px;background:#1e293b;color:#f1f5f9;
+  border:1px solid #334155;border-radius:9px;padding:8px 10px;font-size:14px;cursor:pointer}
+#chapterMeta{font-size:12px;color:#94a3b8;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#authorBar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:0 20px 10px}
+#authorBar:empty{display:none}
+.blab{font-size:12px;color:#94a3b8;margin-inline-end:2px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#e2e8f0;
+  font-size:12px;cursor:pointer;transition:.15s;user-select:none}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--a,#94a3b8);flex:0 0 auto}
+.chip b{font-weight:700;color:#cbd5e1;font-size:11.5px}
+.chip:hover{background:rgba(255,255,255,.14)}
+.chip.off{opacity:.42}
+.chip.off i{background:#64748b}
+.chip.all{border-style:dashed}
+
+/* ---------- main split ---------- */
+#main{position:relative;max-width:1560px;margin:0 auto;padding:26px 22px 30px}
+#wires{position:absolute;inset:0;z-index:0;pointer-events:none}
+#split{position:relative;z-index:1;display:flex;gap:64px;align-items:flex-start}
+#bodyCol{flex:1 1 auto;min-width:0;max-width:900px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:34px 40px 44px;box-shadow:0 1px 4px rgba(15,23,42,.06)}
+#notesCol{flex:0 0 350px;max-width:350px;min-width:280px}
+#notesHead{position:sticky;top:104px;z-index:5;background:var(--bg);padding:2px 2px 8px;
+  font-size:13.5px;font-weight:800;color:#334155;border-bottom:2px solid #cbd5e1;margin-bottom:12px}
+#notesHead span{color:var(--muted);font-weight:600}
+#notesSub{font-size:11px;font-weight:500;color:var(--muted)}
+#cards{position:relative}
+
+/* ---------- body text ---------- */
+.h1{font-size:27px;font-weight:800;line-height:1.35;margin:34px 0 16px;padding-bottom:10px;
+  border-bottom:2px solid #cbd5e1}
+.h2{font-size:24px;font-weight:800;margin:26px 0 14px;line-height:1.4}
+.h3{font-size:20px;font-weight:700;margin:22px 0 10px;line-height:1.45}
+.h4{font-size:18px;font-weight:700;margin:18px 0 8px}
+.h5{font-size:17px;font-weight:700;margin:16px 0 8px}
+.h6{font-size:16.5px;font-weight:700;margin:14px 0 6px}
+.h7{font-size:15.5px;font-weight:600;color:#475569;margin:14px 0 6px}
+.p{font-size:17px;line-height:1.9;margin:0 0 10px;white-space:pre-wrap;overflow-wrap:break-word}
+.sp{height:.85em}
+sup.sup{font-size:.72em}
+
+/* ---------- anchors ---------- */
+.ca{padding:0 2px;border-radius:3px;border-bottom:2px dotted var(--a);background:var(--abg);
+  cursor:pointer;transition:box-shadow .12s}
+.ca:hover,.ca.hot{box-shadow:0 0 0 2px var(--a)}
+.cb{display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:17px;
+  padding:0 4px;margin-inline-start:2px;border-radius:999px;background:var(--a);color:#fff;
+  font-size:10.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:super;
+  transform:translateY(-2px);transition:box-shadow .12s;border:none}
+.cb:hover,.cb.hot{box-shadow:0 0 0 2.5px var(--a);filter:brightness(1.12)}
+.ca.dim,.cb.dim{opacity:.25}
+
+/* ---------- cards ---------- */
+.card{position:absolute;inset-inline:0;background:#fff;border:1px solid var(--line);
+  border-right:4px solid var(--a);border-radius:12px;padding:11px 13px 10px;
+  box-shadow:0 1px 5px rgba(15,23,42,.08);transition:box-shadow .15s;scroll-margin-top:130px}
+.card.off{display:none}
+.card.hot{box-shadow:0 0 0 2px var(--a),0 6px 18px rgba(15,23,42,.18)}
+.chd{display:flex;align-items:center;gap:8px;margin-bottom:7px;cursor:pointer}
+.cbadge{display:inline-flex;align-items:center;justify-content:center;min-width:19px;height:19px;
+  padding:0 4px;border-radius:999px;background:var(--a);color:#fff;font-size:11px;font-weight:800;flex:0 0 auto}
+.cauthor{font-size:12px;font-weight:700;color:var(--a);line-height:1.3}
+.cdate{font-size:10.5px;color:#94a3b8;margin-inline-start:auto;white-space:nowrap}
+.ctext{font-size:13.5px;line-height:1.72;color:#334155}
+.ctext p{margin:0 0 8px;white-space:pre-wrap;overflow-wrap:anywhere}
+.ctext p:last-child{margin-bottom:0}
+.ctext p.sp{height:.6em}
+.nores{background:#fff;border:1px dashed #cbd5e1;border-radius:12px;padding:18px;text-align:center;
+  color:var(--muted);font-size:14px;position:static}
+
+/* ---------- wires ---------- */
+.wire{fill:none;stroke-width:1.7;opacity:.5;transition:opacity .12s,stroke-width .12s}
+.wire.hot{opacity:1;stroke-width:2.8}
+
+/* ---------- states ---------- */
+.loading,.err{display:flex;align-items:center;gap:12px;justify-content:center;color:var(--muted);
+  font-size:15px;padding:60px 0}
+.spin{width:24px;height:24px;border-radius:50%;border:3px solid #cbd5e1;border-top-color:#2563eb;
+  animation:rot .8s linear infinite;flex:0 0 auto}
+@keyframes rot{to{transform:rotate(360deg)}}
+.err button{padding:6px 16px;border-radius:8px;border:1px solid #2563eb;background:#eff6ff;
+  color:#2563eb;font-size:14px;cursor:pointer}
+@keyframes flashA{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 4px var(--a)}}
+.flash{animation:flashA 1s ease 2}
+
+/* ---------- footer ---------- */
+footer{max-width:1560px;margin:0 auto;padding:18px 22px 40px;color:var(--muted);font-size:12.5px;
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+footer a{color:#2563eb;text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* ---------- narrow screens ---------- */
+@media (max-width:960px){
+  html{scroll-padding-top:150px}
+  #split{display:block}
+  #bodyCol{max-width:none;padding:22px 18px 28px}
+  #notesCol{max-width:none;min-width:0;margin-top:26px;flex:none;width:auto}
+  #notesHead{position:static}
+  .card{position:static;margin-bottom:12px}
+  #cards{min-height:0 !important}
+  #wires{display:none}
+  #chapterMeta{display:none}
+  #chapterSelect{flex:1 1 160px;max-width:none}
+}
+@media print{
+  #topbar,#wires,#notesHead{display:none}
+  #split{display:block}
+  .card{position:static;margin-bottom:10px}
+  #bodyCol{box-shadow:none;border:none}
+}
+</style>
+</head>
+<body>
+
+<header id="topbar">
+  <div class="hrow">
+    <div class="brand">
+      <div class="t1">כתב יד <b>S027</b> · סדר הוצאה</div>
+      <div class="t2">P04577 · מקור 797 — גוף החיבור והערות המגיב</div>
+    </div>
+    <div class="controls">
+      <button class="navbtn" id="prevBtn" title="הפרק הקודם (Alt+→)" aria-label="הפרק הקודם">›</button>
+      <select id="chapterSelect" aria-label="בחירת פרק"></select>
+      <button class="navbtn" id="nextBtn" title="הפרק הבא (Alt+←)" aria-label="הפרק הבא">‹</button>
+    </div>
+    <div id="chapterMeta"></div>
+  </div>
+  <div id="authorBar"></div>
+</header>
+
+<main id="main">
+  <svg id="wires" aria-hidden="true"></svg>
+  <div id="split">
+    <section id="bodyCol" class="col" aria-label="גוף הטקסט"></section>
+    <section id="notesCol" class="col" aria-label="הערות מגיב">
+      <div id="notesHead">הערות מגיב <span id="notesCount"></span>
+        <div id="notesSub">מקושרות לפסקה המוערת · כולן מורחבות</div>
+      </div>
+      <div id="cards"></div>
+    </section>
+  </div>
+</main>
+
+<footer id="siteFooter"></footer>
+
+<script src="chapters/list.js"></script>
+<script>
+(function(){
+"use strict";
+var $ = function(s){return document.querySelector(s)};
+var $$ = function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+var list = window.CHAPTER_LIST || [];
+var META = window.SITE_META || {authors:{}, totalChapters:list.length, totalComments:0, built:''};
+
+var main=$('#main'), bodyCol=$('#bodyCol'), cardsEl=$('#cards'), wires=$('#wires'),
+    sel=$('#chapterSelect'), metaLine=$('#chapterMeta'), authorBar=$('#authorBar'),
+    notesCount=$('#notesCount'), prevBtn=$('#prevBtn'), nextBtn=$('#nextBtn');
+var cur=null, offAuthors={}, loadSeq=0;
+
+function colorOf(a){var m=META.authors[a];return m?m.color:'#0f766e'}
+function escAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}
+function shortPart(p){return p.length>26 ? p.split(' - ')[0] : p}
+
+/* ---------- select ---------- */
+(function(){
+  var curPart=null, og=null;
+  list.forEach(function(c){
+    if(c.part!==curPart){
+      curPart=c.part;
+      og=document.createElement('optgroup');
+      og.label=shortPart(c.part);
+      sel.appendChild(og);
+    }
+    var o=document.createElement('option');
+    o.value=c.id;
+    o.textContent=c.num+'. '+c.title+' ('+c.nc+' הערות)';
+    og.appendChild(o);
+  });
+})();
+
+function idxOf(id){for(var i=0;i<list.length;i++) if(list[i].id===id) return i; return -1}
+function step(d){var i=idxOf(cur)+d; if(i>=0&&i<list.length) go(list[i].id)}
+sel.addEventListener('change',function(){go(sel.value)});
+prevBtn.addEventListener('click',function(){step(-1)});
+nextBtn.addEventListener('click',function(){step(1)});
+document.addEventListener('keydown',function(e){
+  if(!e.altKey) return;
+  if(e.key==='ArrowLeft'){step(1);e.preventDefault()}
+  else if(e.key==='ArrowRight'){step(-1);e.preventDefault()}
+});
+
+/* ---------- chapter loading (separate file per chapter) ---------- */
+function go(id){
+  cur=id; loadSeq++;
+  try{history.replaceState(null,'','?ch='+encodeURIComponent(id))}catch(_){}
+  sel.value=id;
+  prevBtn.disabled = idxOf(id)<=0;
+  nextBtn.disabled = idxOf(id)>=list.length-1;
+  var c=list[idxOf(id)];
+  document.title='פרק '+c.num+' · '+c.title+' — כתב יד S027';
+  metaLine.textContent=c.part+' · פרק '+c.num+' מתוך '+list.length;
+  bodyCol.innerHTML='<div class="loading"><span class="spin"></span> טוען פרק…</div>';
+  cardsEl.innerHTML=''; wires.innerHTML=''; authorBar.innerHTML='';
+  notesCount.textContent='';
+  var seq=loadSeq;
+  loadScript(id, function(){
+    if(seq!==loadSeq) return;
+    render();
+  }, function(){
+    if(seq!==loadSeq) return;
+    bodyCol.innerHTML='<div class="err">שגיאה בטעינת הפרק <button id="retryBtn">נסה שוב</button></div>';
+    $('#retryBtn').addEventListener('click',function(){go(id)});
+  });
+}
+window.go=go;
+
+function loadScript(id, ok, fail){
+  if(window.CHAPTER_DATA && window.CHAPTER_DATA[id]) return ok();
+  var s=document.createElement('script');
+  s.src='chapters/'+id+'.js';
+  s.onload=ok; s.onerror=fail;
+  document.head.appendChild(s);
+}
+
+/* ---------- rendering ---------- */
+function cardHTML(c){
+  var col=colorOf(c.a);
+  return '<article class="card" data-c="'+c.id+'" data-a="'+escAttr(c.a)+'" style="--a:'+col+'">'
+    +'<header class="chd" title="מעבר לפסקה המוערת">'
+    +'<span class="cbadge" data-c="'+c.id+'">'+c.n+'</span>'
+    +'<span class="cauthor">'+escAttr(c.a)+'</span>'
+    +'<span class="cdate">'+c.d+'</span></header>'
+    +'<div class="ctext">'+c.h+'</div></article>';
+}
+
+function render(){
+  var d=window.CHAPTER_DATA[cur];
+  var html='';
+  for(var i=0;i<d.paras.length;i++){
+    var p=d.paras[i];
+    if(p.s==='sp'){html+='<div class="sp"></div>';continue}
+    html+='<div class="'+p.s+'">'+p.h+'</div>';
+  }
+  bodyCol.innerHTML=html;
+  if(d.comments.length){
+    cardsEl.innerHTML=d.comments.map(cardHTML).join('');
+    notesCount.textContent='('+d.comments.length+')';
+  }else{
+    cardsEl.innerHTML='<div class="nores">לפרק זה אין הערות</div>';
+  }
+  offAuthors={};
+  buildAuthorBar(d);
+  requestAnimationFrame(function(){
+    window.scrollTo(0,0);
+    layout();
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){if(cur===d.id)layout()});
+  });
+}
+
+function buildAuthorBar(d){
+  var counts={};
+  d.comments.forEach(function(c){counts[c.a]=(counts[c.a]||0)+1});
+  var keys=Object.keys(counts);
+  if(!keys.length){authorBar.innerHTML='';return}
+  var html='<span class="blab">הצג הערות:</span>';
+  keys.forEach(function(a){
+    html+='<button class="chip" data-a="'+escAttr(a)+'" style="--a:'+colorOf(a)+'"><i></i>'
+      +escAttr(a)+' <b>'+counts[a]+'</b></button>';
+  });
+  html+='<button class="chip all" id="allChip">הכול</button>';
+  authorBar.innerHTML=html;
+  $$('#authorBar .chip[data-a]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var a=b.dataset.a;
+      if(offAuthors[a]) delete offAuthors[a]; else offAuthors[a]=true;
+      refreshChips(); applyFilter();
+    });
+  });
+  $('#allChip').addEventListener('click',function(){
+    offAuthors={}; refreshChips(); applyFilter();
+  });
+}
+function refreshChips(){
+  $$('#authorBar .chip[data-a]').forEach(function(b){
+    b.classList.toggle('off',!!offAuthors[b.dataset.a]);
+  });
+}
+
+function cardOf(cid){
+  return document.querySelector('.card[data-c="'+cssEsc(cid)+'"]');
+}
+function anchorFor(cid){
+  return document.querySelector('.cb[data-c="'+cssEsc(cid)+'"]')
+      || document.querySelector('.ca[data-c~="'+cssEsc(cid)+'"]');
+}
+function cssEsc(s){return window.CSS&&CSS.escape?CSS.escape(s):s}
+
+function applyFilter(){
+  $$('.card').forEach(function(card){
+    card.classList.toggle('off',!!offAuthors[card.dataset.a]);
+  });
+  $$('.ca').forEach(function(el){
+    var ids=el.dataset.c.split(' ');
+    var off=ids.every(function(id){var c=cardOf(id);return !c||c.classList.contains('off')});
+    el.classList.toggle('dim',off);
+  });
+  $$('.cb').forEach(function(el){
+    var c=cardOf(el.dataset.c);
+    el.classList.toggle('dim',!c||c.classList.contains('off'));
+  });
+  layout();
+}
+
+/* ---------- layout: align cards to anchors + draw wires ---------- */
+function layout(){
+  wires.innerHTML='';
+  if(!matchMedia('(min-width:961px)').matches){
+    $$('.card').forEach(function(c){c.style.top=''});
+    cardsEl.style.minHeight='';
+    return;
+  }
+  var mainRect=main.getBoundingClientRect();
+  function rel(el){
+    var r=el.getBoundingClientRect();
+    return {top:r.top-mainRect.top,left:r.left-mainRect.left,right:r.right-mainRect.left,
+            height:r.height};
+  }
+  var prevBottom=0, vis=[];
+  $$('.card:not(.off)').forEach(function(card){
+    var anchor=anchorFor(card.dataset.c);
+    var top=anchor? rel(anchor).top-6 : 0;
+    top=Math.max(top,prevBottom+16);
+    card.style.top=top+'px';
+    prevBottom=top+card.offsetHeight;
+    vis.push({card:card,anchor:anchor});
+  });
+  cardsEl.style.minHeight=Math.max(prevBottom+60,bodyCol.offsetHeight)+'px';
+  var H=main.scrollHeight,W=main.clientWidth;
+  wires.setAttribute('width',W);wires.setAttribute('height',H);
+  wires.setAttribute('viewBox','0 0 '+W+' '+H);
+  var out='';
+  vis.forEach(function(v){
+    if(!v.anchor) return;
+    var a=rel(v.anchor),c=rel(v.card);
+    var ax=a.left-3,ay=a.top+a.height/2;
+    var cx=c.right+3,cy=c.top+Math.min(24,c.height/2);
+    var dx=Math.max(24,Math.min(90,(ax-cx)/2));
+    out+='<path class="wire" data-c="'+v.card.dataset.c+'" style="stroke:'+colorOf(v.card.dataset.a)
+      +'" d="M '+ax+' '+ay+' C '+(ax-dx)+' '+ay+', '+(cx+dx)+' '+cy+', '+cx+' '+cy+'"/>';
+  });
+  wires.innerHTML=out;
+}
+
+/* ---------- hover + click sync ---------- */
+var hot=[];
+function clearHot(){hot.forEach(function(e){e.classList.remove('hot')});hot=[]}
+document.addEventListener('mouseover',function(e){
+  var t=e.target.closest('.ca,.cb,.card');
+  clearHot();
+  if(!t) return;
+  var cid=t.dataset.c;
+  if(!cid&&t.classList.contains('card')) cid=t.dataset.c;
+  if(!cid) return;
+  hot=$$('[data-c="'+cssEsc(cid)+'"], .ca[data-c~="'+cssEsc(cid)+'"]').filter(function(el){
+    return el.classList.contains('card')||el.classList.contains('wire')
+        ||el.classList.contains('cb')||el.classList.contains('ca');
+  });
+  hot.forEach(function(el){el.classList.add('hot')});
+});
+document.addEventListener('mouseout',function(e){
+  if(e.target.closest('.ca,.cb,.card')) clearHot();
+});
+function pulse(el){
+  el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+  setTimeout(function(){el.classList.remove('flash')},2400);
+}
+document.addEventListener('click',function(e){
+  var a=e.target.closest('.ca,.cb');
+  if(a){
+    var card=cardOf(a.dataset.c.split(' ')[0]);
+    if(card&&!card.classList.contains('off')){
+      var r=card.getBoundingClientRect();
+      if(r.top<80||r.bottom>innerHeight-40)
+        card.scrollIntoView({block:'center',behavior:'smooth'});
+      pulse(card);
+    }
+    return;
+  }
+  var h=e.target.closest('.chd');
+  if(h){
+    var card2=h.closest('.card');
+    var anchor=anchorFor(card2.dataset.c);
+    if(anchor){
+      anchor.scrollIntoView({block:'center',behavior:'smooth'});
+      pulse(anchor);
+    }
+  }
+});
+
+var rt;
+window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(layout,160)});
+
+/* ---------- footer + init ---------- */
+$('#siteFooter').innerHTML='נבנה אוטומטית מקובץ הבסיס «כתב_יד_S027_P04577_מקור_797_הערות.docx» · '
+  +META.totalChapters+' פרקים · '+META.totalComments+' הערות · עודכן '+META.built
+  +' · <a href="https://github.com/SUGINACH/HOTZAHA_SEDER" target="_blank" rel="noopener">הריפו ב-GitHub</a>';
+
+var p=new URLSearchParams(location.search);
+var id=p.get('ch');
+if(!id||idxOf(id)<0) id=list[0]?list[0].id:null;
+if(id) go(id);
+})();
+</script>
+</body>
+</html>
