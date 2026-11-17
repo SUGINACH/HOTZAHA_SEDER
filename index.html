@@ -4,143 +4,208 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>כתב יד S027 · סדר הוצאה — הערות מגיב</title>
-<meta name="description" content="גוף החיבור והערות המגיב בתצוגת צד-בצד — כתב יד S027 (P04577, מקור 797)">
+<meta name="description" content="גוף החיבור והערות המגיב בזרימה אחת — כתב יד S027 (P04577, מקור 797)">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230f172a"/><text x="32" y="44" font-size="34" text-anchor="middle" fill="%23fbbf24" font-family="serif" font-weight="bold">א</text></svg>'>
 <style>
 :root{
-  --bg:#eef2f7; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+  --bg:#eef2f7; --ink:#1e293b; --muted:#64748b; --line:#dbe3ee;
   --head:#0f172a; --head2:#1e293b; --accent:#fbbf24;
 }
 *{box-sizing:border-box}
-html{scroll-padding-top:118px}
+html{scroll-padding-top:132px}
 body{margin:0;background:var(--bg);color:var(--ink);
   font-family:"Segoe UI","Noto Sans Hebrew","Arial Hebrew",Arial,sans-serif;
   font-size:16px;line-height:1.6}
 button{font-family:inherit}
+::selection{background:#fde68a}
 
-/* ---------- header ---------- */
+/* ================= header ================= */
 #topbar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,var(--head),var(--head2));
   color:#fff;box-shadow:0 2px 14px rgba(15,23,42,.35)}
-.hrow{display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}
-.brand{line-height:1.25}
-.brand .t1{font-size:17px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
+.hrow{display:flex;align-items:center;gap:12px;padding:9px 18px;flex-wrap:wrap}
+.brand{line-height:1.2;margin-inline-end:6px}
+.brand .t1{font-size:16px;font-weight:800;white-space:nowrap}
 .brand .t1 b{color:var(--accent)}
-.brand .t2{font-size:11.5px;color:#94a3b8;white-space:nowrap}
-.controls{display:flex;align-items:center;gap:8px;margin-inline-start:auto;min-width:0;flex:0 1 auto}
-.navbtn{width:36px;height:36px;border-radius:9px;border:1px solid #334155;background:#1e293b;
-  color:#e2e8f0;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.brand .t2{font-size:11px;color:#94a3b8;white-space:nowrap}
+.chnav{display:flex;align-items:center;gap:6px}
+.navbtn{width:34px;height:34px;border-radius:9px;border:1px solid #334155;background:#1e293b;
+  color:#e2e8f0;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
 .navbtn:hover{background:#334155}
 .navbtn:disabled{opacity:.35;cursor:default}
-#chapterSelect{max-width:430px;min-width:0;width:auto;flex:0 1 430px;background:#1e293b;color:#f1f5f9;
-  border:1px solid #334155;border-radius:9px;padding:8px 10px;font-size:14px;cursor:pointer}
-#chapterMeta{font-size:12px;color:#94a3b8;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#authorBar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:0 20px 10px}
-#authorBar:empty{display:none}
-.blab{font-size:12px;color:#94a3b8;margin-inline-end:2px}
+#chapterSelect{max-width:360px;min-width:0;width:auto;flex:0 1 360px;background:#1e293b;color:#f1f5f9;
+  border:1px solid #334155;border-radius:9px;padding:7px 10px;font-size:13.5px;cursor:pointer}
+.noteNav{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);border-radius:11px;padding:4px 8px}
+.noteNav .nbtn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;
+  padding:6px 11px;font-size:12.5px;font-weight:700;cursor:pointer;transition:.15s;white-space:nowrap}
+.noteNav .nbtn:hover{background:#334155}
+#notePos{font-size:11.5px;color:#cbd5e1;min-width:60px;max-width:300px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.actions{display:flex;align-items:center;gap:8px;margin-inline-start:auto}
+.abtn{border:1px solid #334155;background:#1e293b;color:#e2e8f0;border-radius:9px;
+  padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;white-space:nowrap}
+.abtn:hover{background:#334155}
+.abtn.primary{background:#b45309;border-color:#d97706}
+.abtn.primary:hover{background:#d97706}
+#abtnBadge{display:none;background:#fbbf24;color:#78350f;border-radius:999px;font-size:10.5px;
+  padding:1px 7px;margin-inline-start:5px;font-weight:800}
+.abtn.on{background:#15803d;border-color:#22c55e}
+/* filter row */
+.frow{display:flex;align-items:center;gap:7px;padding:7px 18px 9px;overflow-x:auto;flex-wrap:nowrap}
+.flab{font-size:12px;color:#94a3b8;font-weight:700;white-space:nowrap;margin-inline-start:4px}
 .chip{display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#e2e8f0;
-  font-size:12px;cursor:pointer;transition:.15s;user-select:none}
-.chip i{width:9px;height:9px;border-radius:50%;background:var(--a,#94a3b8);flex:0 0 auto}
-.chip b{font-weight:700;color:#cbd5e1;font-size:11.5px}
-.chip:hover{background:rgba(255,255,255,.14)}
-.chip.off{opacity:.42}
-.chip.off i{background:#64748b}
-.chip.all{border-style:dashed}
+  border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#e2e8f0;
+  font-size:12px;cursor:pointer;transition:.15s;user-select:none;white-space:nowrap}
+.chip i{width:11px;height:11px;border-radius:4px;background:var(--cb);border:1.5px solid var(--cd);flex:0 0 auto}
+.chip b{font-weight:800;color:#cbd5e1;font-size:11px}
+.chip:hover{background:rgba(255,255,255,.15)}
+.chip.off{opacity:.38}
+.chip.off i{background:#475569;border-color:#64748b}
+.chip.sv i{border-radius:50%;background:transparent;border:2px solid var(--cd)}
+#allOn{border-style:dashed}
 
-/* ---------- main split ---------- */
-#main{position:relative;max-width:1560px;margin:0 auto;padding:26px 22px 30px}
-#wires{position:absolute;inset:0;z-index:0;pointer-events:none}
-#split{position:relative;z-index:1;display:flex;gap:64px;align-items:flex-start}
-#bodyCol{flex:1 1 auto;min-width:0;max-width:900px;background:#fff;border:1px solid var(--line);
-  border-radius:14px;padding:34px 40px 44px;box-shadow:0 1px 4px rgba(15,23,42,.06)}
-#notesCol{flex:0 0 350px;max-width:350px;min-width:280px}
-#notesHead{position:sticky;top:104px;z-index:5;background:var(--bg);padding:2px 2px 8px;
-  font-size:13.5px;font-weight:800;color:#334155;border-bottom:2px solid #cbd5e1;margin-bottom:12px}
-#notesHead span{color:var(--muted);font-weight:600}
-#notesSub{font-size:11px;font-weight:500;color:var(--muted)}
-#cards{position:relative}
-
-/* ---------- body text ---------- */
-.h1{font-size:27px;font-weight:800;line-height:1.35;margin:34px 0 16px;padding-bottom:10px;
-  border-bottom:2px solid #cbd5e1}
-.h2{font-size:24px;font-weight:800;margin:26px 0 14px;line-height:1.4}
+/* ================= document flow ================= */
+#wrap{max-width:920px;margin:0 auto;padding:26px 20px 40px}
+#doc{background:#fff;border:1px solid var(--line);border-radius:14px;
+  padding:38px 46px 46px;box-shadow:0 1px 5px rgba(15,23,42,.06)}
+.h1{font-size:26px;font-weight:800;line-height:1.35;margin:32px 0 14px;padding-bottom:9px;border-bottom:2px solid #cbd5e1}
+.h2{font-size:23px;font-weight:800;margin:26px 0 13px;line-height:1.4}
 .h3{font-size:20px;font-weight:700;margin:22px 0 10px;line-height:1.45}
 .h4{font-size:18px;font-weight:700;margin:18px 0 8px}
-.h5{font-size:17px;font-weight:700;margin:16px 0 8px}
-.h6{font-size:16.5px;font-weight:700;margin:14px 0 6px}
+.h5{font-size:17px;font-weight:700;margin:16px 0 7px}
+.h6{font-size:16px;font-weight:700;margin:14px 0 6px}
 .h7{font-size:15.5px;font-weight:600;color:#475569;margin:14px 0 6px}
-.p{font-size:17px;line-height:1.9;margin:0 0 10px;white-space:pre-wrap;overflow-wrap:break-word}
+.p{font-size:17px;line-height:1.95;margin:0 0 11px;white-space:pre-wrap;overflow-wrap:break-word}
 .sp{height:.85em}
 sup.sup{font-size:.72em}
+#filterNotice{display:none;background:#fef3c7;border:1px solid #f59e0b;color:#92400e;border-radius:10px;
+  padding:10px 16px;font-size:13.5px;margin-bottom:14px;text-align:center}
+#noNotes{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:10px;padding:12px;text-align:center;
+  color:var(--muted);font-size:13.5px;margin-top:14px}
 
-/* ---------- anchors ---------- */
-.ca{padding:0 2px;border-radius:3px;border-bottom:2px dotted var(--a);background:var(--abg);
-  cursor:pointer;transition:box-shadow .12s}
+/* anchors in body text */
+.ca{padding:0 2px;border-radius:3px;border-bottom:2px dotted var(--a);background:var(--abg);cursor:pointer;transition:box-shadow .12s}
 .ca:hover,.ca.hot{box-shadow:0 0 0 2px var(--a)}
-.cb{display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:17px;
-  padding:0 4px;margin-inline-start:2px;border-radius:999px;background:var(--a);color:#fff;
-  font-size:10.5px;font-weight:800;line-height:1;cursor:pointer;vertical-align:super;
-  transform:translateY(-2px);transition:box-shadow .12s;border:none}
-.cb:hover,.cb.hot{box-shadow:0 0 0 2.5px var(--a);filter:brightness(1.12)}
-.ca.dim,.cb.dim{opacity:.25}
+.cb{display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:17px;padding:0 4px;
+  margin-inline-start:2px;border-radius:999px;background:var(--a);color:#fff;font-size:10.5px;font-weight:800;
+  line-height:1;cursor:pointer;vertical-align:super;transform:translateY(-2px);transition:box-shadow .12s;border:none}
+.cb:hover,.cb.hot{box-shadow:0 0 0 2.5px var(--a);filter:brightness(1.1)}
+.ca.dim,.cb.dim{opacity:.28}
 
-/* ---------- cards ---------- */
-.card{position:absolute;inset-inline:0;background:#fff;border:1px solid var(--line);
-  border-right:4px solid var(--a);border-radius:12px;padding:11px 13px 10px;
-  box-shadow:0 1px 5px rgba(15,23,42,.08);transition:box-shadow .15s;scroll-margin-top:130px}
-.card.off{display:none}
-.card.hot{box-shadow:0 0 0 2px var(--a),0 6px 18px rgba(15,23,42,.18)}
-.chd{display:flex;align-items:center;gap:8px;margin-bottom:7px;cursor:pointer}
-.cbadge{display:inline-flex;align-items:center;justify-content:center;min-width:19px;height:19px;
-  padding:0 4px;border-radius:999px;background:var(--a);color:#fff;font-size:11px;font-weight:800;flex:0 0 auto}
-.cauthor{font-size:12px;font-weight:700;color:var(--a);line-height:1.3}
-.cdate{font-size:10.5px;color:#94a3b8;margin-inline-start:auto;white-space:nowrap}
-.ctext{font-size:13.5px;line-height:1.72;color:#334155}
-.ctext p{margin:0 0 8px;white-space:pre-wrap;overflow-wrap:anywhere}
-.ctext p:last-child{margin-bottom:0}
-.ctext p.sp{height:.6em}
-.nores{background:#fff;border:1px dashed #cbd5e1;border-radius:12px;padding:18px;text-align:center;
-  color:var(--muted);font-size:14px;position:static}
+/* ================= note boxes (background = TYPE, border = identification only) ================= */
+.note{background:var(--tbg);border:2px solid var(--tbd);border-radius:12px;
+  padding:11px 15px 11px;margin:4px 0 16px;scroll-margin-top:150px;position:relative;transition:box-shadow .15s}
+.note.off{display:none}
+.note.hot{box-shadow:0 0 0 3px var(--tbd),0 8px 22px rgba(15,23,42,.18)}
+.nh{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:12px;margin-bottom:7px}
+.nnum{display:inline-flex;align-items:center;justify-content:center;min-width:21px;height:21px;padding:0 5px;
+  border-radius:999px;background:var(--tbd);color:#fff;font-size:11.5px;font-weight:800;flex:0 0 auto;cursor:pointer}
+.ntype{font-weight:800;color:var(--tdk);font-size:12.5px;white-space:nowrap}
+.nsv{display:inline-flex;align-items:center;gap:5px;border:1px solid #94a3b8;color:#475569;background:rgba(255,255,255,.6);
+  border-radius:999px;padding:1.5px 9px;font-size:11px;font-weight:700;white-space:nowrap}
+.nauthor{display:inline-flex;align-items:center;gap:5px;color:#475569;font-weight:600;font-size:11.5px;white-space:nowrap}
+.nauthor i{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.ndate{font-size:10.5px;color:#7c8ba1;white-space:nowrap;margin-inline-start:auto}
+.neditMark{display:none;background:#b45309;color:#fff;border-radius:999px;font-size:10px;font-weight:800;padding:1.5px 8px}
+.note.edited .neditMark{display:inline-flex}
+.nb{font-size:14px;line-height:1.75;color:#334155}
+.nb p{margin:0 0 8px;white-space:pre-wrap;overflow-wrap:anywhere}
+.nb p:last-child{margin-bottom:0}
+.nb p.sp{height:.6em}
 
-/* ---------- wires ---------- */
-.wire{fill:none;stroke-width:1.7;opacity:.5;transition:opacity .12s,stroke-width .12s}
-.wire.hot{opacity:1;stroke-width:2.8}
+/* edit mode */
+body.editing .para,body.editing .nb{outline:1.5px dashed #b6c3d4;outline-offset:3px;border-radius:4px}
+body.editing .para:focus,body.editing .nb:focus{outline:2px solid #2563eb;background:#fff}
+body.editing .para.edited,body.editing .nb.edited{outline-color:#d97706}
+#editHint{display:none;background:#ecfdf5;border:1px solid #10b981;color:#065f46;border-radius:10px;
+  padding:9px 16px;font-size:13px;margin-bottom:14px}
+body.editing #editHint{display:block}
 
-/* ---------- states ---------- */
+/* ================= states ================= */
 .loading,.err{display:flex;align-items:center;gap:12px;justify-content:center;color:var(--muted);
   font-size:15px;padding:60px 0}
 .spin{width:24px;height:24px;border-radius:50%;border:3px solid #cbd5e1;border-top-color:#2563eb;
   animation:rot .8s linear infinite;flex:0 0 auto}
 @keyframes rot{to{transform:rotate(360deg)}}
-.err button{padding:6px 16px;border-radius:8px;border:1px solid #2563eb;background:#eff6ff;
-  color:#2563eb;font-size:14px;cursor:pointer}
-@keyframes flashA{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 4px var(--a)}}
+.err button{padding:6px 16px;border-radius:8px;border:1px solid #2563eb;background:#eff6ff;color:#2563eb;cursor:pointer}
+@keyframes flashA{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 4px var(--tbd)}}
 .flash{animation:flashA 1s ease 2}
 
-/* ---------- footer ---------- */
-footer{max-width:1560px;margin:0 auto;padding:18px 22px 40px;color:var(--muted);font-size:12.5px;
+/* ================= modals ================= */
+.ovl{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:90;display:none;
+  align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.ovl.open{display:flex}
+.dlg{background:#fff;border-radius:16px;max-width:860px;width:100%;box-shadow:0 24px 70px rgba(0,0,0,.35);
+  overflow:hidden;animation:pop .18s ease}
+@keyframes pop{from{transform:translateY(14px);opacity:0}}
+.dhd{display:flex;align-items:center;gap:10px;padding:15px 22px;border-bottom:1px solid var(--line);
+  background:#f8fafc}
+.dhd h2{margin:0;font-size:17px;font-weight:800;flex:1}
+.dclose{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:#fff;
+  font-size:16px;cursor:pointer;color:var(--muted)}
+.dclose:hover{background:#f1f5f9}
+.dbd{padding:18px 22px;max-height:72vh;overflow-y:auto}
+
+/* catalog table */
+#catTable{width:100%;border-collapse:collapse;font-size:13.5px}
+#catTable th,#catTable td{border:1px solid var(--line);padding:7px 10px;text-align:center}
+#catTable th{background:#f1f5f9;font-size:12.5px}
+#catTable th.rowh,#catTable td.rowh{text-align:right;font-weight:700;cursor:pointer;white-space:nowrap}
+#catTable td{cursor:pointer;transition:.12s}
+#catTable td:hover{background:#eff6ff}
+#catTable td.total,#catTable th.total{background:#f8fafc;font-weight:800;cursor:default}
+#catTable td.active{background:#dbeafe;box-shadow:inset 0 0 0 2px #2563eb}
+.tdot{display:inline-block;width:12px;height:12px;border-radius:4px;border:1.5px solid;vertical-align:-2px;margin-inline-start:7px}
+.catNote{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6}
+
+/* downloads panel */
+.dlSec{margin-bottom:20px}
+.dlSec h3{margin:0 0 9px;font-size:14.5px;font-weight:800;color:#334155}
+.dlRow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0;border-bottom:1px dashed var(--line)}
+.dlRow:last-child{border-bottom:none}
+.dlName{font-weight:700;font-size:13.5px;flex:1;min-width:180px}
+.dbtn{border:1px solid #2563eb;background:#eff6ff;color:#1d4ed8;border-radius:8px;padding:5px 13px;
+  font-size:12px;font-weight:700;cursor:pointer;transition:.15s}
+.dbtn:hover{background:#dbeafe}
+.dbtn.gray{border-color:#94a3b8;background:#f8fafc;color:#475569}
+.dbtn.gray:hover{background:#e2e8f0}
+.dbtn.green{border-color:#15803d;background:#f0fdf4;color:#166534}
+.dbtn.green:hover{background:#dcfce7}
+.dlEmpty{color:var(--muted);font-size:13.5px;background:#f8fafc;border:1px dashed var(--line);
+  border-radius:10px;padding:14px;text-align:center}
+
+/* toast */
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:#0f172a;
+  color:#fff;padding:10px 22px;border-radius:11px;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.35);
+  opacity:0;pointer-events:none;transition:.25s;z-index:120;max-width:88vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* footer */
+footer{max-width:920px;margin:0 auto;padding:16px 20px 42px;color:var(--muted);font-size:12.5px;
   display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 footer a{color:#2563eb;text-decoration:none}
 footer a:hover{text-decoration:underline}
 
-/* ---------- narrow screens ---------- */
-@media (max-width:960px){
-  html{scroll-padding-top:150px}
-  #split{display:block}
-  #bodyCol{max-width:none;padding:22px 18px 28px}
-  #notesCol{max-width:none;min-width:0;margin-top:26px;flex:none;width:auto}
-  #notesHead{position:static}
-  .card{position:static;margin-bottom:12px}
-  #cards{min-height:0 !important}
-  #wires{display:none}
-  #chapterMeta{display:none}
-  #chapterSelect{flex:1 1 160px;max-width:none}
+/* narrow screens */
+@media (max-width:760px){
+  html{scroll-padding-top:170px}
+  #wrap{padding:14px 8px 30px}
+  #doc{padding:22px 16px 30px;border-radius:10px}
+  .hrow{padding:8px 10px;gap:8px}
+  .frow{padding:6px 10px 8px}
+  .brand .t2{display:none}
+  #chapterSelect{flex:1 1 130px;max-width:none}
+  .noteNav{order:5}
+  .actions{margin-inline-start:0}
+  #notePos{max-width:150px}
+  .note{padding:9px 11px}
 }
 @media print{
-  #topbar,#wires,#notesHead{display:none}
-  #split{display:block}
-  .card{position:static;margin-bottom:10px}
-  #bodyCol{box-shadow:none;border:none}
+  #topbar,.ovl,#toast,#editHint,#filterNotice{display:none !important}
+  body{background:#fff}
+  #wrap{padding:0;max-width:none}
+  #doc{border:none;box-shadow:none;padding:0}
+  .note{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
@@ -150,299 +215,622 @@ footer a:hover{text-decoration:underline}
   <div class="hrow">
     <div class="brand">
       <div class="t1">כתב יד <b>S027</b> · סדר הוצאה</div>
-      <div class="t2">P04577 · מקור 797 — גוף החיבור והערות המגיב</div>
+      <div class="t2">P04577 · מקור 797 — גוף החיבור והערות המגיב בזרימה אחת</div>
     </div>
-    <div class="controls">
-      <button class="navbtn" id="prevBtn" title="הפרק הקודם (Alt+→)" aria-label="הפרק הקודם">›</button>
+    <div class="chnav">
+      <button class="navbtn" id="prevCh" title="הפרק הקודם (Alt+→)" aria-label="הפרק הקודם">›</button>
       <select id="chapterSelect" aria-label="בחירת פרק"></select>
-      <button class="navbtn" id="nextBtn" title="הפרק הבא (Alt+←)" aria-label="הפרק הבא">‹</button>
+      <button class="navbtn" id="nextCh" title="הפרק הבא (Alt+←)" aria-label="הפרק הבא">‹</button>
     </div>
-    <div id="chapterMeta"></div>
+    <div class="noteNav">
+      <button class="nbtn" id="prevNote" title="ההערה הקודמת במסמך גם אם היא בפרק אחר (Alt+↑)">↑ הערה קודמת</button>
+      <span id="notePos" title="מיקום נוכחי">—</span>
+      <button class="nbtn" id="nextNote" title="ההערה הבאה במסמך גם אם היא בפרק אחר (Alt+↓)">הערה הבאה ↓</button>
+    </div>
+    <div class="actions">
+      <button class="abtn" id="catalogBtn" title="קטלוג ההערות לפי סוג וחומרה">קטלוג</button>
+      <button class="abtn" id="editBtn" title="מצב עריכה של גוף הטקסט וההערות (Alt+E)">עריכה</button>
+      <button class="abtn primary" id="dlBtn">הורדות<b id="abtnBadge">0</b></button>
+    </div>
   </div>
-  <div id="authorBar"></div>
+  <div class="frow" id="filterRow"></div>
 </header>
 
-<main id="main">
-  <svg id="wires" aria-hidden="true"></svg>
-  <div id="split">
-    <section id="bodyCol" class="col" aria-label="גוף הטקסט"></section>
-    <section id="notesCol" class="col" aria-label="הערות מגיב">
-      <div id="notesHead">הערות מגיב <span id="notesCount"></span>
-        <div id="notesSub">מקושרות לפסקה המוערת · כולן מורחבות</div>
-      </div>
-      <div id="cards"></div>
-    </section>
-  </div>
+<main id="wrap">
+  <div id="editHint">מצב עריכה פעיל: ניתן ללחוץ על כל פסקה בגוף המסמך או על גוף הערה ולערוך אותה. העריכות נשמרות אוטומטית בדפדפן וניתן להוריד את הפרקים שנערכו מכפתור «הורדות».</div>
+  <div id="filterNotice"></div>
+  <article id="doc" aria-label="גוף המסמך והערות"></article>
 </main>
 
 <footer id="siteFooter"></footer>
 
+<!-- catalog modal -->
+<div class="ovl" id="catOvl" role="dialog" aria-modal="true" aria-label="קטלוג ההערות">
+  <div class="dlg">
+    <div class="dhd"><h2>קטלוג הערות המגיב</h2><button class="dclose" data-close="catOvl">✕</button></div>
+    <div class="dbd">
+      <table id="catTable"></table>
+      <p class="catNote">הסיווג לסוגים נעשה אוטומטית על בסיס תוכן כל הערה וכותרתה. דרגת החומרה נקבעה בבדיקה עצמאית של תוכן ההערה — ללא תלות בערך החומרה המופיע בנוסח ההערה עצמה.<br>
+      לחיצה על שם סוג או על כותרת עמודה מסננת; לחיצה על תא מסננת לשילוב המדויק של סוג וחומרה.</p>
+    </div>
+  </div>
+</div>
+
+<!-- downloads modal -->
+<div class="ovl" id="dlOvl" role="dialog" aria-modal="true" aria-label="הורדות">
+  <div class="dlg">
+    <div class="dhd"><h2>הורדת קבצים</h2><button class="dclose" data-close="dlOvl">✕</button></div>
+    <div class="dbd" id="dlBody"></div>
+  </div>
+</div>
+
+<div id="toast" role="status"></div>
+
 <script src="chapters/list.js"></script>
+<script src="chapters/notes-index.js"></script>
 <script>
 (function(){
 "use strict";
-var $ = function(s){return document.querySelector(s)};
-var $$ = function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
-var list = window.CHAPTER_LIST || [];
-var META = window.SITE_META || {authors:{}, totalChapters:list.length, totalComments:0, built:''};
+var $=function(s){return document.querySelector(s)};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+var list=window.CHAPTER_LIST||[];
+var NOTES=window.NOTES_INDEX||[];
+var NM=window.NOTES_META||{types:{},svs:{},byType:{},bySv:{},total:NOTES.length,built:''};
+var TYPEM=NM.types||{};
+var SVS={1:(NM.svs&&NM.svs['1'])||'נמוכה',2:(NM.svs&&NM.svs['2'])||'בינונית',3:(NM.svs&&NM.svs['3'])||'גבוהה'};
+var TYPE_ORDER=['missing','titles','margin','essay','source','concept','structure','lang','reply'];
+var AUTHOR_COLORS={'מגיב – שילוב קטעים חסרים':'#15803d','OpenAI – ביקורת עריכה':'#2563eb',
+  'עורך – ביקורת עיונית, המשך':'#d97706','עורך – ביקורת ראשונית':'#dc2626','אורה דיינובסקי':'#9333ea'};
+var LS_KEY='hotzaha_edits_v2';
 
-var main=$('#main'), bodyCol=$('#bodyCol'), cardsEl=$('#cards'), wires=$('#wires'),
-    sel=$('#chapterSelect'), metaLine=$('#chapterMeta'), authorBar=$('#authorBar'),
-    notesCount=$('#notesCount'), prevBtn=$('#prevBtn'), nextBtn=$('#nextBtn');
-var cur=null, offAuthors={}, loadSeq=0;
+var docEl=$('#doc'),sel=$('#chapterSelect'),filterRow=$('#filterRow'),
+    notePosEl=$('#notePos'),prevChBtn=$('#prevCh'),nextChBtn=$('#nextCh'),
+    prevNoteBtn=$('#prevNote'),nextNoteBtn=$('#nextNote'),
+    editBtn=$('#editBtn'),dlBtn=$('#dlBtn'),dlBadge=$('#abtnBadge'),
+    catOvl=$('#catOvl'),dlOvl=$('#dlOvl'),dlBody=$('#dlBody'),toastEl=$('#toast');
+var cur=null,loadSeq=0,curById={},curIdx=-1,pendingNote=null;
+var OFF_T={},OFF_S={};
+var EDITS={};
+try{EDITS=JSON.parse(localStorage.getItem(LS_KEY)||'{}')||{}}catch(_){EDITS={}}
 
-function colorOf(a){var m=META.authors[a];return m?m.color:'#0f766e'}
-function escAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}
-function shortPart(p){return p.length>26 ? p.split(' - ')[0] : p}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function escAttr(s){return esc(s)}
+/* note ids are plain numeric strings from the docx: safe inside quoted attribute
+   selectors and getElementById — CSS.escape would mangle leading digits. */
+function selAttr(v){return String(v).replace(/"/g,'')}
+function typeMeta(t){return TYPEM[t]||{name:t,bg:'#f1f5f9',border:'#94a3b8',dark:'#334155'}}
+function authorColor(a){return AUTHOR_COLORS[a]||'#0f766e'}
+function hexRgba(hx,a){hx=hx.replace('#','');return 'rgba('+parseInt(hx.substr(0,2),16)+','+parseInt(hx.substr(2,2),16)+','+parseInt(hx.substr(4,2),16)+','+a+')'}
 
-/* ---------- select ---------- */
+/* global index map "ch|cid" -> position */
+var NMAP={};
+NOTES.forEach(function(e,i){NMAP[e[0]+'|'+e[1]]=i});
+
+/* ================= chapter select ================= */
 (function(){
-  var curPart=null, og=null;
+  var curPart=null,og=null;
   list.forEach(function(c){
-    if(c.part!==curPart){
-      curPart=c.part;
-      og=document.createElement('optgroup');
-      og.label=shortPart(c.part);
-      sel.appendChild(og);
-    }
-    var o=document.createElement('option');
-    o.value=c.id;
-    o.textContent=c.num+'. '+c.title+' ('+c.nc+' הערות)';
-    og.appendChild(o);
+    if(c.part!==curPart){curPart=c.part;og=document.createElement('optgroup');
+      og.label=c.part.length>26?c.part.split(' - ')[0]:c.part;sel.appendChild(og)}
+    var o=document.createElement('option');o.value=c.id;
+    o.textContent=c.num+'. '+c.title+' ('+c.nc+' הערות)';og.appendChild(o);
   });
 })();
-
-function idxOf(id){for(var i=0;i<list.length;i++) if(list[i].id===id) return i; return -1}
-function step(d){var i=idxOf(cur)+d; if(i>=0&&i<list.length) go(list[i].id)}
+function idxOf(id){for(var i=0;i<list.length;i++)if(list[i].id===id)return i;return -1}
+function stepCh(d){var i=idxOf(cur)+d;if(i>=0&&i<list.length)go(list[i].id)}
 sel.addEventListener('change',function(){go(sel.value)});
-prevBtn.addEventListener('click',function(){step(-1)});
-nextBtn.addEventListener('click',function(){step(1)});
-document.addEventListener('keydown',function(e){
-  if(!e.altKey) return;
-  if(e.key==='ArrowLeft'){step(1);e.preventDefault()}
-  else if(e.key==='ArrowRight'){step(-1);e.preventDefault()}
-});
+prevChBtn.addEventListener('click',function(){stepCh(-1)});
+nextChBtn.addEventListener('click',function(){stepCh(1)});
 
-/* ---------- chapter loading (separate file per chapter) ---------- */
-function go(id){
-  cur=id; loadSeq++;
-  try{history.replaceState(null,'','?ch='+encodeURIComponent(id))}catch(_){}
+/* ================= filter chips ================= */
+function buildFilters(){
+  var html='<span class="flab">סוג ההערה:</span>';
+  TYPE_ORDER.forEach(function(t){
+    var m=typeMeta(t),n=NM.byType[t]||0;
+    if(!n)return;
+    html+='<button class="chip tchip" data-t="'+t+'" style="--cb:'+m.bg+';--cd:'+m.border+'"><i></i>'+m.name+' <b>'+n+'</b></button>';
+  });
+  html+='<span class="flab">חומרה:</span>';
+  [1,2,3].forEach(function(s){
+    var cd=s===3?'#dc2626':(s===2?'#d97706':'#64748b');
+    html+='<button class="chip sv svchip" data-s="'+s+'" style="--cd:'+cd+'"><i></i>'+SVS[s]+' <b>'+(NM.bySv[String(s)]||0)+'</b></button>';
+  });
+  html+='<button class="chip" id="allOn">הצג הכול</button>';
+  filterRow.innerHTML=html;
+  $$('.tchip').forEach(function(b){b.addEventListener('click',function(){
+    var t=b.dataset.t;if(OFF_T[t])delete OFF_T[t];else OFF_T[t]=1;
+    refreshChips();applyFilter();})});
+  $$('.svchip').forEach(function(b){b.addEventListener('click',function(){
+    var s=b.dataset.s;if(OFF_S[s])delete OFF_S[s];else OFF_S[s]=1;
+    refreshChips();applyFilter();})});
+  $('#allOn').addEventListener('click',function(){OFF_T={};OFF_S={};refreshChips();applyFilter()});
+  refreshChips();
+}
+function refreshChips(){
+  $$('.tchip').forEach(function(b){b.classList.toggle('off',!!OFF_T[b.dataset.t])});
+  $$('.svchip').forEach(function(b){b.classList.toggle('off',!!OFF_S[b.dataset.s])});
+  markCatalogActive();
+}
+function noteMatches(t,sv){return !OFF_T[t]&&!OFF_S[String(sv)]&&!OFF_S[sv]}
+buildFilters();
+
+/* ================= chapter loading ================= */
+function go(id,pendingCid){
+  cur=id;loadSeq++;
+  pendingNote=pendingCid||null;
+  try{history.replaceState(null,'','?ch='+encodeURIComponent(id)+(pendingCid?'&note='+encodeURIComponent(pendingCid):''))}catch(_){}
   sel.value=id;
-  prevBtn.disabled = idxOf(id)<=0;
-  nextBtn.disabled = idxOf(id)>=list.length-1;
+  prevChBtn.disabled=idxOf(id)<=0;nextChBtn.disabled=idxOf(id)>=list.length-1;
   var c=list[idxOf(id)];
   document.title='פרק '+c.num+' · '+c.title+' — כתב יד S027';
-  metaLine.textContent=c.part+' · פרק '+c.num+' מתוך '+list.length;
-  bodyCol.innerHTML='<div class="loading"><span class="spin"></span> טוען פרק…</div>';
-  cardsEl.innerHTML=''; wires.innerHTML=''; authorBar.innerHTML='';
-  notesCount.textContent='';
+  docEl.innerHTML='<div class="loading"><span class="spin"></span> טוען פרק…</div>';
+  notePosEl.textContent='—';
   var seq=loadSeq;
-  loadScript(id, function(){
-    if(seq!==loadSeq) return;
-    render();
-  }, function(){
-    if(seq!==loadSeq) return;
-    bodyCol.innerHTML='<div class="err">שגיאה בטעינת הפרק <button id="retryBtn">נסה שוב</button></div>';
-    $('#retryBtn').addEventListener('click',function(){go(id)});
+  loadScript(id,function(){if(seq===loadSeq)render()},function(){
+    if(seq!==loadSeq)return;
+    docEl.innerHTML='<div class="err">שגיאה בטעינת הפרק <button id="retryBtn">נסה שוב</button></div>';
+    $('#retryBtn').addEventListener('click',function(){go(id,pendingCid)});
   });
 }
 window.go=go;
-
-function loadScript(id, ok, fail){
-  if(window.CHAPTER_DATA && window.CHAPTER_DATA[id]) return ok();
-  var s=document.createElement('script');
-  s.src='chapters/'+id+'.js';
-  s.onload=ok; s.onerror=fail;
-  document.head.appendChild(s);
+function loadScript(id,ok,fail){
+  if(window.CHAPTER_DATA&&window.CHAPTER_DATA[id])return ok();
+  var s=document.createElement('script');s.src='chapters/'+id+'.js';
+  s.onload=ok;s.onerror=fail;document.head.appendChild(s);
 }
 
-/* ---------- rendering ---------- */
-function cardHTML(c){
-  var col=colorOf(c.a);
-  return '<article class="card" data-c="'+c.id+'" data-a="'+escAttr(c.a)+'" style="--a:'+col+'">'
-    +'<header class="chd" title="מעבר לפסקה המוערת">'
-    +'<span class="cbadge" data-c="'+c.id+'">'+c.n+'</span>'
-    +'<span class="cauthor">'+escAttr(c.a)+'</span>'
-    +'<span class="cdate">'+c.d+'</span></header>'
-    +'<div class="ctext">'+c.h+'</div></article>';
-}
-
-function render(){
-  var d=window.CHAPTER_DATA[cur];
-  var html='';
-  for(var i=0;i<d.paras.length;i++){
-    var p=d.paras[i];
-    if(p.s==='sp'){html+='<div class="sp"></div>';continue}
-    html+='<div class="'+p.s+'">'+p.h+'</div>';
-  }
-  bodyCol.innerHTML=html;
-  if(d.comments.length){
-    cardsEl.innerHTML=d.comments.map(cardHTML).join('');
-    notesCount.textContent='('+d.comments.length+')';
-  }else{
-    cardsEl.innerHTML='<div class="nores">לפרק זה אין הערות</div>';
-  }
-  offAuthors={};
-  buildAuthorBar(d);
-  requestAnimationFrame(function(){
-    window.scrollTo(0,0);
-    layout();
-    if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){if(cur===d.id)layout()});
-  });
-}
-
-function buildAuthorBar(d){
-  var counts={};
-  d.comments.forEach(function(c){counts[c.a]=(counts[c.a]||0)+1});
-  var keys=Object.keys(counts);
-  if(!keys.length){authorBar.innerHTML='';return}
-  var html='<span class="blab">הצג הערות:</span>';
-  keys.forEach(function(a){
-    html+='<button class="chip" data-a="'+escAttr(a)+'" style="--a:'+colorOf(a)+'"><i></i>'
-      +escAttr(a)+' <b>'+counts[a]+'</b></button>';
-  });
-  html+='<button class="chip all" id="allChip">הכול</button>';
-  authorBar.innerHTML=html;
-  $$('#authorBar .chip[data-a]').forEach(function(b){
-    b.addEventListener('click',function(){
-      var a=b.dataset.a;
-      if(offAuthors[a]) delete offAuthors[a]; else offAuthors[a]=true;
-      refreshChips(); applyFilter();
+/* ================= rendering: single flow ================= */
+function anchorIds(html){
+  var out=[],seen={};
+  (String(html).match(/data-c="([^"]+)"/g)||[]).forEach(function(m){
+    m.slice(8,-1).split(' ').forEach(function(id){
+      if(!seen[id]&&curById[id]){seen[id]=1;out.push(id)}
     });
   });
-  $('#allChip').addEventListener('click',function(){
-    offAuthors={}; refreshChips(); applyFilter();
+  return out;
+}
+function noteHTML(c){
+  var m=typeMeta(c.t);
+  var ed=(EDITS[cur]&&EDITS[cur].notes&&EDITS[cur].notes[c.id]!=null)?
+    EDITS[cur].notes[c.id]:null;
+  var editedClass=ed!=null?' edited':'';
+  return '<section class="note'+editedClass+'" id="note-'+escAttr(c.id)+'" data-c="'+escAttr(c.id)
+    +'" data-t="'+escAttr(c.t)+'" data-sv="'+c.sv+'" style="--tbg:'+m.bg+';--tbd:'+m.border+';--tdk:'+m.dark+'">'
+    +'<header class="nh">'
+    +'<span class="nnum" title="מעבר למקום העיגון בטקסט">'+c.n+'</span>'
+    +'<span class="ntype">'+esc(m.name)+'</span>'
+    +'<span class="nsv">חומרה: '+esc(SVS[c.sv])+'</span>'
+    +'<span class="nauthor"><i style="background:'+authorColor(c.a)+'"></i>'+esc(c.a)+'</span>'
+    +'<span class="neditMark">נערך</span>'
+    +'<span class="ndate">'+esc(c.d||'')+'</span>'
+    +'</header>'
+    +'<div class="nb">'+(ed!=null?ed:c.h)+'</div></section>';
+}
+function render(){
+  var d=window.CHAPTER_DATA[cur];
+  curById={};d.comments.forEach(function(c){curById[c.id]=c});
+  var ed=EDITS[cur]||{};
+  var html='';
+  var noteCount=0;
+  d.paras.forEach(function(p,i){
+    if(p.s==='sp'){html+='<div class="sp"></div>';return}
+    var ph=(ed.paras&&ed.paras[String(i)]!=null)?ed.paras[String(i)]:p.h;
+    var pEdited=(ed.paras&&ed.paras[String(i)]!=null)?' edited':'';
+    html+='<div class="para '+p.s+pEdited+'" data-pi="'+i+'">'+ph+'</div>';
+    anchorIds(p.h).forEach(function(cid){html+=noteHTML(curById[cid]);noteCount++});
+  });
+  if(!noteCount)html+='<div id="noNotes">לפרק זה אין הערות מגיב</div>';
+  docEl.innerHTML=html;
+  recolorAnchors();
+  if(document.body.classList.contains('editing'))setEditable(true);
+  var first=NOTES.filter(function(e){return e[0]===cur});
+  curIdx=first.length?NMAP[cur+'|'+first[0][1]]:-1;
+  applyFilter();
+  requestAnimationFrame(function(){
+    window.scrollTo(0,0);
+    if(pendingNote){
+      var cid=pendingNote;pendingNote=null;
+      var el=document.getElementById('note-'+cid);
+      if(el){curIdx=NMAP.hasOwnProperty(cur+'|'+cid)?NMAP[cur+'|'+cid]:curIdx;
+        el.scrollIntoView({block:'center'});pulse(el);updateNotePos()}
+    }
   });
 }
-function refreshChips(){
-  $$('#authorBar .chip[data-a]').forEach(function(b){
-    b.classList.toggle('off',!!offAuthors[b.dataset.a]);
-  });
-}
-
-function cardOf(cid){
-  return document.querySelector('.card[data-c="'+cssEsc(cid)+'"]');
-}
-function anchorFor(cid){
-  return document.querySelector('.cb[data-c="'+cssEsc(cid)+'"]')
-      || document.querySelector('.ca[data-c~="'+cssEsc(cid)+'"]');
-}
-function cssEsc(s){return window.CSS&&CSS.escape?CSS.escape(s):s}
-
-function applyFilter(){
-  $$('.card').forEach(function(card){
-    card.classList.toggle('off',!!offAuthors[card.dataset.a]);
-  });
+function recolorAnchors(){
   $$('.ca').forEach(function(el){
     var ids=el.dataset.c.split(' ');
-    var off=ids.every(function(id){var c=cardOf(id);return !c||c.classList.contains('off')});
-    el.classList.toggle('dim',off);
+    var c=curById[ids[0]];if(!c)return;
+    var m=typeMeta(c.t);
+    el.style.setProperty('--a',m.border);el.style.setProperty('--abg',hexRgba(m.border,.09));
   });
   $$('.cb').forEach(function(el){
-    var c=cardOf(el.dataset.c);
-    el.classList.toggle('dim',!c||c.classList.contains('off'));
+    var c=curById[el.dataset.c];if(!c)return;
+    el.style.setProperty('--a',typeMeta(c.t).border);
   });
-  layout();
+}
+function applyFilter(){
+  $$('.note').forEach(function(n){
+    n.classList.toggle('off',!noteMatches(n.dataset.t,n.dataset.sv));
+  });
+  $$('.ca,.cb').forEach(function(el){
+    var ids=el.dataset.c.split(' ');
+    var any=ids.some(function(id){var n=document.getElementById('note-'+id);
+      return n&&!n.classList.contains('off')});
+    el.classList.toggle('dim',!any);
+  });
+  var total=$$('.note').length,vis=$$('.note:not(.off)').length;
+  var fn=$('#filterNotice');
+  if(total&&!vis){fn.style.display='block';
+    fn.textContent='כל '+total+' ההערות בפרק זה מסוננות כרגע. שחררו סינון כדי לצפות בהן.'}
+  else fn.style.display='none';
+  updateNotePos();
+  markCatalogActive();
 }
 
-/* ---------- layout: align cards to anchors + draw wires ---------- */
-function layout(){
-  wires.innerHTML='';
-  if(!matchMedia('(min-width:961px)').matches){
-    $$('.card').forEach(function(c){c.style.top=''});
-    cardsEl.style.minHeight='';
-    return;
+/* ================= note navigation (cross-chapter) ================= */
+function jumpNote(dir){
+  if(!NOTES.length){toast('לא נטען אינדקס הערות');return}
+  var any=NOTES.some(function(e){return noteMatches(e[3],e[4])});
+  if(!any){toast('אין הערות שתואמות לסינון הנוכחי');return}
+  var i=curIdx<0?(dir>0?-1:NOTES.length):curIdx;
+  for(var k=0;k<NOTES.length;k++){
+    i=(i+dir+NOTES.length)%NOTES.length;
+    var e=NOTES[i];
+    if(noteMatches(e[3],e[4])){
+      if(e[0]===cur){curIdx=i;var el=document.getElementById('note-'+e[1]);
+        if(el){el.scrollIntoView({block:'center',behavior:'smooth'});pulse(el)}}
+      else{curIdx=i;go(e[0],e[1]);toast('מעבר לפרק '+chapterNum(e[0])+' — '+(e[2]||'הערה'))}
+      updateNotePos();return;
+    }
   }
-  var mainRect=main.getBoundingClientRect();
-  function rel(el){
-    var r=el.getBoundingClientRect();
-    return {top:r.top-mainRect.top,left:r.left-mainRect.left,right:r.right-mainRect.left,
-            height:r.height};
-  }
-  var prevBottom=0, vis=[];
-  $$('.card:not(.off)').forEach(function(card){
-    var anchor=anchorFor(card.dataset.c);
-    var top=anchor? rel(anchor).top-6 : 0;
-    top=Math.max(top,prevBottom+16);
-    card.style.top=top+'px';
-    prevBottom=top+card.offsetHeight;
-    vis.push({card:card,anchor:anchor});
-  });
-  cardsEl.style.minHeight=Math.max(prevBottom+60,bodyCol.offsetHeight)+'px';
-  var H=main.scrollHeight,W=main.clientWidth;
-  wires.setAttribute('width',W);wires.setAttribute('height',H);
-  wires.setAttribute('viewBox','0 0 '+W+' '+H);
-  var out='';
-  vis.forEach(function(v){
-    if(!v.anchor) return;
-    var a=rel(v.anchor),c=rel(v.card);
-    var ax=a.left-3,ay=a.top+a.height/2;
-    var cx=c.right+3,cy=c.top+Math.min(24,c.height/2);
-    var dx=Math.max(24,Math.min(90,(ax-cx)/2));
-    out+='<path class="wire" data-c="'+v.card.dataset.c+'" style="stroke:'+colorOf(v.card.dataset.a)
-      +'" d="M '+ax+' '+ay+' C '+(ax-dx)+' '+ay+', '+(cx+dx)+' '+cy+', '+cx+' '+cy+'"/>';
-  });
-  wires.innerHTML=out;
 }
+function chapterNum(chid){for(var i=0;i<list.length;i++)if(list[i].id===chid)return list[i].num;return ''}
+nextNoteBtn.addEventListener('click',function(){jumpNote(1)});
+prevNoteBtn.addEventListener('click',function(){jumpNote(-1)});
+function updateNotePos(){
+  if(curIdx<0||!NOTES[curIdx]){notePosEl.textContent='—';return}
+  var e=NOTES[curIdx];
+  notePosEl.textContent=(e[2]||'הערה')+' · '+typeMeta(e[3]).name+' · '+SVS[e[4]]+' ('+(curIdx+1)+'/'+NOTES.length+')';
+}
+function pulse(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+  setTimeout(function(){el.classList.remove('flash')},2400)}
 
-/* ---------- hover + click sync ---------- */
-var hot=[];
-function clearHot(){hot.forEach(function(e){e.classList.remove('hot')});hot=[]}
-document.addEventListener('mouseover',function(e){
-  var t=e.target.closest('.ca,.cb,.card');
-  clearHot();
-  if(!t) return;
-  var cid=t.dataset.c;
-  if(!cid&&t.classList.contains('card')) cid=t.dataset.c;
-  if(!cid) return;
-  hot=$$('[data-c="'+cssEsc(cid)+'"], .ca[data-c~="'+cssEsc(cid)+'"]').filter(function(el){
-    return el.classList.contains('card')||el.classList.contains('wire')
-        ||el.classList.contains('cb')||el.classList.contains('ca');
-  });
-  hot.forEach(function(el){el.classList.add('hot')});
-});
-document.addEventListener('mouseout',function(e){
-  if(e.target.closest('.ca,.cb,.card')) clearHot();
-});
-function pulse(el){
-  el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
-  setTimeout(function(){el.classList.remove('flash')},2400);
-}
+/* clicks: anchor -> note box; note header num -> anchor; track current */
 document.addEventListener('click',function(e){
   var a=e.target.closest('.ca,.cb');
   if(a){
-    var card=cardOf(a.dataset.c.split(' ')[0]);
-    if(card&&!card.classList.contains('off')){
-      var r=card.getBoundingClientRect();
-      if(r.top<80||r.bottom>innerHeight-40)
-        card.scrollIntoView({block:'center',behavior:'smooth'});
-      pulse(card);
-    }
+    var id=a.dataset.c.split(' ')[0];
+    var n=document.getElementById('note-'+id);
+    if(n&&!n.classList.contains('off')){n.scrollIntoView({block:'center',behavior:'smooth'});pulse(n)}
+    else if(n)toast('הערה זו מסוננת כרגע');
     return;
   }
-  var h=e.target.closest('.chd');
-  if(h){
-    var card2=h.closest('.card');
-    var anchor=anchorFor(card2.dataset.c);
-    if(anchor){
-      anchor.scrollIntoView({block:'center',behavior:'smooth'});
-      pulse(anchor);
-    }
+  var num=e.target.closest('.nnum');
+  if(num){
+    var note=num.closest('.note');
+    var anchor=document.querySelector('.ca[data-c~="'+selAttr(note.dataset.c)+'"],.cb[data-c="'+selAttr(note.dataset.c)+'"]');
+    if(anchor){anchor.scrollIntoView({block:'center',behavior:'smooth'});pulse(anchor)}
+    return;
+  }
+  var note2=e.target.closest('.note');
+  if(note2){
+    var key=cur+'|'+note2.dataset.c;
+    if(NMAP.hasOwnProperty(key)){curIdx=NMAP[key];updateNotePos()}
   }
 });
+document.addEventListener('mouseover',function(e){
+  var t=e.target.closest('.ca,.cb,.note');if(!t)return;
+  $$('.hot').forEach(function(x){x.classList.remove('hot')});
+  var id=t.dataset.c;if(!id)return;
+  $$('[data-c~="'+selAttr(id)+'"], .note[data-c="'+selAttr(id)+'"]').forEach(function(el){
+    if(el.classList.contains('ca')||el.classList.contains('cb')||el.classList.contains('note'))el.classList.add('hot');
+  });
+});
+document.addEventListener('mouseout',function(e){if(e.target.closest('.ca,.cb,.note'))$$('.hot').forEach(function(x){x.classList.remove('hot')})});
 
-var rt;
-window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(layout,160)});
+/* keyboard */
+document.addEventListener('keydown',function(e){
+  if(!e.altKey)return;
+  if(e.key==='ArrowLeft'){stepCh(1);e.preventDefault()}
+  else if(e.key==='ArrowRight'){stepCh(-1);e.preventDefault()}
+  else if(e.key==='ArrowDown'){jumpNote(1);e.preventDefault()}
+  else if(e.key==='ArrowUp'){jumpNote(-1);e.preventDefault()}
+  else if(e.key==='e'||e.key==='E'||e.key==='א'){toggleEdit();e.preventDefault()}
+});
+var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){},160)});
 
-/* ---------- footer + init ---------- */
+/* ================= catalog modal ================= */
+function openModal(id){$('#'+id).classList.add('open')}
+function closeModal(id){$('#'+id).classList.remove('open')}
+$$('.dclose').forEach(function(b){b.addEventListener('click',function(){closeModal(b.dataset.close)})});
+$$('.ovl').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open')})});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){$$('.ovl.open').forEach(function(o){o.classList.remove('open')})}});
+$('#catalogBtn').addEventListener('click',function(){buildCatalog();openModal('catOvl')});
+
+function buildCatalog(){
+  var counts={};
+  NOTES.forEach(function(e){var k=e[3]+'|'+e[4];counts[k]=(counts[k]||0)+1});
+  var byT={},byS={};
+  NOTES.forEach(function(e){byT[e[3]]=(byT[e[3]]||0)+1;byS[e[4]]=(byS[e[4]]||0)+1});
+  var h='<tr><th class="rowh">סוג ההערה</th>'
+    +'<th class="svh" data-s="1">חומרה: נמוכה</th><th class="svh" data-s="2">חומרה: בינונית</th>'
+    +'<th class="svh" data-s="3">חומרה: גבוהה</th><th class="total">סה״כ</th></tr>';
+  TYPE_ORDER.forEach(function(t){
+    var n=byT[t]||0;if(!n)return;
+    var m=typeMeta(t);
+    h+='<tr><td class="rowh" data-t="'+t+'"><span class="tdot" style="background:'+m.bg+';border-color:'+m.border+'"></span>'+esc(m.name)+'</td>';
+    [1,2,3].forEach(function(s){
+      var c=counts[t+'|'+s]||0;
+      h+='<td data-t="'+t+'" data-s="'+s+'"'+(c?'':' style="color:#cbd5e1"')+'>'+(c||'—')+'</td>';
+    });
+    h+='<td class="total">'+n+'</td></tr>';
+  });
+  h+='<tr><td class="total" style="text-align:right">סה״כ</td>'
+    +[1,2,3].map(function(s){return '<td class="total">'+(byS[s]||0)+'</td>'}).join('')
+    +'<td class="total">'+NOTES.length+'</td></tr>';
+  $('#catTable').innerHTML=h;
+  $$('#catTable .rowh[data-t]').forEach(function(td){
+    td.addEventListener('click',function(){
+      var t=td.dataset.t;
+      if(OFF_T[t])delete OFF_T[t];else{OFF_T={};TYPE_ORDER.forEach(function(x){if(x!==t)OFF_T[x]=1});OFF_S={}}
+      refreshChips();applyFilter();
+    });
+  });
+  $$('#catTable .svh').forEach(function(th){
+    th.addEventListener('click',function(){
+      var s=th.dataset.s;
+      if(OFF_S[s])delete OFF_S[s];else{OFF_S={};[1,2,3].forEach(function(x){if(String(x)!==s)OFF_S[x]=1})}
+      refreshChips();applyFilter();
+    });
+  });
+  $$('#catTable td[data-t][data-s]').forEach(function(td){
+    td.addEventListener('click',function(){
+      var t=td.dataset.t,s=td.dataset.s;
+      OFF_T={};TYPE_ORDER.forEach(function(x){if(x!==t)OFF_T[x]=1});
+      OFF_S={};[1,2,3].forEach(function(x){if(String(x)!==s)OFF_S[x]=1});
+      refreshChips();applyFilter();closeModal('catOvl');
+      toast('מסנן: '+typeMeta(t).name+' · חומרה '+SVS[s]);
+    });
+  });
+  markCatalogActive();
+}
+function markCatalogActive(){
+  $$('#catTable td[data-t][data-s]').forEach(function(td){
+    td.classList.toggle('active',!OFF_T[td.dataset.t]&&!OFF_S[td.dataset.s]&&Object.keys(OFF_T).length+Object.keys(OFF_S).length>0);
+  });
+}
+
+/* ================= editing ================= */
+function setEditable(on){
+  $$('.nb').forEach(function(el){el.contentEditable=on?'true':'false'});
+  $$('.para').forEach(function(el){el.contentEditable=on?'true':'false'});
+}
+function toggleEdit(){
+  var on=!document.body.classList.contains('editing');
+  document.body.classList.toggle('editing',on);
+  editBtn.classList.toggle('on',on);
+  editBtn.textContent=on?'סיים עריכה':'עריכה';
+  setEditable(on);
+  if(on)toast('מצב עריכה הופעל — ערכו פסקאות והערות ישירות');
+}
+editBtn.addEventListener('click',toggleEdit);
+
+var saveT=null;
+document.addEventListener('input',function(e){
+  if(!document.body.classList.contains('editing'))return;
+  var t=e.target;
+  if(t.classList.contains('nb')){
+    var note=t.closest('.note');if(!note)return;
+    var cid=note.dataset.c;
+    ensureCh(cur);EDITS[cur].notes[cid]=t.innerHTML;
+    note.classList.add('edited');
+  }else if(t.classList.contains('para')){
+    ensureCh(cur);EDITS[cur].paras[t.dataset.pi]=t.innerHTML;
+    t.classList.add('edited');
+  }else return;
+  clearTimeout(saveT);
+  saveT=setTimeout(function(){
+    try{localStorage.setItem(LS_KEY,JSON.stringify(EDITS))}catch(_){}
+    updateBadge();
+  },500);
+  updateBadge();
+});
+function ensureCh(ch){if(!EDITS[ch])EDITS[ch]={paras:{},notes:{}}}
+function updateBadge(){
+  var n=Object.keys(EDITS).filter(function(ch){return EDITS[ch]&&(Object.keys(EDITS[ch].notes||{}).length||Object.keys(EDITS[ch].paras||{}).length)}).length;
+  dlBadge.textContent=n;dlBadge.style.display=n?'inline-block':'none';
+}
+updateBadge();
+
+/* ================= exports & downloads ================= */
+function stripAnchors(h){
+  h=String(h).replace(/<sup class="cb"[^>]*>[\s\S]*?<\/sup>/g,'');
+  h=h.replace(/<span class="ca"[^>]*>([\s\S]*?)<\/span>/g,'$1');
+  return h;
+}
+function safeName(s){return String(s).replace(/[\\\/:*?"<>|]/g,'-').replace(/\s+/g,'_').slice(0,60)}
+function chapterFileName(ch,ext){
+  var d=window.CHAPTER_DATA[ch];if(!d)return 'פרק.'+ext;
+  var num=(d.num<10?'0':'')+d.num;
+  return 'פרק_'+num+'_'+safeName(d.title)+'.'+ext;
+}
+function buildExportHTML(ch){
+  var d=window.CHAPTER_DATA[ch],ed=EDITS[ch]||{};
+  var byId={};d.comments.forEach(function(c){byId[c.id]=c});
+  var css='body{direction:rtl;unicode-bidi:embed;font-family:"David","Narkisim","Times New Roman",serif;font-size:13pt;line-height:1.75}'
+    +'h1{font-size:20pt}h2{font-size:17pt}h3{font-size:15pt}h4,h5,h6,h7{font-size:13.5pt}'
+    +'p{margin:0 0 8pt;text-align:justify}'
+    +'.note{border:1.5pt solid #999;padding:8pt 11pt;margin:10pt 0;font-size:11pt;line-height:1.6}'
+    +'.nhead{font-weight:bold;font-size:9.5pt;margin-bottom:4pt}'
+    +'.note p{margin:0 0 5pt;text-align:right}';
+  var body='<h1>'+esc(d.part)+'</h1><h2>'+esc(d.title)+'</h2>';
+  d.paras.forEach(function(p,i){
+    if(p.s==='sp')return;
+    var h=(ed.paras&&ed.paras[String(i)]!=null)?ed.paras[String(i)]:p.h;
+    var lvl=p.s[0]==='h'?Math.min(parseInt(p.s.slice(1),10)||2,6):0;
+    body+=lvl?('<h'+(lvl+2>6?6:lvl+2)+'>'+stripAnchors(h)+'</'+(lvl+2>6?6:lvl+2)+'>'):('<p>'+stripAnchors(h)+'</p>');
+    anchorIdsFor(p.h,byId).forEach(function(cid){
+      var c=byId[cid],m=typeMeta(c.t);
+      var nh=(ed.notes&&ed.notes[cid]!=null)?ed.notes[cid]:c.h;
+      body+='<div class="note" style="border-color:'+m.border+';background:'+m.bg+'">'
+        +'<div class="nhead" style="color:'+m.dark+'">הערה '+c.n+' · סוג: '+esc(m.name)
+        +' · חומרה: '+esc(SVS[c.sv])+' · '+esc(c.a)+' · '+esc(c.d||'')+'</div>'
+        +stripAnchors(nh)+'</div>';
+    });
+  });
+  return '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">'
+    +'<head><meta charset="utf-8"><title>פרק '+d.num+' — '+esc(d.title)+'</title>'
+    +'<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->'
+    +'<style>@page{size:A4;margin:2.2cm}'+css+'</style></head>'
+    +'<body dir="rtl" lang="he">'+body+'</body></html>';
+}
+function anchorIdsFor(html,byId){
+  var out=[],seen={};
+  (String(html).match(/data-c="([^"]+)"/g)||[]).forEach(function(m){
+    m.slice(8,-1).split(' ').forEach(function(id){if(!seen[id]&&byId[id]){seen[id]=1;out.push(id)}});
+  });
+  return out;
+}
+function buildExportJSON(ch){
+  var d=window.CHAPTER_DATA[ch],ed=EDITS[ch]||{};
+  var paras=d.paras.map(function(p,i){
+    var o={i:i,s:p.s,h:p.h};
+    if(ed.paras&&ed.paras[String(i)]!=null)o.h_edit=ed.paras[String(i)];
+    return o;
+  });
+  var comments=d.comments.map(function(c){
+    var o={id:c.id,n:c.n,a:c.a,d:c.d,t:c.t,sv:c.sv,h:c.h};
+    if(ed.notes&&ed.notes[c.id]!=null)o.h_edit=ed.notes[c.id];
+    return o;
+  });
+  return JSON.stringify({chapter:d.num,part:d.part,title:d.title,id:ch,
+    exported:new Date().toISOString(),has_edits:!!(ed.notes&&Object.keys(ed.notes).length)||(!!(ed.paras&&Object.keys(ed.paras).length)),
+    paras:paras,comments:comments},null,1);
+}
+function download(name,blob){
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},400);
+  toast('הורדה: '+name);
+}
+/* minimal ZIP (store, no compression) with UTF-8 names */
+var CRC_T=null;
+function crc32(u8){
+  if(!CRC_T){CRC_T=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;CRC_T[n]=c>>>0}}
+  var c=0xFFFFFFFF;
+  for(var i=0;i<u8.length;i++)c=CRC_T[(c^u8[i])&0xFF]^(c>>>8);
+  return (c^0xFFFFFFFF)>>>0;
+}
+function mkZip(files){
+  var enc=new TextEncoder(),parts=[],central=[],offset=0,now=new Date();
+  var dosTime=(now.getHours()<<11)|(now.getMinutes()<<5)|(now.getSeconds()>>1);
+  var dosDate=(((now.getFullYear()-1980)&0x7F)<<9)|((now.getMonth()+1)<<5)|now.getDate();
+  files.forEach(function(f){
+    var name=enc.encode(f.name),crc=crc32(f.u8);
+    var lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);
+    lh.setUint16(8,0,true);lh.setUint16(10,dosTime,true);lh.setUint16(12,dosDate,true);
+    lh.setUint32(14,crc,true);lh.setUint32(18,f.u8.length,true);lh.setUint32(22,f.u8.length,true);
+    lh.setUint16(26,name.length,true);lh.setUint16(28,0,true);
+    parts.push(new Uint8Array(lh.buffer),name,f.u8);
+    var ch=new DataView(new ArrayBuffer(46));
+    ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);
+    ch.setUint16(8,0x0800,true);ch.setUint16(10,0,true);ch.setUint16(12,dosTime,true);ch.setUint16(14,dosDate,true);
+    ch.setUint32(16,crc,true);ch.setUint32(20,f.u8.length,true);ch.setUint32(24,f.u8.length,true);
+    ch.setUint16(28,name.length,true);ch.setUint16(30,0,true);ch.setUint16(32,0,true);
+    ch.setUint16(34,0,true);ch.setUint16(36,0,true);ch.setUint32(38,0,true);ch.setUint32(42,offset,true);
+    central.push(new Uint8Array(ch.buffer),name);
+    offset+=30+name.length+f.u8.length;
+  });
+  var cdSize=central.reduce(function(a,p){return a+p.length},0);
+  var eo=new DataView(new ArrayBuffer(22));
+  eo.setUint32(0,0x06054b50,true);eo.setUint16(8,files.length,true);eo.setUint16(10,files.length,true);
+  eo.setUint32(12,cdSize,true);eo.setUint32(16,offset,true);
+  parts=parts.concat(central);parts.push(new Uint8Array(eo.buffer));
+  return new Blob(parts,{type:'application/zip'});
+}
+function editedChapters(){
+  return Object.keys(EDITS).filter(function(ch){
+    return window.CHAPTER_DATA[ch]&&EDITS[ch]&&
+      ((EDITS[ch].notes&&Object.keys(EDITS[ch].notes).length)||(EDITS[ch].paras&&Object.keys(EDITS[ch].paras).length));
+  });
+}
+/* downloads panel */
+dlBtn.addEventListener('click',function(){buildDlPanel();openModal('dlOvl')});
+function buildDlPanel(){
+  var h='';
+  if(cur&&window.CHAPTER_DATA[cur]){
+    h+='<div class="dlSec"><h3>הפרק הנוכחי</h3><div class="dlRow">'
+      +'<span class="dlName">פרק '+window.CHAPTER_DATA[cur].num+' — '+esc(window.CHAPTER_DATA[cur].title)+'</span>'
+      +'<button class="dbtn" data-dl="html" data-ch="'+cur+'">HTML לוורד</button>'
+      +'<button class="dbtn" data-dl="json" data-ch="'+cur+'">JSON</button></div></div>';
+  }
+  var edited=editedChapters();
+  if(edited.length){
+    h+='<div class="dlSec"><h3>פרקים שנערכו ('+edited.length+')</h3>';
+    edited.forEach(function(ch){
+      var d=window.CHAPTER_DATA[ch];
+      h+='<div class="dlRow"><span class="dlName">פרק '+d.num+' — '+esc(d.title)+'</span>'
+        +'<button class="dbtn" data-dl="html" data-ch="'+ch+'">HTML לוורד</button>'
+        +'<button class="dbtn" data-dl="json" data-ch="'+ch+'">JSON</button>'
+        +'<button class="dbtn gray" data-reset="'+ch+'">איפוס עריכות הפרק</button></div>';
+    });
+    if(edited.length>1)h+='<div class="dlRow"><span class="dlName">כל הפרקים הנערכים</span>'
+      +'<button class="dbtn green" id="zipAll">הורד הכול (ZIP)</button>'
+      +'<button class="dbtn gray" id="resetAll">איפוס כל העריכות</button></div>';
+    else h+='<div class="dlRow"><span class="dlName">איפור עריכות</span><button class="dbtn gray" id="resetAll">איפוס כל העריכות</button></div>';
+    h+='</div>';
+  }else{
+    h+='<div class="dlSec"><h3>פרקים שנערכו</h3><div class="dlEmpty">טרם נערכו פרקים. הפעילו «עריכה», ערכו הערות או פסקאות, והפרקים יופיעו כאן להורדה.</div></div>';
+  }
+  h+='<p class="catNote">קובץ ה-HTML נפתח ישירות בוורד וכולל את גוף הפרק וההערות בתיבות צבעוניות לפי הסוג. קובץ ה-JSON מכיל את הנתונים המלאים (מקור + נוסח נערך) לשילוב חזרה בקובץ הבסיס.</p>';
+  dlBody.innerHTML=h;
+  $$('#dlBody [data-dl]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var ch=b.dataset.ch,kind=b.dataset.dl;
+      if(kind==='html')download(chapterFileName(ch,'html'),new Blob([buildExportHTML(ch)],{type:'text/html;charset=utf-8'}));
+      else download(chapterFileName(ch,'json'),new Blob([buildExportJSON(ch)],{type:'application/json'}));
+    });
+  });
+  $$('#dlBody [data-reset]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var ch=b.dataset.reset;
+      delete EDITS[ch];
+      try{localStorage.setItem(LS_KEY,JSON.stringify(EDITS))}catch(_){}
+      updateBadge();
+      if(ch===cur&&window.CHAPTER_DATA[ch])render();
+      buildDlPanel();toast('עריכות הפרק אופסו');
+    });
+  });
+  var zipAll=$('#zipAll');
+  if(zipAll)zipAll.addEventListener('click',function(){
+    var enc=new TextEncoder(),files=[];
+    editedChapters().forEach(function(ch){
+      files.push({name:chapterFileName(ch,'html'),u8:enc.encode(buildExportHTML(ch))});
+      files.push({name:chapterFileName(ch,'json'),u8:enc.encode(buildExportJSON(ch))});
+    });
+    files.push({name:'מצב_עריכות.txt',u8:enc.encode('פרקים שנערכו: '+editedChapters().join(', ')+'\nתאריך: '+new Date().toLocaleString('he-IL')+'\n')});
+    download('פרקים_נערכים_'+new Date().toISOString().slice(0,10)+'.zip',mkZip(files));
+  });
+  var resetAll=$('#resetAll');
+  if(resetAll)resetAll.addEventListener('click',function(){
+    EDITS={};try{localStorage.removeItem(LS_KEY)}catch(_){}
+    updateBadge();if(cur&&window.CHAPTER_DATA[cur])render();buildDlPanel();toast('כל העריכות אופסו');
+  });
+}
+
+/* ================= toast / footer / init ================= */
+var toastT;
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show')},2600)}
 $('#siteFooter').innerHTML='נבנה אוטומטית מקובץ הבסיס «כתב_יד_S027_P04577_מקור_797_הערות.docx» · '
-  +META.totalChapters+' פרקים · '+META.totalComments+' הערות · עודכן '+META.built
+  +(NM.total||NOTES.length)+' הערות ב-'+list.length+' פרקים · עודכן '+(NM.built||'')
   +' · <a href="https://github.com/SUGINACH/HOTZAHA_SEDER" target="_blank" rel="noopener">הריפו ב-GitHub</a>';
 
 var p=new URLSearchParams(location.search);
 var id=p.get('ch');
-if(!id||idxOf(id)<0) id=list[0]?list[0].id:null;
-if(id) go(id);
+if(!id||idxOf(id)<0)id=list[0]?list[0].id:null;
+if(id)go(id,p.get('note'));
 })();
 </script>
 </body>
